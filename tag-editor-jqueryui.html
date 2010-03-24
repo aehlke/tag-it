@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Tag Editor - example</title>
+
+	<link href="css/reset.css" rel="stylesheet" type="text/css" />
+	<link href="css/master.css" rel="stylesheet" type="text/css" />
+	<link href="css/jquery-ui/jquery.ui.autocomplete.custom.css" rel="stylesheet" type="text/css"  />
+
+	<script src="js/jquery/jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery-ui/jquery-ui-1.8.core-and-interactions.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery-ui/jquery-ui-1.8.autocomplete.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/tag-it.js" type="text/javascript" charset="utf-8"></script>
+
+	<script>
+	$(document).ready(function(){
+		$("#mytags").tagit({
+			availableTags: ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl"]
+		});
+	});
+	</script>
+
+</head>
+<body>
+
+<div id="content">
+   	<form class="myform">
+		<div class="line">
+			<p><strong>Tag it!</strong> ~ Tag editor and suggestions</p>
+			<p>After looking for a jQuery plugin for handling a 'tag suggestion' form field, in much the same way ZenDesk.com does, I ended up developing a customization of jQuery UI that does the same interaction.</p>
+		</div>
+		<div class="line">
+			<label for="tags">Tags</label>
+			<ul id="mytags"></ul>
+		</div>
+		<div class="line">
+			<p>Built with <a href="http://jquery.com/" target="_blank">jQuery</a> and <a href="http://jqueryui.com/" target="_blank">jQueryUI</a>.</p>
+			<p>By <a href="http://levycarneiro.com/">Levy Carneiro Jr</a></p>
+		</div>
+	</form>
+</div>
+
+</body>
+</html>
