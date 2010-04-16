@@ -9,6 +9,10 @@
 		const SPACE			= 32;
 		const COMMA			= 44;
 
+		// option defaults
+		if (!options.itemName) options.itemName = 'item';
+		if (!options.fieldName) options.fieldName = 'tags';
+
 		// add the tagit CSS class.
 		el.addClass("tagit");
 
@@ -85,7 +89,7 @@
 			el  = "<li class=\"tagit-choice\">\n";
 			el += value + "\n";
 			el += "<a class=\"close\">x</a>\n";
-			el += "<input type=\"hidden\" style=\"display:none;\" value=\""+value+"\" name=\"item[tags][]\">\n";
+			el += "<input type=\"hidden\" style=\"display:none;\" value=\""+value+"\" name=\"" + options.itemName + "[" + options.fieldName + "][]\">\n";
 			el += "</li>\n";
 			var li_search_tags = this.tag_input.parent();
 			$(el).insertBefore (li_search_tags);
