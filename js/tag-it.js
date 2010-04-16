@@ -18,9 +18,17 @@
 
 		// create the input field.
 		var html_input_field = "<li class=\"tagit-new\"><input class=\"tagit-input\" type=\"text\" /></li>\n";
-		el.html (html_input_field);
+		el.append (html_input_field);
 
 		tag_input		= el.children(".tagit-new").children(".tagit-input");
+
+		// add existing tags
+		el.children("li").each(function(){
+			if (!$(this).hasClass('tagit-new')) {
+				create_choice($(this).html());
+				$(this).remove();
+			}
+		});
 
 		$(this).click(function(e){
 			if (e.target.tagName == 'A') {
