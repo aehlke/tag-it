@@ -61,7 +61,7 @@
 				event.preventDefault();
 
 				var typed = tag_input.val();
-				typed = typed.replace(/,+$/,"").replace(/^\s*"(.*)"\s*$/, "$1");
+				typed = typed.replace(/,+$/,"").trim().replace(/^"/, "").replace(/"$/, "");
 				typed = typed.trim();
 
 				if (typed != "") {
