@@ -8,6 +8,7 @@
 		const ENTER			= 13;
 		const SPACE			= 32;
 		const COMMA			= 44;
+		const TAB			= 9;
 
 		// add the tagit CSS class.
 		el.addClass("tagit");
@@ -32,18 +33,35 @@
 		});
 
 		tag_input.keypress(function(event){
-			if (event.which == BACKSPACE) {
+			keyCode = event.keyCode || event.which
+			if (keyCode == BACKSPACE) {
 				if (tag_input.val() == "") {
 					// When backspace is pressed, the last tag is deleted.
 					$(el).children(".tagit-choice:last").remove();
 				}
 			}
-			// Comma/Space/Enter are all valid delimiters for new tags.
-			else if (event.which == COMMA || event.which == SPACE || event.which == ENTER) {
+			// Comma/Space/Enter are all valid delimiters for new tags. except when there is an open quote
+			else if (
+					keyCode == COMMA || 
+					keyCode == ENTER || 
+					keyCode == TAB ||
+					(
+						keyCode == SPACE &&
+						( 
+							(tag_input.val().trim().replace( /^s*/, "" ).charAt(0) != '"') ||
+							(
+								tag_input.val().trim().charAt(0) == '"' && 
+								tag_input.val().trim().charAt(tag_input.val().trim().length - 1) == '"' && 
+								tag_input.val().trim().length - 1 != 0
+							)
+						)
+					)
+				) {
+				
 				event.preventDefault();
 
 				var typed = tag_input.val();
-				typed = typed.replace(/,+$/,"");
+				typed = typed.replace(/,+$/,"").replace(/^\s*"(.*)"\s*$/, "$1");
 				typed = typed.trim();
 
 				if (typed != "") {
