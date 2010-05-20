@@ -87,7 +87,9 @@
 		});
 
 		tag_input.autocomplete({
-			source: options.availableTags, 
+			source: function(req, show_choices){
+				show_choices(subtract_array(options.availableTags,assigned_tags()));
+			},
 			select: function(event,ui){
 				if (is_new (ui.item.value)) {
 					create_choice (ui.item.value);
@@ -99,6 +101,24 @@
 				return false;
 			}
 		});
+
+		function assigned_tags(){
+			var tags = [];
+			this.tag_input.parents("ul").children(".tagit-choice").each(function(){
+				tags.push($(this).children("input").val());
+			});
+			return tags;
+		}
+
+		function subtract_array(a1,a2){
+			var result = new Array();
+			for(var i in a1) {
+				if (a2.indexOf(a1[i]) == -1) {
+					result.push(a1[i]);
+				}
+			}
+			return result;
+		}
 
 		function is_new (value){
 			var is_new = true;
