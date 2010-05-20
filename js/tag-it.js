@@ -87,8 +87,13 @@
 		});
 
 		tag_input.autocomplete({
-			source: function(req, show_choices){
-				show_choices(subtract_array(options.availableTags,assigned_tags()));
+			source: function(search, show_choices){
+			  var filter = new RegExp(search.term, "i")
+				var choices = options.availableTags.filter(function(element) {
+					return (element.search(filter) != -1);
+				});
+
+				show_choices(subtract_array(choices,assigned_tags()));
 			},
 			select: function(event,ui){
 				if (is_new (ui.item.value)) {
