@@ -107,7 +107,7 @@
 				if (value == n) {
 					is_new = false;
 				}
-			})
+			});
 			return is_new;
 		}
 		function create_choice (value){
