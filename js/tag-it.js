@@ -88,7 +88,7 @@
 
 		tag_input.autocomplete({
 			source: function(search, show_choices){
-			  var filter = new RegExp(search.term, "i")
+			  var filter = new RegExp(search.term, "i");
 				var choices = options.availableTags.filter(function(element) {
 					return (element.search(filter) != -1);
 				});
