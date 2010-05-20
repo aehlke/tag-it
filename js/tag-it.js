@@ -95,7 +95,7 @@
 				// Cleaning the input.
 				tag_input.val("");
 
-				// Preventing the tag input to be update with the chosen value.
+				// Preventing the tag input to be updated with the chosen value.
 				return false;
 			}
 		});
