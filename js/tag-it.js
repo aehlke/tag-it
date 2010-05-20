@@ -45,7 +45,7 @@
 		});
 
 		tag_input.keypress(function(event){
-			keyCode = event.keyCode || event.which
+			keyCode = event.keyCode || event.which;
 			if (keyCode == BACKSPACE) {
 				if (tag_input.val() == "") {
 					// When backspace is pressed, the last tag is deleted.
