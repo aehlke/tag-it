@@ -16,7 +16,10 @@
 	<script>
 	$(document).ready(function(){
 		$("#mytags").tagit({
-			availableTags: ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl"]
+			availableTags: ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl"],
+			// configure the name of the input field (will be submitted with form), default: item[tags]
+			itemName: 'item',
+			fieldName: 'tags'
 		});
 	});
 	</script>
@@ -32,7 +35,11 @@
 		</div>
 		<div class="line">
 			<label for="tags">Tags</label>
-			<ul id="mytags"></ul>
+			<ul id="mytags">
+				<!-- Existing list items will be pre-added to the tags -->
+				<li>Tag1</li>
+				<li>Tag2</li>
+			</ul>
 		</div>
 		<div class="line">
 			<p>Built with <a href="http://jquery.com/" target="_blank">jQuery</a> and <a href="http://jqueryui.com/" target="_blank">jQueryUI</a>.</p>
