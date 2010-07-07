@@ -21,7 +21,7 @@
 		var html_input_field = "<li class=\"tagit-new\"><input class=\"tagit-input\" type=\"text\" /></li>\n";
 		el.append (html_input_field);
 
-		tag_input		= el.children(".tagit-new").children(".tagit-input");
+		var tag_input		= el.children(".tagit-new").children(".tagit-input");
 
 		// add existing tags
 		el.children("li").each(function(){
@@ -45,7 +45,7 @@
 		});
 
 		tag_input.keypress(function(event){
-			keyCode = event.keyCode || event.which;
+			var keyCode = event.keyCode || event.which;
 			if (keyCode == BACKSPACE) {
 				if (tag_input.val() == "") {
 					// When backspace is pressed, the last tag is deleted.
@@ -109,7 +109,7 @@
 
 		function assigned_tags(){
 			var tags = [];
-			this.tag_input.parents("ul").children(".tagit-choice").each(function(){
+			tag_input.parents("ul").children(".tagit-choice").each(function(){
 				tags.push($(this).children("input").val());
 			});
 			return tags;
@@ -127,7 +127,7 @@
 
 		function is_new (value){
 			var is_new = true;
-			this.tag_input.parents("ul").children(".tagit-choice").each(function(i){
+			tag_input.parents("ul").children(".tagit-choice").each(function(i){
 				n = $(this).children("input").val();
 				if (value == n) {
 					is_new = false;
@@ -142,9 +142,9 @@
 			el += "<a class=\"close\">x</a>\n";
 			el += "<input type=\"hidden\" style=\"display:none;\" value=\""+value+"\" name=\"" + options.itemName + "[" + options.fieldName + "][]\">\n";
 			el += "</li>\n";
-			var li_search_tags = this.tag_input.parent();
+			var li_search_tags = tag_input.parent();
 			$(el).insertBefore (li_search_tags);
-			this.tag_input.val("");
+			tag_input.val("");
 		}
 	};
 
