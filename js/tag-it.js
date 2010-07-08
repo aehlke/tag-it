@@ -4,11 +4,11 @@
 
 		var el = this;
 
-		const BACKSPACE		= 8;
-		const ENTER			= 13;
-		const SPACE			= 32;
-		const COMMA			= 44;
-		const TAB			= 9;
+		var BACKSPACE		= 8;
+		var ENTER			= 13;
+		var SPACE			= 32;
+		var COMMA			= 44;
+		var TAB			    = 9;
 
 		// option defaults
 		if (!options.itemName) options.itemName = 'item';
