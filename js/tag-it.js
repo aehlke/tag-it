@@ -44,7 +44,7 @@
 			}
 		});
 
-		tag_input.keyup(function(event){
+		tag_input.keydown(function(event){
 			var keyCode = event.keyCode || event.which;
 			// Backspace is not detected within a keypress, so using a keyup
 			if (keyCode == BACKSPACE) {
