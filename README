@@ -2,3 +2,4 @@ After looking for a jQuery plugin for handling a 'tag suggestion' form field, in
 
 Check the example.html for a demo.
 
+Notice, to make it work under IE you have to add 'js/ie-compat.js' into your pages.
