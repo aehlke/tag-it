@@ -57,7 +57,7 @@
 		tag_input.keypress(function(event){
 			var keyCode = event.keyCode || event.which;
 			// Comma/Space/Enter are all valid delimiters for new tags. except when there is an open quote
-			else if (
+			if (
 					keyCode == COMMA || 
 					keyCode == ENTER || 
 					keyCode == TAB ||
