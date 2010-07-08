@@ -44,14 +44,18 @@
 			}
 		});
 
-		tag_input.keypress(function(event){
+		tag_input.keyup(function(event){
 			var keyCode = event.keyCode || event.which;
+			// Backspace is not detected within a keypress, so using a keyup
 			if (keyCode == BACKSPACE) {
 				if (tag_input.val() == "") {
 					// When backspace is pressed, the last tag is deleted.
 					$(el).children(".tagit-choice:last").remove();
 				}
 			}
+		});
+		tag_input.keypress(function(event){
+			var keyCode = event.keyCode || event.which;
 			// Comma/Space/Enter are all valid delimiters for new tags. except when there is an open quote
 			else if (
 					keyCode == COMMA || 
