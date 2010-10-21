@@ -6,6 +6,10 @@
       'itemName'      : 'item',
       'fieldName'     : 'tags',
       'availableTags' : [],
+      // event handler: called when a tag is added
+      'onTagAdded'    : null,
+      // event handler: called when a tag is removed
+      'onTagRemoved'  : null,
     };
 
     if (options) {
@@ -31,7 +35,7 @@
     // add existing tags
     el.children("li").each(function() {
       if (!$(this).hasClass('tagit-new')) {
-        create_choice($(this).html());
+        create_tag($(this).html());
         $(this).remove();
       }
     });
@@ -40,7 +44,7 @@
       if (e.target.tagName == 'A') {
         // Removes a tag when the little 'x' is clicked.
         // Event is binded to the UL, otherwise a new tag (LI > A) wouldn't have this event attached to it.
-        $(e.target).parent().remove();
+        remove_tag($(e.target).parent());
       }
       else {
         // Sets the focus() to the input field, if the user clicks anywhere inside the UL.
@@ -55,7 +59,7 @@
       if (keyCode == BACKSPACE) {
         if (tag_input.val() == "") {
           // When backspace is pressed, the last tag is deleted.
-          $(el).children(".tagit-choice:last").remove();
+          remove_tag($(el).children(".tagit-choice:last"));
         }
       }
     });
@@ -86,11 +90,7 @@
         typed = typed.trim();
 
         if (typed != "") {
-          if (is_new(typed)) {
-            create_choice(typed);
-          }
-          // Cleaning the input.
-          tag_input.val("");
+          create_tag(typed);
         }
       }
     });
@@ -104,13 +104,8 @@
 
         show_choices(subtract_array(choices,assigned_tags()));
       },
-      select: function(event,ui) {
-        if (is_new(ui.item.value)) {
-          create_choice(ui.item.value);
-        }
-        // Cleaning the input.
-        tag_input.val("");
-
+      select: function(event, ui) {
+        create_tag(ui.item.value);
         // Preventing the tag input to be updated with the chosen value.
         return false;
       }
@@ -145,16 +140,36 @@
       return is_new;
     }
 
-    function create_choice(value) {
-      var el = "";
-      el  = "<li class=\"tagit-choice\">\n";
+    function create_tag(value) {
+      if (!is_new(value)) {
+        return false;
+      }
+
+      var el = "<li class=\"tagit-choice\">\n";
       el += value + "\n";
       el += "<a class=\"close\">x</a>\n";
       el += "<input type=\"hidden\" style=\"display:none;\" value=\""+value+"\" name=\"" + options.itemName + "[" + options.fieldName + "][]\">\n";
       el += "</li>\n";
-      var li_search_tags = tag_input.parent();
-      $(el).insertBefore(li_search_tags);
-      tag_input.val("");
+
+      var tag = $(el);
+
+      if (options.onTagAdded) {
+        options.onTagAdded(tag);
+      }
+
+      tag_input
+        // Cleaning the input.
+        .val("")
+        // insert tag
+        .parent()
+          .before(tag);
+    }
+
+    function remove_tag(element) {
+      if (options.onTagRemoved) {
+        options.onTagRemoved(element);
+      }
+      element.remove();
     }
 
     // maintaining chainability
