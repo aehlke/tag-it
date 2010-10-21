@@ -2,18 +2,26 @@
 
   $.fn.tagit = function(options) {
 
-    var defaults = {
+    var settings = {
       'itemName'      : 'item',
       'fieldName'     : 'tags',
       'availableTags' : [],
-      // event handler: called when a tag is added
+      // callback: called when a tag is added
       'onTagAdded'    : null,
-      // event handler: called when a tag is removed
+      // callback: called when a tag is removed
       'onTagRemoved'  : null,
+      'tagSource'     : function(search, show_choices) {
+        var filter = new RegExp(search.term, "i");
+        var choices = settings.availableTags.filter(function(element) {
+          return (element.search(filter) != -1);
+        });
+
+        show_choices(subtract_array(choices, assigned_tags()));
+      }
     };
 
     if (options) {
-      $.extend(defaults, options);
+      $.extend(settings, options);
     }
 
     var tagList = $(this),
@@ -52,7 +60,7 @@
     tagInput
       .keydown(function(event) {
         var keyCode = event.keyCode || event.which;
-        // Backspace is not detected within a keypress, so using a keyup
+        // Backspace is not detected within a keypress, so using a keydown
         if (keyCode == BACKSPACE) {
           if (tagInput.val() == "") {
             // When backspace is pressed, the last tag is deleted.
@@ -83,22 +91,18 @@
           event.preventDefault();
           create_tag(tagInput.val().replace(/^"|"$|,+$/g, "").trim());
         }
-      })
-      .autocomplete({
-        source: function(search, show_choices) {
-          var filter = new RegExp(search.term, "i");
-          var choices = options.availableTags.filter(function(element) {
-            return (element.search(filter) != -1);
-          });
+      });
 
-          show_choices(subtract_array(choices, assigned_tags()));
-        },
+    if (options.availableTags || options.tagSource) {
+      tagInput.autocomplete({
+        source: settings.tagSource,
         select: function(event, ui) {
           create_tag(ui.item.value);
           // Preventing the tag input to be updated with the chosen value.
           return false;
         }
       });
+    }
 
     function assigned_tags() {
       var tags = [];
@@ -140,11 +144,11 @@
       var tag = "<li class=\"tagit-choice\">\n";
       tag += value + "\n";
       tag += "<a class=\"close\">x</a>\n";
-      tag += "<input type=\"hidden\" style=\"display:none;\" value=\""+value+"\" name=\"" + options.itemName + "[" + options.fieldName + "][]\">\n";
+      tag += "<input type=\"hidden\" style=\"display:none;\" value=\""+value+"\" name=\"" + settings.itemName + "[" + settings.fieldName + "][]\">\n";
       tag += "</li>\n";
 
-      if (options.onTagAdded) {
-        options.onTagAdded($(tag));
+      if (settings.onTagAdded) {
+        settings.onTagAdded($(tag));
       }
 
       // insert tag
@@ -152,8 +156,8 @@
     }
 
     function remove_tag(tag) {
-      if (options.onTagRemoved) {
-        options.onTagRemoved(tag);
+      if (settings.onTagRemoved) {
+        settings.onTagRemoved(tag);
       }
       tag.remove();
     }
