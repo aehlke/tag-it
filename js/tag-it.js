@@ -3,21 +3,21 @@
   $.fn.tagit = function(options) {
 
     var settings = {
-      'itemName'      : 'item',
-      'fieldName'     : 'tags',
-      'availableTags' : [],
+      'itemName'          : 'item',
+      'fieldName'         : 'tags',
+      'availableTags'     : [],
       // callback: called when a tag is added
-      'onTagAdded'    : null,
+      'onTagAdded'        : null,
       // callback: called when a tag is removed
-      'onTagRemoved'  : null,
-      'tagSource'     : function(search, show_choices) {
-        var filter = new RegExp(search.term, "i");
-        var choices = settings.availableTags.filter(function(element) {
-          return (element.search(filter) != -1);
-        });
-
-        show_choices(subtract_array(choices, assigned_tags()));
-      }
+      'onTagRemoved'      : null,
+      'tagSource'         : function(search, show_choices) {
+                              var filter = new RegExp(search.term, "i");
+                              var choices = settings.availableTags.filter(function(element) {
+                                return (element.search(filter) != -1);
+                              });
+                              show_choices(subtract_array(choices, assigned_tags()));
+                            },
+      'removeConfirmation': false,
     };
 
     if (options) {
@@ -61,10 +61,13 @@
       .keydown(function(event) {
         var keyCode = event.keyCode || event.which;
         // Backspace is not detected within a keypress, so using a keydown
-        if (keyCode == BACKSPACE) {
-          if (tagInput.val() == "") {
+        if (keyCode == BACKSPACE && tagInput.val() == "") {
+          var tag = tagList.children(".tagit-choice:last");
+          if (!settings.removeConfirmation || tag.hasClass("remove")) {
             // When backspace is pressed, the last tag is deleted.
-            remove_tag(tagList.children(".tagit-choice:last"));
+            remove_tag(tag);
+          } else if (settings.removeConfirmation) {
+            tag.addClass("remove");
           }
         }
       })
@@ -90,6 +93,9 @@
 
           event.preventDefault();
           create_tag(tagInput.val().replace(/^"|"$|,+$/g, "").trim());
+        }
+        if (settings.removeConfirmation) {
+          tagList.children(".tagit-choice:last").removeClass("remove");
         }
       });
 

@@ -41,7 +41,7 @@ ul.tagit li.tagit-choice {
 	border:1px solid #CAD8F3;
 	padding:2px 4px 3px;
 }
-ul.tagit li.tagit-choice:hover {
+ul.tagit li.tagit-choice:hover, ul.tagit li.tagit-choice.remove {
 	background-color:#bbcef1;
 	border-color:#6d95e0;
 }
