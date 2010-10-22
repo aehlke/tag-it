@@ -7,7 +7,7 @@
 
 ![Screenshot](http://github.com/grobie/tag-it/raw/master/screenshot.png)
 
-Check the example.html for a demo.
+Check the [example.html](http://github.com/grobie/tag-it/blob/master/example.html) for a demo.
 
 ## Usage
 
@@ -61,7 +61,7 @@ Tag-it accepts several options to customize the behaviour:
 
 ### itemName (String)
 
-Used to build the name of the hidden input field: `**itemName**[fieldName][]`.
+Used to build the name of the hidden input field: `itemName[fieldName][]`.
 
     $("#mytags").tagit({
       itemName: "user"
@@ -71,7 +71,7 @@ Defaults to *item*.
 
 ### fieldName (String)
 
-Used to build the name of the hidden input field: `itemName[**fieldName**][]`
+Used to build the name of the hidden input field: `itemName[fieldName][]`.
 
     $("#mytags").tagit({
       fieldName: "skills"
@@ -106,7 +106,7 @@ Can be used to add custom behaviour before the Tag is removed from the DOM.
 The function receives the tag as parameter.
 
     $("#mytags").tagit({
-      onTagAdded: function(tag) {
+      onTagRemoved: function(tag) {
         // do something special
       }
     });
