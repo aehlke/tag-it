@@ -1,5 +1,0 @@
-After looking for a jQuery plugin for handling a 'tag suggestion' form field, in much the same way ZenDesk.com does, I ended up developing a customization of jQuery UI that does the same interaction.
-
-Check the example.html for a demo.
-
-Notice, to make it work under IE you have to add 'js/ie-compat.js' into your pages.
