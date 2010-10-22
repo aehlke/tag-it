@@ -37,7 +37,6 @@
       .addClass("tagit")
       // create the input field.
       .append($("<li class=\"tagit-new\"></li>\n").append(tagInput))
-      // add existing tags
       .click(function(e) {
         if (e.target.tagName == 'A') {
           // Removes a tag when the little 'x' is clicked.
@@ -49,10 +48,11 @@
           tagInput.focus();
         }
       })
+      // add existing tags
       .children("li")
         .each(function() {
           if (!$(this).hasClass('tagit-new')) {
-            create_tag($(this).html());
+            create_tag($(this).html(), $(this).attr("class"));
             $(this).remove();
           }
         });
@@ -139,7 +139,7 @@
       return isNew;
     }
 
-    function create_tag(value) {
+    function create_tag(value, additionalClass) {
       // Cleaning the input.
       tagInput.val("");
 
@@ -147,14 +147,16 @@
         return false;
       }
 
-      var tag = "<li class=\"tagit-choice\">\n";
-      tag += value + "\n";
-      tag += "<a class=\"close\">x</a>\n";
-      tag += "<input type=\"hidden\" style=\"display:none;\" value=\""+value+"\" name=\"" + settings.itemName + "[" + settings.fieldName + "][]\">\n";
-      tag += "</li>\n";
+      // create tag
+      var tag = $("<li />")
+        .addClass("tagit-choice")
+        .addClass(additionalClass)
+        .append(value)
+        .append("<a class=\"close\">x</a>")
+        .append("<input type=\"hidden\" style=\"display:none;\" value=\"" + value + "\" name=\"" + settings.itemName + "[" + settings.fieldName + "][]\">");
 
       if (settings.onTagAdded) {
-        settings.onTagAdded($(tag));
+        settings.onTagAdded(tag);
       }
 
       // insert tag
