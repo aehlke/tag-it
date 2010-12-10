@@ -18,6 +18,7 @@
                               show_choices(subtract_array(choices, assigned_tags()));
                             },
       'removeConfirmation': false,
+      'caseSensitive':true
     };
 
     if (options) {
@@ -131,14 +132,18 @@
     function is_new(value) {
       var isNew = true;
       tagList.children(".tagit-choice").each(function(i) {
-        if (value == $(this).children("input").val()) {
+        if (format_str(value) == format_str($(this).children("input").val())) {
           isNew = false;
           return;
         }
       });
       return isNew;
     }
-
+	function format_str(str) {
+		if(settings.caseSensitive)
+			return str;
+		return str.toLowerCase();
+	}
     function create_tag(value, additionalClass) {
       // Cleaning the input.
       tagInput.val("");
