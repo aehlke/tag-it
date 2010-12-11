@@ -10,6 +10,8 @@
       'onTagAdded'        : null,
       // callback: called when a tag is removed
       'onTagRemoved'      : null,
+      // callback: called when a tag is clicked
+    	'onTagClicked'			: null,
       'tagSource'         : function(search, show_choices) {
                               var filter = new RegExp(search.term, "i");
                               var choices = settings.availableTags.filter(function(element) {
@@ -39,10 +41,12 @@
       // create the input field.
       .append($("<li class=\"tagit-new\"></li>\n").append(tagInput))
       .click(function(e) {
-        if (e.target.tagName == 'A') {
+        if (e.target.className == 'close') {
           // Removes a tag when the little 'x' is clicked.
           // Event is binded to the UL, otherwise a new tag (LI > A) wouldn't have this event attached to it.
           remove_tag($(e.target).parent());
+        } else if (e.target.className == 'tagLabel' && settings.onTagClicked) {
+						settings.onTagClicked($(e.target).parent());
         } else {
           // Sets the focus() to the input field, if the user clicks anywhere inside the UL.
           // This is needed because the input field needs to be of a small size.
@@ -151,12 +155,14 @@
       if (!is_new(value) || value == "") {
         return false;
       }
-
+      var linkValue = value;
+      if(settings.onTagClicked)
+      	linkValue = "<a class=\"tagLabel\">" + value + "</a>";
       // create tag
       var tag = $("<li />")
         .addClass("tagit-choice")
         .addClass(additionalClass)
-        .append(value)
+        .append(linkValue)
         .append("<a class=\"close\">x</a>")
         .append("<input type=\"hidden\" style=\"display:none;\" value=\"" + value + "\" name=\"" + settings.itemName + "[" + settings.fieldName + "][]\">");
 

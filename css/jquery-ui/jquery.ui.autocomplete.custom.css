@@ -56,6 +56,10 @@ ul.tagit li.tagit-choice input {
 	float:left;
 	margin:2px 5px 2px 0;
 }
+ul.tagit li.tagit-choice a.tagLabel {
+	cursor:pointer;
+	text-decoration:none;
+}
 ul.tagit li.tagit-choice a.close {
 	color:#777777;
 	cursor:pointer;
@@ -64,6 +68,7 @@ ul.tagit li.tagit-choice a.close {
 	padding:2px 0 2px 3px;
 	text-decoration:none;
 }
+ul.tagit li.tagit-choice a.tagLabel:hover
 ul.tagit li.tagit-choice a.close:hover {
   color:#222;
 }

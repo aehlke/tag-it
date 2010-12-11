@@ -111,6 +111,17 @@ The function receives the tag as parameter.
       }
     });
 
+### onTagClicked (function, Callback)
+
+Can be used to add custom behaviour when the Tag is clicked from the DOM.
+The function receives the tag as parameter.
+
+    $("#mytags").tagit({
+      onTagClicked: function(tag) {
+        // do something special
+      }
+    });
+    
 ### tagSource (function)
 
 Can be overwritten in order to use custom autocompletion sources like Ajax requests.
@@ -122,6 +133,12 @@ When removeConfirmation is enabled the user has to press the backspace key twice
 After the first keypress the last tag receives a *remove* css class which can be used to visually highlight the tag.
 
 Defaults to *false*.
+
+### caseSensitive (boolean)
+
+whether the duplication check should do a case sensitive check or not.
+
+Defaults to *true*.
 
 ## Authors
 
