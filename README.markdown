@@ -123,8 +123,16 @@ After the first keypress the last tag receives a *remove* css class which can be
 
 Defaults to *false*.
 
+### allowSpaces (boolean)
+
+When allowSpaces is enabled the user is not required to wrap multi-word tags in quotation marks.
+ie. user can enter John Smith instead of "John Smith"
+
+Defaults to *false*.
+
 ## Authors
 
 * [Levy Carneiro Jr.](http://github.com/levycarneiro)
 * [Martin Rehfeld](http://github.com/martinrehfeld)
 * [Tobias Schmidt](http://github.com/grobie)
+* [Skylar Challand](http://github.com/sskylar)
