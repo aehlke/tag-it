@@ -20,7 +20,8 @@
                               show_choices(subtract_array(choices, assigned_tags()));
                             },
       'removeConfirmation': false,
-      'caseSensitive':true
+      'caseSensitive':true,
+      'allowSpaces': false //when enabled, quotes are not neccesary for inputting multi-word tags
     };
 
     if (options) {
@@ -78,21 +79,22 @@
       })
       .keypress(function(event) {
         var keyCode = event.keyCode || event.which;
-        // Comma/Space/Enter are all valid delimiters for new tags. except when there is an open quote
+        // Comma/Space/Enter are all valid delimiters for new tags. except when there is an open quote or if setting allowSpaces = true
         if (
             keyCode == COMMA ||
             keyCode == ENTER ||
             keyCode == TAB ||
             (
-              keyCode == SPACE &&
-              (
-                (tagInput.val().trim().replace( /^s*/, "" ).charAt(0) != '"') ||
-                (
-                  tagInput.val().trim().charAt(0) == '"' &&
-                  tagInput.val().trim().charAt(tagInput.val().trim().length - 1) == '"' &&
-                  tagInput.val().trim().length - 1 != 0
-                )
-              )
+             	keyCode == SPACE && 
+             	settings.allowSpaces != true &&
+				(
+					(tagInput.val().trim().replace( /^s*/, "" ).charAt(0) != '"') ||
+					(
+					  tagInput.val().trim().charAt(0) == '"' &&
+					  tagInput.val().trim().charAt(tagInput.val().trim().length - 1) == '"' &&
+					  tagInput.val().trim().length - 1 != 0
+					)
+				)
             )
           ) {
 
