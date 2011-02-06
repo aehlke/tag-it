@@ -4,26 +4,26 @@
     $.fn.tagit = function(options) {
 
         var settings = {
-        'itemName'          : 'item',
-        'fieldName'         : 'tags',
-        'availableTags'     : [],
-        // callback: called when a tag is added
-        'onTagAdded'        : null,
-        // callback: called when a tag is removed
-        'onTagRemoved'      : null,
-        // callback: called when a tag is clicked
-    	'onTagClicked'      : null,
-        'tagSource':
-            function(search, show_choices) {
-                var filter = new RegExp(search.term, "i");
-                var choices = settings.availableTags.filter(function(element) {
-                    return (element.search(filter) != -1);
-                });
-                show_choices(subtract_array(choices, assigned_tags()));
-            },
-        'removeConfirmation': false,
-        'caseSensitive': true,
-        'allowSpaces': false //when enabled, quotes are not neccesary for inputting multi-word tags
+            'itemName'          : 'item',
+            'fieldName'         : 'tags',
+            'availableTags'     : [],
+            // callback: called when a tag is added
+            'onTagAdded'        : null,
+            // callback: called when a tag is removed
+            'onTagRemoved'      : null,
+            // callback: called when a tag is clicked
+    	    'onTagClicked'      : null,
+            'tagSource':
+                function(search, show_choices) {
+                    var filter = new RegExp(search.term, "i");
+                    var choices = settings.availableTags.filter(function(element) {
+                        return (element.search(filter) != -1);
+                    });
+                    show_choices(subtract_array(choices, assigned_tags()));
+                },
+            'removeConfirmation': false,
+            'caseSensitive': true,
+            'allowSpaces': false //when enabled, quotes are not neccesary for inputting multi-word tags
         };
 
         if (options) {
