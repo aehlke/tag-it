@@ -15,7 +15,7 @@
     	    'onTagClicked'      : null,
             'tagSource':
                 function(search, show_choices) {
-                    var filter = new RegExp(search.term, "i");
+                    var filter = new RegExp(search.term, 'i');
                     var choices = settings.availableTags.filter(function(element) {
                         return (element.search(filter) != -1);
                     });
@@ -31,7 +31,7 @@
         }
 
         var tagList = $(this),
-            tagInput  = $("<input class=\"tagit-input\" type=\"text\" />");
+            tagInput  = $('<input class="tagit-input" type="text" />');
             BACKSPACE = 8,
             ENTER     = 13,
             SPACE     = 32,
@@ -40,9 +40,9 @@
 
         tagList
             // add the tagit CSS class.
-            .addClass("tagit")
+            .addClass('tagit')
             // create the input field.
-            .append($("<li class=\"tagit-new\"></li>\n").append(tagInput))
+            .append($('<li class="tagit-new"></li>\n').append(tagInput))
             .click(function(e) {
                     if (e.target.className == 'close') {
                         // Removes a tag when the little 'x' is clicked.
@@ -57,10 +57,10 @@
                     }
             })
             // add existing tags
-            .children("li")
+            .children('li')
                 .each(function() {
                     if (!$(this).hasClass('tagit-new')) {
-                        create_tag($(this).html(), $(this).attr("class"));
+                        create_tag($(this).html(), $(this).attr('class'));
                         $(this).remove();
                     }
                 });
@@ -69,13 +69,13 @@
             .keydown(function(event) {
                 var keyCode = event.keyCode || event.which;
                 // Backspace is not detected within a keypress, so using a keydown
-                if (keyCode == BACKSPACE && tagInput.val() == "") {
-                    var tag = tagList.children(".tagit-choice:last");
-                    if (!settings.removeConfirmation || tag.hasClass("remove")) {
+                if (keyCode == BACKSPACE && tagInput.val() == '') {
+                    var tag = tagList.children('.tagit-choice:last');
+                    if (!settings.removeConfirmation || tag.hasClass('remove')) {
                         // When backspace is pressed, the last tag is deleted.
                         remove_tag(tag);
                     } else if (settings.removeConfirmation) {
-                        tag.addClass("remove");
+                        tag.addClass('remove');
                     }
                 }
             })
@@ -90,7 +90,7 @@
              	        keyCode == SPACE && 
              	        settings.allowSpaces != true &&
 				        (
-					        (tagInput.val().trim().replace( /^s*/, "" ).charAt(0) != '"') ||
+					        (tagInput.val().trim().replace( /^s*/, '' ).charAt(0) != '"') ||
 					        (
 					            tagInput.val().trim().charAt(0) == '"' &&
 					            tagInput.val().trim().charAt(tagInput.val().trim().length - 1) == '"' &&
@@ -101,10 +101,10 @@
                 ) {
 
                 event.preventDefault();
-                create_tag(tagInput.val().replace(/^"|"$|,+$/g, "").trim());
+                create_tag(tagInput.val().replace(/^"|"$|,+$/g, '').trim());
             }
             if (settings.removeConfirmation) {
-                tagList.children(".tagit-choice:last").removeClass("remove");
+                tagList.children('.tagit-choice:last').removeClass('remove');
             }
         });
 
@@ -121,15 +121,15 @@
 
         function assigned_tags() {
             var tags = [];
-            tagList.children(".tagit-choice").each(function() {
-                tags.push($(this).children("input").val());
+            tagList.children('.tagit-choice').each(function() {
+                tags.push($(this).children('input').val());
             });
             return tags;
         }
 
         function subtract_array(a1, a2) {
             var result = new Array();
-            for(var i = 0; i < a1.length; i++) {
+            for (var i = 0; i < a1.length; i++) {
                 if (a2.indexOf(a1[i]) == -1) {
                     result.push(a1[i]);
                 }
@@ -139,8 +139,8 @@
 
         function is_new(value) {
             var isNew = true;
-            tagList.children(".tagit-choice").each(function(i) {
-                if (format_str(value) == format_str($(this).children("input").val())) {
+            tagList.children('.tagit-choice').each(function(i) {
+                if (format_str(value) == format_str($(this).children('input').val())) {
                     isNew = false;
                     return;
                 }
@@ -154,22 +154,22 @@
 	    }
         function create_tag(value, additionalClass) {
             // Cleaning the input.
-            tagInput.val("");
+            tagInput.val('');
 
-            if (!is_new(value) || value == "") {
+            if (!is_new(value) || value == '') {
                 return false;
             }
             var linkValue = value;
-            if(settings.onTagClicked) {
-      	        linkValue = "<a class=\"tagLabel\">" + value + "</a>";
+            if (settings.onTagClicked) {
+      	        linkValue = '<a class="tagLabel">' + value + '</a>';
             }
             // create tag
-            var tag = $("<li />")
-                .addClass("tagit-choice")
+            var tag = $('<li />')
+                .addClass('tagit-choice')
                 .addClass(additionalClass)
                 .append(linkValue)
-                .append("<a class=\"close\">x</a>")
-                .append("<input type=\"hidden\" style=\"display:none;\" value=\"" + value + "\" name=\"" + settings.itemName + "[" + settings.fieldName + "][]\">");
+                .append('<a class="close">x</a>')
+                .append('<input type="hidden" style="display:none;" value="' + value + '" name="' + settings.itemName + '[' + settings.fieldName + '][]">');
 
             if (settings.onTagAdded) {
                 settings.onTagAdded(tag);
@@ -190,7 +190,7 @@
     };
 
     String.prototype.trim = function() {
-        return this.replace(/^\s+|\s+$/g, "");
+        return this.replace(/^\s+|\s+$/g, '');
     };
 
 })(jQuery);
