@@ -82,7 +82,7 @@
                 var tags = node.val().split(settings.singleFieldDelimiter);
                 node.val('');
                 $.each(tags, function(index, tag) {
-                    createTag(tag);
+                    createTag(unescape(tag));
                 });
             } else {
                 // Create our single field input after our list.
@@ -126,7 +126,6 @@
                 ) {
 
                     event.preventDefault();
-                    //TODO is the below for sanitization? if so, use escape() instead
                     createTag($.trim(tagInput.val().replace(/^'|"$|,+$/g, '')));
                 }
                 if (settings.removeConfirmation) {
@@ -147,22 +146,30 @@
 
         function assignedTags() {
             // Returns an array of tag string values
+            // WARNING: values won't be sanitized/escaped. Sanitize them before inserting them into the DOM.
             var tags = [];
             if (settings.singleField) {
                 tags = $(settings.singleFieldNode).val().split(settings.singleFieldDelimiter);
+                tags = $.map(tags, function(tag){
+                    return unescape(tag);
+                });
                 if (tags[0] == '') {
                     tags = [];
                 }
             } else {
                 tagList.children('.tagit-choice').each(function() {
-                    tags.push($(this).children('input').val());
+                    tags.push(tagLabel(this));//$(this).children('input').val());
                 });
             }
             return tags;
         }
         function updateSingleTagsField(tags) {
             // Takes a list of tag string values, updates settings.singleFieldNode.val to the tags delimited by settings.singleFieldDelimiter
-            $(settings.singleFieldNode).val(tags.join(settings.singleFieldDelimiter));
+            // Escapes the tag values.
+            var escapedTags = $.map(tags, function(tag){
+                return unescape(tag);
+            });
+            $(settings.singleFieldNode).val(escapedTags.join(settings.singleFieldDelimiter));
         }
         function subtractArray(a1, a2) {
             var result = new Array();
@@ -173,11 +180,19 @@
             }
             return result;
         }
-
+        function tagLabel(tag) {
+            // Returns the tag's string label.
+            // WARNING: It will not be a sanitized (escaped) string.
+            if (settings.singleField) {
+                return unescape($(tag).children('.tagit-label').text());
+            } else {
+                return $(tag).children('input').val();
+            }
+        }
         function isNew(value) {
             var isNew = true;
             tagList.children('.tagit-choice').each(function(i) {
-                if (formatStr(value) == formatStr($(this).children('input').val())) {
+                if (formatStr(value) == formatStr(tagLabel(this))) {
                     isNew = false;
                     return;
                 }
@@ -188,7 +203,7 @@
 		    if(settings.caseSensitive) {
 			    return str;
             }
-		    return str.toLowerCase();
+		    return $.trim(str.toLowerCase());
 	    }
         function createTag(value, additionalClass) {
             // Automatically trims the value of leading and trailing whitespace.
@@ -201,7 +216,8 @@
                 return false;
             }
 
-            var label = settings.onTagClicked ? '<a class="tagit-label">' + label + '</a>' : '<span class="tagit-label">' + value + '</span>';
+            var escapedValue = escape(value);
+            var label = settings.onTagClicked ? '<a class="tagit-label">' + escapedValue + '</a>' : '<span class="tagit-label">' + escapedValue + '</span>';
 
             // create tag
             var tag = $('<li />')
@@ -216,7 +232,7 @@
                 tags.push(value);
                 updateSingleTagsField(tags);
             } else {
-                tag.append('<input type="hidden" style="display:none;" value="' + value + '" name="' + settings.itemName + '[' + settings.fieldName + '][]">');
+                tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + settings.itemName + '[' + settings.fieldName + '][]">');
             }
 
             if (settings.onTagAdded) {
@@ -232,7 +248,7 @@
             }
             if (settings.singleField) {
                 var tags = assignedTags();
-                var removedTagLabel = tag.children('.tagit-label').text();
+                var removedTagLabel = unescape(tag.children('.tagit-label').text());
                 tags = $.grep(tags, function(el){
                     return el != removedTagLabel;
                 });
