@@ -154,11 +154,11 @@ It will delimit tags in the field with **singleFieldDelimiter**.
 
 Defaults to *false*
 
-### singleFieldDelimiter': 
+### singleFieldDelimiter (String)
 
 Defaults to *','*
 
-### singleFieldNode
+### singleFieldNode (DomNode)
 Set this to an input DOM node to use an existing form field.
 Any text in it will be erased on init. But it will be populated with the text of tags as they are created, delimited by **singleFieldDelimiter**.
 If this is not set, we create an input node for it, with the name given in **fieldName**, ignoring **itemName**.
