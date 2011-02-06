@@ -14,12 +14,12 @@
             // callback: called when a tag is clicked
     	    'onTagClicked'      : null,
             'tagSource':
-                function(search, show_choices) {
+                function(search, showChoices) {
                     var filter = new RegExp(search.term, 'i');
                     var choices = settings.availableTags.filter(function(element) {
                         return (element.search(filter) != -1);
                     });
-                    show_choices(subtract_array(choices, assigned_tags()));
+                    showChoices(subtractArray(choices, assignedTags()));
                 },
             'removeConfirmation': false,
             'caseSensitive': true,
@@ -51,7 +51,7 @@
                 if (e.target.className == 'close') {
                     // Removes a tag when the little 'x' is clicked.
                     // Event is binded to the UL, otherwise a new tag (LI > A) wouldn't have this event attached to it.
-                    remove_tag($(e.target).parent());
+                    removeTag($(e.target).parent());
                 } else if (e.target.className == 'tagLabel' && settings.onTagClicked) {
                     settings.onTagClicked($(e.target).parent());
                 } else {
@@ -64,7 +64,7 @@
             .children('li')
                 .each(function() {
                     if (!$(this).hasClass('tagit-new')) {
-                        create_tag($(this).html(), $(this).attr('class'));
+                        createTag($(this).html(), $(this).attr('class'));
                         $(this).remove();
                     }
                 });
@@ -77,7 +77,7 @@
                     var tag = tagList.children('.tagit-choice:last');
                     if (!settings.removeConfirmation || tag.hasClass('remove')) {
                         // When backspace is pressed, the last tag is deleted.
-                        remove_tag(tag);
+                        removeTag(tag);
                     } else if (settings.removeConfirmation) {
                         tag.addClass('remove');
                     }
@@ -105,7 +105,7 @@
                 ) {
 
                     event.preventDefault();
-                    $.trim(create_tag(tagInput.val().replace(/^'|"$|,+$/g, '')));
+                    $.trim(createTag(tagInput.val().replace(/^'|"$|,+$/g, '')));
                 }
                 if (settings.removeConfirmation) {
                     tagList.children('.tagit-choice:last').removeClass('remove');
@@ -116,14 +116,15 @@
             tagInput.autocomplete({
                 source: settings.tagSource,
                 select: function(event, ui) {
-                    create_tag(ui.item.value);
+                    createTag(ui.item.value);
                     // Preventing the tag input to be updated with the chosen value.
                     return false;
                 }
             });
         }
 
-        function assigned_tags() {
+        function assignedTags() {
+            // Returns an array of tag string values
             var tags = [];
             tagList.children('.tagit-choice').each(function() {
                 tags.push($(this).children('input').val());
@@ -131,7 +132,7 @@
             return tags;
         }
 
-        function subtract_array(a1, a2) {
+        function subtractArray(a1, a2) {
             var result = new Array();
             for (var i = 0; i < a1.length; i++) {
                 if (a2.indexOf(a1[i]) == -1) {
@@ -141,26 +142,26 @@
             return result;
         }
 
-        function is_new(value) {
+        function isNew(value) {
             var isNew = true;
             tagList.children('.tagit-choice').each(function(i) {
-                if (format_str(value) == format_str($(this).children('input').val())) {
+                if (formatStr(value) == formatStr($(this).children('input').val())) {
                     isNew = false;
                     return;
                 }
             });
             return isNew;
         }
-	    function format_str(str) {
+	    function formatStr(str) {
 		    if(settings.caseSensitive)
 			    return str;
 		    return str.toLowerCase();
 	    }
-        function create_tag(value, additionalClass) {
+        function createTag(value, additionalClass) {
             // Cleaning the input.
             tagInput.val('');
 
-            if (!is_new(value) || value == '') {
+            if (!isNew(value) || value == '') {
                 return false;
             }
             var linkValue = value;
@@ -186,7 +187,7 @@
             // insert tag
             tagInput.parent().before(tag);
         }
-        function remove_tag(tag) {
+        function removeTag(tag) {
             if (settings.onTagRemoved) {
                 settings.onTagRemoved(tag);
             }
