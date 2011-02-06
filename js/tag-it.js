@@ -22,7 +22,7 @@
                 show_choices(subtract_array(choices, assigned_tags()));
             },
         'removeConfirmation': false,
-        'caseSensitive':true,
+        'caseSensitive': true,
         'allowSpaces': false //when enabled, quotes are not neccesary for inputting multi-word tags
         };
 
