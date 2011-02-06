@@ -44,17 +44,17 @@
             // create the input field.
             .append($('<li class="tagit-new"></li>\n').append(tagInput))
             .click(function(e) {
-                    if (e.target.className == 'close') {
-                        // Removes a tag when the little 'x' is clicked.
-                        // Event is binded to the UL, otherwise a new tag (LI > A) wouldn't have this event attached to it.
-                        remove_tag($(e.target).parent());
-                    } else if (e.target.className == 'tagLabel' && settings.onTagClicked) {
-                        settings.onTagClicked($(e.target).parent());
-                    } else {
-                        // Sets the focus() to the input field, if the user clicks anywhere inside the UL.
-                        // This is needed because the input field needs to be of a small size.
-                        tagInput.focus();
-                    }
+                if (e.target.className == 'close') {
+                    // Removes a tag when the little 'x' is clicked.
+                    // Event is binded to the UL, otherwise a new tag (LI > A) wouldn't have this event attached to it.
+                    remove_tag($(e.target).parent());
+                } else if (e.target.className == 'tagLabel' && settings.onTagClicked) {
+                    settings.onTagClicked($(e.target).parent());
+                } else {
+                    // Sets the focus() to the input field, if the user clicks anywhere inside the UL.
+                    // This is needed because the input field needs to be of a small size.
+                    tagInput.focus();
+                }
             })
             // add existing tags
             .children('li')
@@ -100,13 +100,13 @@
                     )
                 ) {
 
-                event.preventDefault();
-                create_tag(tagInput.val().replace(/^"|"$|,+$/g, '').trim());
-            }
-            if (settings.removeConfirmation) {
-                tagList.children('.tagit-choice:last').removeClass('remove');
-            }
-        });
+                    event.preventDefault();
+                    create_tag(tagInput.val().replace(/^"|"$|,+$/g, '').trim());
+                }
+                if (settings.removeConfirmation) {
+                    tagList.children('.tagit-choice:last').removeClass('remove');
+                }
+            });
 
         if (options.availableTags || options.tagSource) {
             tagInput.autocomplete({
