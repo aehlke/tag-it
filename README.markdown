@@ -153,3 +153,5 @@ Defaults to *false*.
 * [Martin Rehfeld](http://github.com/martinrehfeld)
 * [Tobias Schmidt](http://github.com/grobie)
 * [Skylar Challand](http://github.com/sskylar)
+* [Alex Ehlke](http://github.com/aehlke)
+
