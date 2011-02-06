@@ -94,18 +94,18 @@
              	        keyCode == SPACE && 
              	        settings.allowSpaces != true &&
 				        (
-					        (tagInput.val().trim().replace( /^s*/, '' ).charAt(0) != '"') ||
+					        ($.trim(tagInput.val()).replace( /^s*/, '' ).charAt(0) != '"') ||
 					        (
-					            tagInput.val().trim().charAt(0) == '"' &&
-					            tagInput.val().trim().charAt(tagInput.val().trim().length - 1) == '"' &&
-					            tagInput.val().trim().length - 1 != 0
+					            $.trim(tagInput.val()).charAt(0) == '"' &&
+					            $.trim(tagInput.val()).charAt(tagInput.val().trim().length - 1) == '"' &&
+					            $.trim(tagInput.val()).length - 1 != 0
 					        )
 				        )
                     )
                 ) {
 
                     event.preventDefault();
-                    create_tag(tagInput.val().replace(/^"|"$|,+$/g, '').trim());
+                    $.trim(create_tag(tagInput.val().replace(/^'|"$|,+$/g, ''));
                 }
                 if (settings.removeConfirmation) {
                     tagList.children('.tagit-choice:last').removeClass('remove');
@@ -198,10 +198,6 @@
 
         // maintaining chainability
         return this;
-    };
-
-    String.prototype.trim = function() {
-        return this.replace(/^\s+|\s+$/g, '');
     };
 
 })(jQuery);
