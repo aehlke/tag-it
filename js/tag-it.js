@@ -23,7 +23,11 @@
                 },
             'removeConfirmation': false,
             'caseSensitive': true,
-            'allowSpaces': false //when enabled, quotes are not neccesary for inputting multi-word tags
+            'allowSpaces': false, // when enabled, quotes are not neccesary for inputting multi-word tags
+
+            'singleField': false, // When enabled, will use a single hidden field for the form, rather than one per tag.
+                                  // It will delimit tags in the field with singleFieldDelimiter.
+            'singleFieldDelimiter': ','
         };
 
         if (options) {
@@ -168,8 +172,12 @@
                 .addClass('tagit-choice')
                 .addClass(additionalClass)
                 .append(linkValue)
-                .append('<a class="close">x</a>')
-                .append('<input type="hidden" style="display:none;" value="' + value + '" name="' + settings.itemName + '[' + settings.fieldName + '][]">');
+                .append('<a class="close">x</a>');
+            if (settings.singleField) {
+                //TODO
+            } else {
+                tag.append('<input type="hidden" style="display:none;" value="' + value + '" name="' + settings.itemName + '[' + settings.fieldName + '][]">');
+            }
 
             if (settings.onTagAdded) {
                 settings.onTagAdded(tag);
@@ -181,6 +189,9 @@
         function remove_tag(tag) {
             if (settings.onTagRemoved) {
                 settings.onTagRemoved(tag);
+            }
+            if (settings.singleField) {
+                //TODO
             }
             tag.remove();
         }
