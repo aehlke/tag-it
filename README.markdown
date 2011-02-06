@@ -147,6 +147,24 @@ ie. user can enter John Smith instead of "John Smith"
 
 Defaults to *false*.
 
+### singleField (boolean)
+
+When enabled, will use a single hidden field for the form, rather than one per tag.
+It will delimit tags in the field with **singleFieldDelimiter**.
+
+Defaults to *false*
+
+### singleFieldDelimiter': 
+
+Defaults to *','*
+
+### singleFieldNode
+Set this to an input DOM node to use an existing form field.
+Any text in it will be erased on init. But it will be populated with the text of tags as they are created, delimited by **singleFieldDelimiter**.
+If this is not set, we create an input node for it, with the name given in **fieldName**, ignoring **itemName**.
+
+Defalts to *null*
+
 ## Authors
 
 * [Levy Carneiro Jr.](http://github.com/levycarneiro)
