@@ -25,9 +25,15 @@
             'caseSensitive': true,
             'allowSpaces': false, // when enabled, quotes are not neccesary for inputting multi-word tags
 
+            // The below options are for using a single field instead of several for our form values.
             'singleField': false, // When enabled, will use a single hidden field for the form, rather than one per tag.
                                   // It will delimit tags in the field with singleFieldDelimiter.
-            'singleFieldDelimiter': ','
+            'singleFieldDelimiter': ',',
+            'singleFieldNode': null // Set this to an input DOM node to use an existing form field.
+                                    // Any text in it will be erased on init. But it will be populated with 
+                                    // the text of tags as they are created, delimited by singleFieldDelimiter.
+                                    // If this is not set, we create an input node for it, with the name 
+                                    // given in settings.fieldName, ignoring settings.itemName.
         };
 
         if (options) {
@@ -52,7 +58,7 @@
                     // Removes a tag when the little 'x' is clicked.
                     // Event is binded to the UL, otherwise a new tag (LI > A) wouldn't have this event attached to it.
                     removeTag($(e.target).parent());
-                } else if (e.target.className == 'tagLabel' && settings.onTagClicked) {
+                } else if (e.target.className == 'tagit-label' && settings.onTagClicked) {
                     settings.onTagClicked($(e.target).parent());
                 } else {
                     // Sets the focus() to the input field, if the user clicks anywhere inside the UL.
@@ -68,6 +74,12 @@
                         $(this).remove();
                     }
                 });
+            //TODO add existing tags from the text in singleFieldNode
+
+        if (settings.singleField && !settings.singleFieldNode) {
+            // Create our single field input after our list.
+            settings.singleFieldNode = tagList.after('<input type="hidden" style="display:none;" value="" name="' + settings.fieldName + '" />');
+        }
 
         tagInput
             .keydown(function(event) {
@@ -105,6 +117,7 @@
                 ) {
 
                     event.preventDefault();
+                    //TODO is the below for sanitization? if so, use escape() instead
                     $.trim(createTag(tagInput.val().replace(/^'|"$|,+$/g, '')));
                 }
                 if (settings.removeConfirmation) {
@@ -126,12 +139,22 @@
         function assignedTags() {
             // Returns an array of tag string values
             var tags = [];
-            tagList.children('.tagit-choice').each(function() {
-                tags.push($(this).children('input').val());
-            });
+            if (settings.singleField) {
+                tags = $(settings.singleFieldNode).val().split(settings.singleFieldDelimiter);
+                if (tags[0] == '') {
+                    tags = [];
+                }
+            } else {
+                tagList.children('.tagit-choice').each(function() {
+                    tags.push($(this).children('input').val());
+                });
+            }
             return tags;
         }
-
+        function updateSingleTagsField(tags) {
+            // Takes a list of tag string values, updates settings.singleFieldNode.val to the tags delimited by settings.singleFieldDelimiter
+            $(settings.singleFieldNode).val(tags.join(settings.singleFieldDelimiter));
+        }
         function subtractArray(a1, a2) {
             var result = new Array();
             for (var i = 0; i < a1.length; i++) {
@@ -153,8 +176,9 @@
             return isNew;
         }
 	    function formatStr(str) {
-		    if(settings.caseSensitive)
+		    if(settings.caseSensitive) {
 			    return str;
+            }
 		    return str.toLowerCase();
 	    }
         function createTag(value, additionalClass) {
@@ -164,18 +188,21 @@
             if (!isNew(value) || value == '') {
                 return false;
             }
-            var linkValue = value;
-            if (settings.onTagClicked) {
-      	        linkValue = '<a class="tagLabel">' + value + '</a>';
-            }
+
+            var label = settings.onTagClicked ? '<a class="tagit-label">' + label + '</a>' : '<span class="tagit-label">' + value + '</span>';
+
             // create tag
             var tag = $('<li />')
                 .addClass('tagit-choice')
                 .addClass(additionalClass)
-                .append(linkValue)
+                .append(label)
                 .append('<a class="close">x</a>');
+
             if (settings.singleField) {
                 //TODO
+                var tags = assignedTags();
+                tags.push(value);
+                updateSingleTagsField(tags);
             } else {
                 tag.append('<input type="hidden" style="display:none;" value="' + value + '" name="' + settings.itemName + '[' + settings.fieldName + '][]">');
             }
@@ -192,7 +219,12 @@
                 settings.onTagRemoved(tag);
             }
             if (settings.singleField) {
-                //TODO
+                var tags = assignedTags();
+                var removedTagLabel = tag.children('.tagit-label').text();
+                tags = $.grep(tags, function(el){
+                    return el != removedTagLabel;
+                });
+                updateSingleTagsField(tags);
             }
             tag.remove();
         }
