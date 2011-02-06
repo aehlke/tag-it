@@ -105,7 +105,7 @@
                 ) {
 
                     event.preventDefault();
-                    $.trim(create_tag(tagInput.val().replace(/^'|"$|,+$/g, ''));
+                    $.trim(create_tag(tagInput.val().replace(/^'|"$|,+$/g, '')));
                 }
                 if (settings.removeConfirmation) {
                     tagList.children('.tagit-choice:last').removeClass('remove');
