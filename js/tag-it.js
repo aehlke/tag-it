@@ -74,11 +74,20 @@
                         $(this).remove();
                     }
                 });
-            //TODO add existing tags from the text in singleFieldNode
 
-        if (settings.singleField && !settings.singleFieldNode) {
-            // Create our single field input after our list.
-            settings.singleFieldNode = tagList.after('<input type="hidden" style="display:none;" value="" name="' + settings.fieldName + '" />');
+        if (settings.singleField) {
+            if (settings.singleFieldNode) {
+                // Add existing tags from the input field
+                var node = $(settings.singleFieldNode);
+                var tags = node.val().split(settings.singleFieldDelimiter);
+                node.val('');
+                $.each(tags, function(index, tag) {
+                    createTag(tag);
+                });
+            } else {
+                // Create our single field input after our list.
+                settings.singleFieldNode = tagList.after('<input type="hidden" style="display:none;" value="" name="' + settings.fieldName + '" />');
+            }
         }
 
         tagInput
@@ -109,7 +118,7 @@
 					        ($.trim(tagInput.val()).replace( /^s*/, '' ).charAt(0) != '"') ||
 					        (
 					            $.trim(tagInput.val()).charAt(0) == '"' &&
-					            $.trim(tagInput.val()).charAt(tagInput.val().trim().length - 1) == '"' &&
+					            $.trim(tagInput.val()).charAt($.trim(tagInput.val()).length - 1) == '"' &&
 					            $.trim(tagInput.val()).length - 1 != 0
 					        )
 				        )
@@ -118,7 +127,7 @@
 
                     event.preventDefault();
                     //TODO is the below for sanitization? if so, use escape() instead
-                    $.trim(createTag(tagInput.val().replace(/^'|"$|,+$/g, '')));
+                    createTag($.trim(tagInput.val().replace(/^'|"$|,+$/g, '')));
                 }
                 if (settings.removeConfirmation) {
                     tagList.children('.tagit-choice:last').removeClass('remove');
@@ -182,6 +191,9 @@
 		    return str.toLowerCase();
 	    }
         function createTag(value, additionalClass) {
+            // Automatically trims the value of leading and trailing whitespace.
+            value = $.trim(value);
+
             // Cleaning the input.
             tagInput.val('');
 
