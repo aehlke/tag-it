@@ -29,11 +29,13 @@
             'singleField': false, // When enabled, will use a single hidden field for the form, rather than one per tag.
                                   // It will delimit tags in the field with singleFieldDelimiter.
             'singleFieldDelimiter': ',',
-            'singleFieldNode': null // Set this to an input DOM node to use an existing form field.
+            'singleFieldNode': null, // Set this to an input DOM node to use an existing form field.
                                     // Any text in it will be erased on init. But it will be populated with 
                                     // the text of tags as they are created, delimited by singleFieldDelimiter.
                                     // If this is not set, we create an input node for it, with the name 
                                     // given in settings.fieldName, ignoring settings.itemName.
+
+            'tabIndex': null // Optionally set a tabindex attribute on the input that gets created for tag-it.
         };
 
         if (options) {
@@ -41,7 +43,7 @@
         }
 
         var tagList = $(this),
-            tagInput  = $('<input class="tagit-input" type="text" />');
+            tagInput  = $('<input class="tagit-input" type="text" ' + (settings.tabIndex ? 'tabindex="' + settings.tabIndex + '"' : '') + '/>');
             BACKSPACE = 8,
             ENTER     = 13,
             SPACE     = 32,

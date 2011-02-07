@@ -165,6 +165,12 @@ If this is not set, we create an input node for it, with the name given in **fie
 
 Defalts to *null*
 
+### tabIndex (integer)
+Optionally set a *tabindex* attribute on the input that gets created for tag-it.
+
+Defaults to *null*
+
+
 ## Authors
 
 * [Levy Carneiro Jr.](http://github.com/levycarneiro)
