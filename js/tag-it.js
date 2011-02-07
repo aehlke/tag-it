@@ -126,22 +126,42 @@
                 ) {
 
                     event.preventDefault();
-                    createTag($.trim(tagInput.val().replace(/^'|"$|,+$/g, '')));
+                    createTag(cleanedInput());
                 }
                 if (settings.removeConfirmation) {
                     tagList.children('.tagit-choice:last').removeClass('remove');
                 }
-            });
+            }).blur(function(e){
+                // create a tag when the element loses focus (nothing will happen if it's empty though)
+                createTag(cleanedInput());
+		    });
+            
 
         if (options.availableTags || options.tagSource) {
+            var tagAutocompleteChangedSinceOpen = false;
+
             tagInput.autocomplete({
                 source: settings.tagSource,
                 select: function(event, ui) {
+                    // Delete the last tag if we autocomplete something despite the input being empty
+                    // This happens because the input's blur event causes the tag to be created when
+                    // the user clicks an autocomplete item.
+                    // The only artifact of this is that while the user holds down the mouse button
+                    // on the selected autocomplete item, a tag is shown with the pre-autocompleted text,
+                    // and is changed to the autocompleted text upon mouseup.
+                    if (tagInput.val() == '') {
+                        removeTag(tagList.children('.tagit-choice:last'));
+                    }
                     createTag(ui.item.value);
                     // Preventing the tag input to be updated with the chosen value.
                     return false;
                 }
             });
+        }
+
+        function cleanedInput() {
+            // Returns the contents of the tag input, cleaned and ready to be passed to createTag
+            return $.trim(tagInput.val().replace(/^'|"$|,+$/g, ''));
         }
 
         function assignedTags() {
