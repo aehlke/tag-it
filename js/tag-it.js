@@ -138,8 +138,6 @@
             
 
         if (options.availableTags || options.tagSource) {
-            var tagAutocompleteChangedSinceOpen = false;
-
             tagInput.autocomplete({
                 source: settings.tagSource,
                 select: function(event, ui) {
