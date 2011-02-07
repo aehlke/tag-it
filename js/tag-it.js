@@ -84,7 +84,7 @@
                 var tags = node.val().split(settings.singleFieldDelimiter);
                 node.val('');
                 $.each(tags, function(index, tag) {
-                    createTag(unescape(tag));
+                    createTag(tag);
                 });
             } else {
                 // Create our single field input after our list.
@@ -166,13 +166,9 @@
 
         function assignedTags() {
             // Returns an array of tag string values
-            // WARNING: values won't be sanitized/escaped. Sanitize them before inserting them into the DOM.
             var tags = [];
             if (settings.singleField) {
                 tags = $(settings.singleFieldNode).val().split(settings.singleFieldDelimiter);
-                tags = $.map(tags, function(tag){
-                    return unescape(tag);
-                });
                 if (tags[0] == '') {
                     tags = [];
                 }
@@ -185,11 +181,7 @@
         }
         function updateSingleTagsField(tags) {
             // Takes a list of tag string values, updates settings.singleFieldNode.val to the tags delimited by settings.singleFieldDelimiter
-            // Escapes the tag values.
-            var escapedTags = $.map(tags, function(tag){
-                return unescape(tag);
-            });
-            $(settings.singleFieldNode).val(escapedTags.join(settings.singleFieldDelimiter));
+            $(settings.singleFieldNode).val(tags.join(settings.singleFieldDelimiter));
         }
         function subtractArray(a1, a2) {
             var result = new Array();
@@ -202,9 +194,8 @@
         }
         function tagLabel(tag) {
             // Returns the tag's string label.
-            // WARNING: It will not be a sanitized (escaped) string.
             if (settings.singleField) {
-                return unescape($(tag).children('.tagit-label').text());
+                return $(tag).children('.tagit-label').text();
             } else {
                 return $(tag).children('input').val();
             }
@@ -236,8 +227,7 @@
                 return false;
             }
 
-            var escapedValue = escape(value);
-            var label = settings.onTagClicked ? '<a class="tagit-label">' + escapedValue + '</a>' : '<span class="tagit-label">' + escapedValue + '</span>';
+            var label = $(settings.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
 
             // create tag
             var tag = $('<li />')
@@ -252,6 +242,7 @@
                 tags.push(value);
                 updateSingleTagsField(tags);
             } else {
+                var escapedValue = label.html();
                 tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + settings.itemName + '[' + settings.fieldName + '][]">');
             }
 
@@ -268,7 +259,7 @@
             }
             if (settings.singleField) {
                 var tags = assignedTags();
-                var removedTagLabel = unescape(tag.children('.tagit-label').text());
+                var removedTagLabel = tag.children('.tagit-label').text();
                 tags = $.grep(tags, function(el){
                     return el != removedTagLabel;
                 });
