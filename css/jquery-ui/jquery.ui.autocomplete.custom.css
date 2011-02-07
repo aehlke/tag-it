@@ -4,6 +4,7 @@
 	cursor: default;
 }
 .ui-autocomplete .ui-menu-item {
+    list-style: none;
 }
 .ui-autocomplete  .ui-menu-item a {
 	display:block;
@@ -18,7 +19,7 @@
 	margin:0;
 }
 .ui-autocomplete-loading {
-	background: white url(images/ui-anim_basic_16x16.gif) right center no-repeat;
+	/*background: white url(images/ui-anim_basic_16x16.gif) right center no-repeat;*/
 }
 
 ul.tagit {
@@ -76,11 +77,12 @@ ul.tagit input[type="text"] {
   -moz-box-sizing:    border-box;
   -webkit-box-sizing: border-box;
   box-sizing:         border-box;
-	border:none;
+    border:none;
 	margin:0;
 	padding:0;
 	width:inherit;
 	border-color:#C6C6C6;
 	background-color:#FFFFFF;
 	color:#333333;
+    outline: none;
 }
