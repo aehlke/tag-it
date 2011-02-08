@@ -43,7 +43,7 @@
         }
 
         var tagList = $(this),
-            tagInput  = $('<input class="tagit-input" type="text" ' + (settings.tabIndex ? 'tabindex="' + settings.tabIndex + '"' : '') + '/>');
+            tagInput  = $('<input class="tagit-input" type="text" ' + (settings.tabIndex ? 'tabindex="' + settings.tabIndex + '"' : '') + '/>'),
             BACKSPACE = 8,
             ENTER     = 13,
             SPACE     = 32,
