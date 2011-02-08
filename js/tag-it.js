@@ -174,7 +174,7 @@
                 }
             } else {
                 tagList.children('.tagit-choice').each(function() {
-                    tags.push(tagLabel(this));//$(this).children('input').val());
+                    tags.push(tagLabel(this));
                 });
             }
             return tags;
@@ -237,7 +237,6 @@
                 .append('<a class="close">x</a>');
 
             if (settings.singleField) {
-                //TODO
                 var tags = assignedTags();
                 tags.push(value);
                 updateSingleTagsField(tags);
