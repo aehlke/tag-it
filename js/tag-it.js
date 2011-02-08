@@ -139,7 +139,7 @@
 		    });
             
 
-        if (options.availableTags || options.tagSource) {
+        if (settings.availableTags || settings.tagSource) {
             tagInput.autocomplete({
                 source: settings.tagSource,
                 select: function(event, ui) {
