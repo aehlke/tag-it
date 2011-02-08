@@ -176,6 +176,8 @@ Defaults to *null*
 ### removeAll()
 Clears the widget of all tags -- removes each tag it contains, so the onTagRemoved event callback (if set in the options) will be called for each.
 
+    $("#mytags").tagit('removeAll');
+
 
 ## Authors
 
