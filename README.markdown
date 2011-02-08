@@ -171,6 +171,12 @@ Optionally set a *tabindex* attribute on the input that gets created for tag-it.
 Defaults to *null*
 
 
+## Methods
+
+### removeAll()
+Clears the widget of all tags -- removes each tag it contains, so the onTagRemoved event callback (if set in the options) will be called for each.
+
+
 ## Authors
 
 * [Levy Carneiro Jr.](http://github.com/levycarneiro)
