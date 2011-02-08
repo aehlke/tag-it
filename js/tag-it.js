@@ -1,8 +1,5 @@
         /*if (options_or_action == 'clear') {
             // Resets the widget, removing all tags
-            $.each(assignedTags(), function(index, tag) {
-                removeTag(tag);
-            });
             return this; // for chainability
         } else {*/
 
@@ -272,6 +269,7 @@
         },
         
         removeTag: function(tag) {
+            tag = $(tag);
             if (this.options.onTagRemoved) {
                 this.options.onTagRemoved(tag);
             }
@@ -284,6 +282,14 @@
                 this._updateSingleTagsField(tags);
             }
             tag.remove();
+        },
+
+        removeAll: function() {
+            // Removes all tags
+            var self = this;
+            this.tagList.children('.tagit-choice').each(function(index, tag) {
+                self.removeTag(tag);
+            });
         }
 
     });
