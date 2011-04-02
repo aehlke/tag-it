@@ -121,7 +121,7 @@ The function receives the tag as parameter.
         // do something special
       }
     });
-    
+
 ### tagSource (function)
 
 Can be overwritten in order to use custom autocompletion sources like Ajax requests.
@@ -178,6 +178,11 @@ Clears the widget of all tags -- removes each tag it contains, so the onTagRemov
 
     $("#mytags").tagit('removeAll');
 
+### createTag(tagName)
+Adds new tag to the list.
+
+    $("#mytags").tagit('createTag','brandNewTag');
+
 
 ## Authors
 
@@ -186,4 +191,3 @@ Clears the widget of all tags -- removes each tag it contains, so the onTagRemov
 * [Tobias Schmidt](http://github.com/grobie)
 * [Skylar Challand](http://github.com/sskylar)
 * [Alex Ehlke](http://github.com/aehlke)
-
