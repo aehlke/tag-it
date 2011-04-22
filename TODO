@@ -1,0 +1,3 @@
+* Update the autocomplete to use the new jQuery UI autocomplete widget. The 
+current one is deprecated, though still functional.
+
