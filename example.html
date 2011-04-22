@@ -1,13 +1,14 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+<html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Tag Editor - example</title>
+    <meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Tag it! example</title>
 
-	<link href="css/reset.css" rel="stylesheet" type="text/css" />
-	<link href="css/master.css" rel="stylesheet" type="text/css" />
+	<link href="css/reset.css" rel="stylesheet" type="text/css">
+	<link href="css/master.css" rel="stylesheet" type="text/css">
 
-	<link href="css/jquery-ui/jquery.ui.autocomplete.custom.css" rel="stylesheet" type="text/css" />
+	<link href="css/jquery-ui/jquery.ui.autocomplete.custom.css" rel="stylesheet" type="text/css">
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/ie-compat.js" type="text/javascript" charset="utf-8"></script>
@@ -15,21 +16,22 @@
 	<script src="js/tag-it.js" type="text/javascript" charset="utf-8"></script>
 
 	<script>
-	$(function(){
-		$("#mytags").tagit({
-			availableTags: ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl"],
-			// configure the name of the input field (will be submitted with form), default: item[tags]
-			itemName: 'item',
-			fieldName: 'tags'
-		});
+	    $(function(){
+            var sampleTags = ['c++', 'java', 'php', 'coldfusion', 'javascript', 'asp', 'ruby', 'python', 'c', 'scala', 'groovy', 'haskell', 'perl'];
+		    $("#mytags").tagit({
+			    availableTags: sampleTags,
+			    // configure the name of the input field (will be submitted with form), default: item[tags]
+			    itemName: 'item',
+			    fieldName: 'tags'
+		    });
 
-		$("#myTags2").tagit({
-			availableTags: ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl"],
-			// configure the name of the input field (will be submitted with form), default: item[tags]
-			singleField: true,
-            singleFieldNode: $('#mySingleField')
-		});
-	});
+		    $("#myTags2").tagit({
+			    availableTags: sampleTags,
+			    // configure the name of the input field (will be submitted with form), default: item[tags]
+			    singleField: true,
+                singleFieldNode: $('#mySingleField')
+		    });
+	    });
 	</script>
 
 </head>
@@ -42,7 +44,7 @@
 			<p>After looking for a jQuery plugin for handling a 'tag suggestion' form field, in much the same way ZenDesk.com does, I ended up developing a customization of jQuery UI that does the same interaction.</p>
 		</div>
 		<div class="line">
-			<label for="tags">Tags</label>
+			<label>Tags</label>
 			<ul id="mytags">
 				<!-- Existing list items will be pre-added to the tags -->
 				<li>Tag1</li>
@@ -50,7 +52,7 @@
 			</ul>
 		</div>
 		<div class="line">
-			<input type="submit" value="Submit" />
+			<input type="submit" value="Submit">
 		</div>
 		<div class="line">
 			<p>Built with <a href="http://jquery.com/" target="_blank">jQuery</a> and <a href="http://jqueryui.com/" target="_blank">jQueryUI</a>.</p>
@@ -71,7 +73,7 @@
             </p>
         </div>
 		<div class="line">
-			<label for="tags">Tags</label>
+			<label>Tags</label>
 			<ul id="myTags2">
 				<!-- Existing list items will be pre-added to the tags -->
 			</ul>
@@ -80,7 +82,7 @@
             <a href="#" onclick="$('#myTags2').tagit('removeAll');">Clear tags</a>
         </div>
 		<div class="line">
-			<input type="submit" value="Submit" />
+			<input type="submit" value="Submit">
 		</div>
 	</form>
 </div>

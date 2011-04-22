@@ -40,7 +40,7 @@
             var self = this;
 
             this.tagList = this.element;
-            this._tagInput  = $('<input class="tagit-input" type="text" ' + (this.options.tabIndex ? 'tabindex="' + this.options.tabIndex + '"' : '') + '/>');
+            this._tagInput  = $('<input class="tagit-input" type="text" ' + (this.options.tabIndex ? 'tabindex="' + this.options.tabIndex + '"' : '') + '>');
 
             var BACKSPACE = 8,
                 ENTER     = 13,
@@ -94,7 +94,7 @@
                     });
                 } else {
                     // Create our single field input after our list.
-                    this.options.singleFieldNode = tagList.after('<input type="hidden" style="display:none;" value="" name="' + this.options.fieldName + '" />');
+                    this.options.singleFieldNode = tagList.after('<input type="hidden" style="display:none;" value="" name="' + this.options.fieldName + '">');
                 }
             }
 
@@ -245,7 +245,7 @@
             var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
 
             // create tag
-            var tag = $('<li />')
+            var tag = $('<li></li>')
                 .addClass('tagit-choice')
                 .addClass(additionalClass)
                 .append(label)
