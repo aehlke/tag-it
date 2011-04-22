@@ -13,9 +13,8 @@ Check the [example.html](http://github.com/grobie/tag-it/blob/master/example.htm
 
 First, load [jQuery](http://jquery.com/), [jQuery UI](http://jqueryui.com/) and the plugin:
 
-    <script src="js/jquery/jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="js/jquery-ui/jquery-ui-1.8.core-and-interactions.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="js/jquery-ui/jquery-ui-1.8.autocomplete.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/tag-it.js" type="text/javascript" charset="utf-8"></script>
 
 Notice, to make it work under IE you have to additionally load 'js/ie-compat.js'.

@@ -6,15 +6,16 @@
 
 	<link href="css/reset.css" rel="stylesheet" type="text/css" />
 	<link href="css/master.css" rel="stylesheet" type="text/css" />
-	<link href="css/jquery-ui/jquery.ui.autocomplete.custom.css" rel="stylesheet" type="text/css"  />
 
-	<script src="js/jquery-1.4.4.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="js/jquery-ui-1.8.7.custom.min.js" type="text/javascript" charset="utf-8"></script>
+	<link href="css/jquery-ui/jquery.ui.autocomplete.custom.css" rel="stylesheet" type="text/css"  />
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="js/ie-compat.js" type="text/javascript" charset="utf-8"></script>
+
 	<script src="js/tag-it.js" type="text/javascript" charset="utf-8"></script>
 
 	<script>
-	$(document).ready(function(){
+	$(function(){
 		$("#mytags").tagit({
 			availableTags: ["c++", "java", "php", "coldfusion", "javascript", "asp", "ruby", "python", "c", "scala", "groovy", "haskell", "perl"],
 			// configure the name of the input field (will be submitted with form), default: item[tags]
