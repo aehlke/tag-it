@@ -15,7 +15,7 @@
             // callback: called when a tag is removed
             'onTagRemoved'      : null,
             // callback: called when a tag is clicked
-    	    'onTagClicked'      : null,
+            'onTagClicked'      : null,
             'tagSource'         : null,
             'removeConfirmation': false,
             'caseSensitive': true,
@@ -26,10 +26,10 @@
                                   // It will delimit tags in the field with singleFieldDelimiter.
             'singleFieldDelimiter': ',',
             'singleFieldNode': null, // Set this to an input DOM node to use an existing form field.
-                                    // Any text in it will be erased on init. But it will be populated with 
-                                    // the text of tags as they are created, delimited by singleFieldDelimiter.
-                                    // If this is not set, we create an input node for it, with the name 
-                                    // given in settings.fieldName, ignoring settings.itemName.
+                                     // Any text in it will be erased on init. But it will be populated with 
+                                     // the text of tags as they are created, delimited by singleFieldDelimiter.
+                                     // If this is not set, we create an input node for it, with the name 
+                                     // given in settings.fieldName, ignoring settings.itemName.
 
             'tabIndex': null // Optionally set a tabindex attribute on the input that gets created for tag-it.
         },
@@ -102,7 +102,7 @@
                 .keydown(function(event) {
                     var keyCode = event.keyCode || event.which;
                     // Backspace is not detected within a keypress, so using a keydown
-                    if (keyCode == BACKSPACE && self._tagInput.val() == '') {
+                    if (keyCode == BACKSPACE && self._tagInput.val() === '') {
                         var tag = self.tagList.children('.tagit-choice:last');
                         if (!self.options.removeConfirmation || tag.hasClass('remove')) {
                             // When backspace is pressed, the last tag is deleted.
@@ -120,14 +120,14 @@
                         keyCode == ENTER ||
                         keyCode == TAB ||
                         (
-             	            keyCode == SPACE && 
-             	            self.options.allowSpaces != true &&
+                            keyCode == SPACE && 
+                            self.options.allowSpaces !== true &&
 				            (
 					            ($.trim(self._tagInput.val()).replace( /^s*/, '' ).charAt(0) != '"') ||
 					            (
 					                $.trim(self._tagInput.val()).charAt(0) == '"' &&
 					                $.trim(self._tagInput.val()).charAt($.trim(self._tagInput.val()).length - 1) == '"' &&
-					                $.trim(self._tagInput.val()).length - 1 != 0
+					                $.trim(self._tagInput.val()).length - 1 !== 0
 					            )
 				            )
                         )
@@ -155,7 +155,7 @@
                         // The only artifact of this is that while the user holds down the mouse button
                         // on the selected autocomplete item, a tag is shown with the pre-autocompleted text,
                         // and is changed to the autocompleted text upon mouseup.
-                        if (self._tagInput.val() == '') {
+                        if (self._tagInput.val() === '') {
                             self.removeTag(self.tagList.children('.tagit-choice:last'));
                         }
                         self.createTag(ui.item.value);
@@ -177,7 +177,7 @@
             var tags = [];
             if (this.options.singleField) {
                 tags = $(this.options.singleFieldNode).val().split(this.options.singleFieldDelimiter);
-                if (tags[0] == '') {
+                if (tags[0] === '') {
                     tags = [];
                 }
             } else {
@@ -194,7 +194,7 @@
         },
 
         _subtractArray: function(a1, a2) {
-            var result = new Array();
+            var result = [];
             for (var i = 0; i < a1.length; i++) {
                 if (a2.indexOf(a1[i]) == -1) {
                     result.push(a1[i]);
@@ -238,7 +238,7 @@
             // Cleaning the input.
             this._tagInput.val('');
 
-            if (!this._isNew(value) || value == '') {
+            if (!this._isNew(value) || value === '') {
                 return false;
             }
 

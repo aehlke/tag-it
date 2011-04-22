@@ -180,7 +180,7 @@ Clears the widget of all tags -- removes each tag it contains, so the onTagRemov
 ### createTag(tagName)
 Adds new tag to the list.
 
-    $("#mytags").tagit('createTag','brandNewTag');
+    $("#mytags").tagit('createTag', 'brandNewTag');
 
 
 ## Authors
