@@ -6,7 +6,7 @@ if (!Array.prototype.filter)
     if (typeof fun != "function")
       throw new TypeError();
 
-    var res = new Array();
+    var res = [];
     var thisp = arguments[1];
     for (var i = 0; i < len; i++)
     {
@@ -28,9 +28,7 @@ if (!Array.prototype.indexOf)
     var len = this.length;
 
     var from = Number(arguments[1]) || 0;
-    from = (from < 0)
-         ? Math.ceil(from)
-         : Math.floor(from);
+    from = (from < 0) ? Math.ceil(from) : Math.floor(from);
     if (from < 0)
       from += len;
 
