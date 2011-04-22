@@ -122,14 +122,14 @@
                         (
                             keyCode == SPACE && 
                             self.options.allowSpaces !== true &&
-				            (
-					            ($.trim(self._tagInput.val()).replace( /^s*/, '' ).charAt(0) != '"') ||
-					            (
-					                $.trim(self._tagInput.val()).charAt(0) == '"' &&
-					                $.trim(self._tagInput.val()).charAt($.trim(self._tagInput.val()).length - 1) == '"' &&
-					                $.trim(self._tagInput.val()).length - 1 !== 0
-					            )
-				            )
+                            (
+                                ($.trim(self._tagInput.val()).replace( /^s*/, '' ).charAt(0) != '"') ||
+                                (
+                                    $.trim(self._tagInput.val()).charAt(0) == '"' &&
+                                    $.trim(self._tagInput.val()).charAt($.trim(self._tagInput.val()).length - 1) == '"' &&
+                                    $.trim(self._tagInput.val()).length - 1 !== 0
+                                )
+                            )
                         )
                     ) {
 
@@ -142,7 +142,7 @@
                 }).blur(function(e){
                     // create a tag when the element loses focus (nothing will happen if it's empty though)
                     self.createTag(self._cleanedInput());
-		        });
+                });
                 
 
             if (this.options.availableTags || this.options.tagSource) {
@@ -224,12 +224,12 @@
             return isNew;
         },
 
-	    _formatStr: function(str) {
-		    if(this.options.caseSensitive) {
-			    return str;
+        _formatStr: function(str) {
+            if(this.options.caseSensitive) {
+                return str;
             }
-		    return $.trim(str.toLowerCase());
-	    },
+            return $.trim(str.toLowerCase());
+        },
 
         createTag: function(value, additionalClass) {
             // Automatically trims the value of leading and trailing whitespace.
