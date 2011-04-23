@@ -49,9 +49,11 @@
                 TAB       = 9;
 
             this.options.tagSource = this.options.tagSource || function(search, showChoices) {
-                var filter = new RegExp(search.term, 'i');
+                var filter = search.term.toLowerCase();
                 var choices = self.options.availableTags.filter(function(element) {
-                    return (element.search(filter) != -1);
+                    // Only match autocomplete options that begin with the search term.
+                    // (Case insensitive.)
+                    return (element.toLowerCase().indexOf(filter) === 0);
                 });
                 showChoices(self._subtractArray(choices, self.assignedTags()));
             };
@@ -140,7 +142,7 @@
                         self.tagList.children('.tagit-choice:last').removeClass('remove');
                     }
                 }).blur(function(e){
-                    // create a tag when the element loses focus (nothing will happen if it's empty though)
+                    // Create a tag when the element loses focus (unless it's empty).
                     self.createTag(self._cleanedInput());
                 });
                 
