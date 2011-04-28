@@ -50,7 +50,7 @@
 
             this.options.tagSource = this.options.tagSource || function(search, showChoices) {
                 var filter = search.term.toLowerCase();
-                var choices = self.options.availableTags.filter(function(element) {
+                var choices = $.grep(self.options.availableTags, function(element) {
                     // Only match autocomplete options that begin with the search term.
                     // (Case insensitive.)
                     return (element.toLowerCase().indexOf(filter) === 0);
@@ -198,7 +198,7 @@
         _subtractArray: function(a1, a2) {
             var result = [];
             for (var i = 0; i < a1.length; i++) {
-                if (a2.indexOf(a1[i]) == -1) {
+                if ($.inArray(a1[i], a2) == -1) {
                     result.push(a1[i]);
                 }
             }
