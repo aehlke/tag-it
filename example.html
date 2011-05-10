@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Tag it! example</title>
+
+	<!--<link href="css/reset.css" rel="stylesheet" type="text/css">-->
+	<link href="css/master.css" rel="stylesheet" type="text/css">
+
+	<link href="css/jquery-ui/jquery.ui.autocomplete.custom.css" rel="stylesheet" type="text/css">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+
+	<script src="js/tag-it.js" type="text/javascript" charset="utf-8"></script>
+
+	<script>
+	    $(function(){
+            var sampleTags = ['c++', 'ja/va', 'php', 'coldfusion', 'javascript', 'asp', 'ruby', 'python', 'c', 'scala', 'groovy', 'haskell', 'perl'];
+            $("#mytags").tagit({
+			    availableTags: sampleTags,
+			    // configure the name of the input field (will be submitted with form), default: item[tags]
+			    itemName: 'item',
+			    fieldName: 'tags'
+		    });
+
+		    $("#myTagsSingleField").tagit({
+			    availableTags: sampleTags,
+			    // configure the name of the input field (will be submitted with form), default: item[tags]
+			    singleField: true,
+                singleFieldNode: $('#mySingleField')
+		    });
+
+            $("#eventTags").tagit({
+                availableTags: sampleTags,
+                singleField: true
+            });
+	    });
+	</script>
+
+</head>
+<body>
+
+	<p><strong>Tag it!</strong> ~ Tag editor and suggestions</p>
+	<p>After looking for a jQuery plugin for handling a 'tag suggestion' form field, in much the same way ZenDesk.com does, I ended up developing a customization of jQuery UI that does the same interaction.</p>
+
+   	<form class="myform">
+		<label>Tags</label>
+		<ul id="mytags">
+			<!-- Existing list items will be pre-added to the tags -->
+			<li>Tag1</li>
+			<li>Tag2</li>
+		</ul>
+	    <input type="submit" value="Submit">
+	</form>
+
+    <hr>
+
+   	<form class="myform">
+		<p>Example using a single input form field to hold all the tag values, instead of one per tag (see settings.singleField):</p>
+        <p>
+            Normally this input field will be hidden -- but we leave it visible here so you can see how it is manipulated by the widget:<br>
+            <input name="tags" id="mySingleField" value="Tag1, Tag2">
+        </p>
+		<label>Tags</label>
+		<ul id="myTagsSingleField"></ul>
+        <a href="#" onclick="$('#myTagsSingleField').tagit('removeAll');return false;">Clear tags</a>
+		<div class="line">
+			<input type="submit" value="Submit">
+		</div>
+	</form>
+
+   	<form class="myform">
+		<div class="line">
+			<p>Example of tag events. Try removing or adding a tag.</p>
+		</div>
+		<div class="line">
+			<label>Tags</label>
+			<ul id="eventTags"></ul>
+		</div>
+        <div class="line">
+            <a href="#" onclick="$('#eventTags').tagit('removeAll');">Clear tags</a>
+        </div>
+	</form>
+</div>
+
+	<p>Built with <a href="http://jquery.com/" target="_blank">jQuery</a> and <a href="http://jqueryui.com/" target="_blank">jQuery UI</a>.</p>
+	<p>Originally created by <a href="http://levycarneiro.com/">Levy Carneiro Jr</a>. Currently maintained by <a href="http://github.com/aehlke">Alex Ehlke</a>.</p>
+</body>
+</html>
