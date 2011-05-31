@@ -38,12 +38,6 @@
             this.tagList = this.element;
             this._tagInput = $('<input class="tagit-input" type="text" ' + (this.options.tabIndex ? 'tabindex="' + this.options.tabIndex + '"' : '') + '>');
 
-            var BACKSPACE = 8,
-                ENTER     = 13,
-                SPACE     = 32,
-                COMMA     = 44,
-                TAB       = 9;
-
             this.options.tagSource = this.options.tagSource || function(search, showChoices) {
                 var filter = search.term.toLowerCase();
                 var choices = $.grep(self.options.availableTags, function(element) {
@@ -101,7 +95,7 @@
                 .keydown(function(event) {
                     var keyCode = event.keyCode || event.which;
                     // Backspace is not detected within a keypress, so using a keydown
-                    if (keyCode == BACKSPACE && self._tagInput.val() === '') {
+                    if (keyCode == $.ui.keyCode.BACKSPACE && self._tagInput.val() === '') {
                         var tag = self.tagList.children('.tagit-choice:last');
                         if (!self.options.removeConfirmation || tag.hasClass('remove')) {
                             // When backspace is pressed, the last tag is deleted.
@@ -115,11 +109,11 @@
                     var keyCode = event.keyCode || event.which;
                     // Comma/Space/Enter are all valid delimiters for new tags. except when there is an open quote or if setting allowSpaces = true
                     if (
-                        keyCode == COMMA ||
-                        keyCode == ENTER ||
-                        keyCode == TAB ||
+                        keyCode == $.ui.keyCode.COMMA ||
+                        keyCode == $.ui.keyCode.ENTER ||
+                        keyCode == $.ui.keyCode.TAB   ||
                         (
-                            keyCode == SPACE && 
+                            keyCode == $.ui.keyCode.SPACE &&
                             self.options.allowSpaces !== true &&
                             (
                                 ($.trim(self._tagInput.val()).replace( /^s*/, '' ).charAt(0) != '"') ||
