@@ -1,1 +1,115 @@
-My GitHub Page
+<!doctype html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7 ]> <html class="ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--> <html lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>jQuery Tag-it!</title> 
+
+
+
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/reset-fonts/reset-fonts.css">
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/base/base-min.css">
+
+	<link rel="stylesheet" href="css/common.css" type="text/css" />
+
+    <link href="css/master.css" rel="stylesheet" type="text/css">
+    
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
+
+	<link href="css/jquery.tagit.css" rel="stylesheet" type="text/css">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+
+	<script src="js/tag-it.js" type="text/javascript" charset="utf-8"></script>
+
+	<script>
+	    $(function(){
+            var sampleTags = ['c++', 'ja/va', 'php', 'coldfusion', 'javascript', 'asp', 'ruby', 'python', 'c', 'scala', 'groovy', 'haskell', 'perl'];
+		    $("#myTagsSingleField").tagit({
+			    availableTags: sampleTags,
+			    // configure the name of the input field (will be submitted with form), default: item[tags]
+			    singleField: true,
+                singleFieldNode: $('#mySingleField')
+		    });
+
+			$('#switcher').themeswitcher();
+	    });
+	</script>
+</head>
+<body>
+
+<a href="http://github.com/aehlke/tag-it"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub" /></a>
+ 
+<div id="wrapper"> 
+	<div id="header"> 
+		<h1>jQuery Tag-it!</h1> 
+		<p>
+		    <em>Simple and configurable tag editing widget with autocomplete support.</em>
+		</p> 
+		
+		<ul id="nav">
+            <li><a href="http://github.com/aehlke/tag-it">Source</a></li>
+            <li><a href="http://github.com/aehlke/tag-it/issues">Bugs</a></li>
+            <li><a href="http://github.com/aehlke/tag-it/zipball/master">Download</a></li>
+		</ul>
+	</div>
+	
+	<div id="content">
+    <p>
+    </p>
+    
+    <ul>
+      <li>Source code is available at <a href="http://github.com/aehlke/tag-it" title="Social Coding">Github</a></li>
+      <li>The widget is styleable using <a href="http://jqueryui.com/themeroller/" title="jQuery UI Themeroller">Themeroller</a>.</li>
+    </ul><br/>
+
+    <h2>Demo</h2>
+   	<form>
+        <input name="tags" id="mySingleField" value="Tag1, Tag2" type="hidden">
+		<label>Tags</label>
+		<ul id="myTagsSingleField"></ul>
+		<div class="line">
+			<input type="submit" value="Submit">
+		</div>
+	</form>
+    
+    <script type="text/javascript" src="http://jqueryui.com/themeroller/themeswitchertool/"></script>
+    <div id="switcher"></div>
+    
+    <h2>Features</h2>
+    <ul>
+      <li>Search within available options, if there are a lots of them</li>
+      <li>Displaying counts of selected and available items</li>
+      <li>Select All / Deselect All Buttons</li>
+      <li>Dragging items from the available list to the selected list directly</li>
+    </ul>
+    
+    <h2>Authors</h2>
+    <ul>
+        <li><a href="http://github.com/levycarneiro">Levy Carneiro Jr.</a>, <em>original author</em></li>
+        <li><a href="http://github.com/martinrehfeld">Martin Rehfeld</a></li>
+        <li><a href="http://github.com/grobie">Tobias Schmidt</a></li>
+        <li><a href="http://github.com/sskylar">Skylar Challand</a></li>
+        <li><a href="http://github.com/aehlke">Alex Ehlke</a>, <em>current maintainer</em></li>
+    </ul>
+    </p>
+    <h2>License</h2>
+    <p>
+        Tag-it is released under the <a href="https://github.com/aehlke/tag-it/raw/master/LICENSE">MIT license</a>.
+    </p>
+	</div> 
+ 
+	<div id="footer"> 
+		<p class="right">Template adopted from <a href="http://orderedlist.com/demos/fancy-zoom-jquery/">orderedlist.com</a></p>
+		<br class="clear"/>
+	</div> 
+</div> 
+</body> 
+</html>
+
