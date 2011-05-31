@@ -190,3 +190,9 @@ Adds new tag to the list.
 * [Tobias Schmidt](http://github.com/grobie)
 * [Skylar Challand](http://github.com/sskylar)
 * [Alex Ehlke](http://github.com/aehlke)
+
+
+## License
+
+tag-it is released under the MIT license.
+
