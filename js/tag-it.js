@@ -149,7 +149,7 @@
                         // on the selected autocomplete item, a tag is shown with the pre-autocompleted text,
                         // and is changed to the autocompleted text upon mouseup.
                         if (self._tagInput.val() === '') {
-                            self.removeTag(self.tagList.children('.tagit-choice:last'), false);
+                            self.removeTag(self._lastTag(), false);
                         }
                         self.createTag(ui.item.value);
                         // Preventing the tag input to be updated with the chosen value.
@@ -161,7 +161,7 @@
 
         _cleanedInput: function() {
             // Returns the contents of the tag input, cleaned and ready to be passed to createTag
-            return $.trim(this._tagInput.val().replace(/^'|"$|,+$/g, ''));
+            return $.trim(this._tagInput.val().replace(/^"(.*)"$/, '$1'));
         },
 
         _lastTag: function() {
@@ -222,7 +222,7 @@
         },
 
         _formatStr: function(str) {
-            if(this.options.caseSensitive) {
+            if (this.options.caseSensitive) {
                 return str;
             }
             return $.trim(str.toLowerCase());
