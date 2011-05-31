@@ -93,30 +93,30 @@
 
             this._tagInput
                 .keydown(function(event) {
-                    var keyCode = event.keyCode || event.which;
-                    // Backspace is not detected within a keypress, so using a keydown
-                    if (keyCode == $.ui.keyCode.BACKSPACE && self._tagInput.val() === '') {
-                        var tag = self.tagList.children('.tagit-choice:last');
+                    // Backspace is not detected within a keypress, so it must use keydown.
+                    if (event.which == $.ui.keyCode.BACKSPACE && self._tagInput.val() === '') {
+                        var tag = self._lastTag();
                         if (!self.options.removeConfirmation || tag.hasClass('remove')) {
                             // When backspace is pressed, the last tag is deleted.
                             self.removeTag(tag);
                         } else if (self.options.removeConfirmation) {
                             tag.addClass('remove');
                         }
+                    } else if (self.options.removeConfirmation) {
+                        self._lastTag().removeClass('remove');
                     }
-                })
-                .keypress(function(event) {
-                    var keyCode = event.keyCode || event.which;
-                    // Comma/Space/Enter are all valid delimiters for new tags. except when there is an open quote or if setting allowSpaces = true
+
+                    // Comma/Space/Enter are all valid delimiters for new tags,
+                    // except when there is an open quote or if setting allowSpaces = true.
                     if (
-                        keyCode == $.ui.keyCode.COMMA ||
-                        keyCode == $.ui.keyCode.ENTER ||
-                        keyCode == $.ui.keyCode.TAB   ||
+                        event.which == $.ui.keyCode.COMMA ||
+                        event.which == $.ui.keyCode.TAB ||
+                        event.which == $.ui.keyCode.ENTER ||
                         (
-                            keyCode == $.ui.keyCode.SPACE &&
+                            event.which == $.ui.keyCode.SPACE &&
                             self.options.allowSpaces !== true &&
                             (
-                                ($.trim(self._tagInput.val()).replace( /^s*/, '' ).charAt(0) != '"') ||
+                                $.trim(self._tagInput.val()).replace( /^s*/, '' ).charAt(0) != '"' ||
                                 (
                                     $.trim(self._tagInput.val()).charAt(0) == '"' &&
                                     $.trim(self._tagInput.val()).charAt($.trim(self._tagInput.val()).length - 1) == '"' &&
@@ -127,9 +127,6 @@
                     ) {
                         event.preventDefault();
                         self.createTag(self._cleanedInput());
-                    }
-                    if (self.options.removeConfirmation) {
-                        self.tagList.children('.tagit-choice:last').removeClass('remove');
                     }
                 }).blur(function(e){
                     // Create a tag when the element loses focus (unless it's empty).
@@ -161,6 +158,10 @@
         _cleanedInput: function() {
             // Returns the contents of the tag input, cleaned and ready to be passed to createTag
             return $.trim(this._tagInput.val().replace(/^'|"$|,+$/g, ''));
+        },
+
+        _lastTag: function() {
+            return this.tagList.children('.tagit-choice:last');
         },
 
         assignedTags: function() {
@@ -289,10 +290,10 @@
         },
 
         removeAll: function() {
-            // Removes all tags
+            // Removes all tags. Takes an optional `animate` argument.
             var self = this;
             this.tagList.children('.tagit-choice').each(function(index, tag) {
-                self.removeTag(tag);
+                self.removeTag(tag, false);
             });
         }
 
