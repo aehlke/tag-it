@@ -1,7 +1,3 @@
-        /*if (options_or_action == 'clear') {
-            // Resets the widget, removing all tags
-            return this; // for chainability
-        } else {*/
 
 (function($) {
 
@@ -40,7 +36,7 @@
             var self = this;
 
             this.tagList = this.element;
-            this._tagInput  = $('<input class="tagit-input" type="text" ' + (this.options.tabIndex ? 'tabindex="' + this.options.tabIndex + '"' : '') + '>');
+            this._tagInput = $('<input class="tagit-input" type="text" ' + (this.options.tabIndex ? 'tabindex="' + this.options.tabIndex + '"' : '') + '>');
 
             var BACKSPACE = 8,
                 ENTER     = 13,
@@ -59,31 +55,32 @@
             };
 
             this.tagList
-                // add the tagit CSS class.
                 .addClass('tagit')
+                .addClass('ui-widget ui-widget-content ui-corner-all')
                 // create the input field.
                 .append($('<li class="tagit-new"></li>\n').append(this._tagInput))
                 .click(function(e) {
-                    if (e.target.className == 'close') {
+                    var target = $(e.target);
+                    if (target.hasClass('close')) {
                         // Removes a tag when the little 'x' is clicked.
                         // Event is binded to the UL, otherwise a new tag (LI > A) wouldn't have this event attached to it.
-                        self.removeTag($(e.target).parent());
-                    } else if (e.target.className == 'tagit-label' && self.options.onTagClicked) {
-                        self.options.onTagClicked($(e.target).parent());
+                        self.removeTag(target.parent());
+                    } else if (target.hasClass('tagit-label') && self.options.onTagClicked) {
+                        self.options.onTagClicked(target.parent());
                     } else {
                         // Sets the focus() to the input field, if the user clicks anywhere inside the UL.
                         // This is needed because the input field needs to be of a small size.
                         self._tagInput.focus();
                     }
-                })
-                // add existing tags
-                .children('li')
-                    .each(function() {
-                        if (!$(this).hasClass('tagit-new')) {
-                            self.createTag($(this).html(), $(this).attr('class'));
-                            $(this).remove();
-                        }
-                    });
+                });
+
+            // Add existing tags.
+            this.tagList.children('li').each(function() {
+                if (!$(this).hasClass('tagit-new')) {
+                    self.createTag($(this).html(), $(this).attr('class'));
+                    $(this).remove();
+                }
+            });
 
             if (this.options.singleField) {
                 if (this.options.singleFieldNode) {
@@ -134,7 +131,6 @@
                             )
                         )
                     ) {
-
                         event.preventDefault();
                         self.createTag(self._cleanedInput());
                     }
@@ -158,7 +154,7 @@
                         // on the selected autocomplete item, a tag is shown with the pre-autocompleted text,
                         // and is changed to the autocompleted text upon mouseup.
                         if (self._tagInput.val() === '') {
-                            self.removeTag(self.tagList.children('.tagit-choice:last'));
+                            self.removeTag(self.tagList.children('.tagit-choice:last'), false);
                         }
                         self.createTag(ui.item.value);
                         // Preventing the tag input to be updated with the chosen value.
@@ -246,12 +242,14 @@
 
             var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
 
-            // create tag
+            // Create tag.
             var tag = $('<li></li>')
-                .addClass('tagit-choice')
+                .addClass('tagit-choice ui-widget-content ui-state-default ui-corner-all')
                 .addClass(additionalClass)
-                .append(label)
-                .append('<a class="close">x</a>');
+                .append(label);
+            var removeTag = $('<a></a>')
+                .addClass('ui-icon ui-icon-close close');
+            tag.append(removeTag);
 
             if (this.options.singleField) {
                 var tags = this.assignedTags();
@@ -270,8 +268,11 @@
             this._tagInput.parent().before(tag);
         },
         
-        removeTag: function(tag) {
+        removeTag: function(tag, animate) {
+            if (typeof animate === 'undefined') { animate = true; }
+
             tag = $(tag);
+
             if (this.options.onTagRemoved) {
                 this.options.onTagRemoved(tag);
             }
@@ -283,7 +284,14 @@
                 });
                 this._updateSingleTagsField(tags);
             }
-            tag.remove();
+            // Animate the removal.
+            if (animate) {
+                tag.fadeOut('fast').hide('blind', {direction: 'horizontal'}, 'fast', function(){
+                    tag.remove();
+                }).dequeue();
+            } else {
+                tag.remove();
+            }
         },
 
         removeAll: function() {
