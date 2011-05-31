@@ -108,10 +108,14 @@
 
                     // Comma/Space/Enter are all valid delimiters for new tags,
                     // except when there is an open quote or if setting allowSpaces = true.
+                    // Tab will also create a tag, unless the tag input is empty, in which case it isn't caught.
                     if (
                         event.which == $.ui.keyCode.COMMA ||
-                        event.which == $.ui.keyCode.TAB ||
                         event.which == $.ui.keyCode.ENTER ||
+                        (
+                            event.which == $.ui.keyCode.TAB &&
+                            self._tagInput.val() !== ''
+                        ) ||
                         (
                             event.which == $.ui.keyCode.SPACE &&
                             self.options.allowSpaces !== true &&
