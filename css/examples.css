@@ -1,0 +1,39 @@
+@charset "UTF-8";
+
+
+#nav {
+    left:0;
+}
+#header {
+    padding-top:3em;
+}
+
+#header h1, #header h2 {
+    margin: 0 0 .2em 0;
+    padding-top: 1.5em;
+}
+hr + h3, hr + h4 {
+    margin-top: 0;
+}
+hr {
+    margin-bottom: .4em;
+}
+
+
+ul#nav li {
+    padding:0;
+}
+
+.myform {
+	padding:20px 0px;
+}
+.myform div.line {
+	clear:both;
+	min-height:50px;
+	margin-bottom:15px;
+}
+.myform label {
+	display:block;
+	font-weight:bold;
+	margin-bottom:5px;
+}

@@ -6,6 +6,7 @@ ul.tagit {
 	border-style: solid;
 	border-width: 1px;
 	border-color: #C6C6C6;
+    background: inherit;
 }
 ul.tagit li.tagit-choice {
     -moz-border-radius: 6px;
@@ -19,21 +20,23 @@ ul.tagit li.tagit-choice {
     color: #555;
     font-weight: normal;
 }
-ul.tagit .tagit-choice a.ui-icon {
-    right: .4em;
-}
 ul.tagit li.tagit-choice a.close {
     text-decoration: none;
 }
-ul.tagit li.tagit-choice a.ui-icon {
+ul.tagit li.tagit-choice .close {
+    right: .4em;
+}
+ul.tagit li.tagit-choice .ui-icon {
     background-image: none;
     text-indent: inherit;
     width: inherit;
     height: inherit;
 }
-ul.tagit li.tagit-choice a.close:before {
+ul.tagit li.tagit-choice .close:before {
     content: '×';
-    font-weight: bold;
+    font-family: arial, sans-serif;
+    font-size: 16px;
+    line-height: 16px;
     color: #777;
 }
 ul.tagit li.tagit-choice:hover, ul.tagit li.tagit-choice.remove {
@@ -43,6 +46,10 @@ ul.tagit li.tagit-choice:hover, ul.tagit li.tagit-choice.remove {
 ul.tagit li.tagit-choice a.tagLabel:hover,
 ul.tagit li.tagit-choice a.close:hover:before {
     color: #222;
+}
+ul.tagit input[type="text"] {
+	color: #333333;
+    background: none;
 }
  
 

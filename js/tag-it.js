@@ -3,93 +3,99 @@
 
     $.widget('ui.tagit', {
         options: {
-            'itemName'          : 'item',
-            'fieldName'         : 'tags',
-            'availableTags'     : [],
-            // callback: called when a tag is added
-            'onTagAdded'        : null,
-            // callback: called when a tag is removed
-            'onTagRemoved'      : null,
-            // callback: called when a tag is clicked
-            'onTagClicked'      : null,
-            'tagSource'         : null,
-            'removeConfirmation': false,
-            'caseSensitive': true,
-            'allowSpaces': false, // when enabled, quotes are not neccesary for inputting multi-word tags
+            itemName          : 'item',
+            fieldName         : 'tags',
+            availableTags     : [],
+            tagSource         : null,
+            removeConfirmation: false,
+            caseSensitive     : true,
+            allowSpaces       : false, // when enabled, quotes are not neccesary for inputting multi-word tags
 
             // The below options are for using a single field instead of several for our form values.
-            'singleField': false, // When enabled, will use a single hidden field for the form, rather than one per tag.
-                                  // It will delimit tags in the field with singleFieldDelimiter.
-            'singleFieldDelimiter': ',',
-            'singleFieldNode': null, // Set this to an input DOM node to use an existing form field.
+            singleField: false, // When enabled, will use a single hidden field for the form, rather than 
+                                  // one per tag. It will delimit tags in the field with singleFieldDelimiter.
+            singleFieldDelimiter: ',',
+            singleFieldNode: null, // Set this to an input DOM node to use an existing form field.
                                      // Any text in it will be erased on init. But it will be populated with 
                                      // the text of tags as they are created, delimited by singleFieldDelimiter.
                                      // If this is not set, we create an input node for it, with the name 
                                      // given in settings.fieldName, ignoring settings.itemName.
 
-            'tabIndex': null // Optionally set a tabindex attribute on the input that gets created for tag-it.
+            tabIndex: null, // Optionally set a tabindex attribute on the input that gets created for tag-it.
+
+
+            // Event callbacks.
+            onTagAdded  : null,
+            onTagRemoved: null,
+            onTagClicked: null
         },
 
 
         _create: function() {
             // for handling static scoping inside callbacks
-            var self = this;
+            var that = this;
 
-            this.tagList = this.element;
-            this._tagInput = $('<input class="tagit-input" type="text" ' + (this.options.tabIndex ? 'tabindex="' + this.options.tabIndex + '"' : '') + '>');
+            // There are 2 kinds of DOM nodes this widget can be instantiated on:
+            //     1. UL, OL, or some element containing either of these.
+            //     2. INPUT, in which case 'singleField' is overridden to true, a UL is created 
+            //        and the INPUT is hidden.
+            if (this.element.is('input')) {
+                this.tagList = $('<ul></ul>').insertAfter(this.element);
+                this.options.singleField = true;
+                this.options.singleFieldNode = this.element;
+                this.element.css('display', 'none');
+            } else {
+                this.tagList = this.element.find('ul, ol').andSelf().last();
+            }
 
-            var BACKSPACE = 8,
-                ENTER     = 13,
-                SPACE     = 32,
-                COMMA     = 44,
-                TAB       = 9;
+            this._tagInput = $('<input type="text">').addClass('ui-widget-content');
+            if (this.options.tabIndex) {
+                this._tagInput.attr('tabindex', this.options.tabIndex);
+            }
 
             this.options.tagSource = this.options.tagSource || function(search, showChoices) {
                 var filter = search.term.toLowerCase();
-                var choices = $.grep(self.options.availableTags, function(element) {
+                var choices = $.grep(that.options.availableTags, function(element) {
                     // Only match autocomplete options that begin with the search term.
                     // (Case insensitive.)
                     return (element.toLowerCase().indexOf(filter) === 0);
                 });
-                showChoices(self._subtractArray(choices, self.assignedTags()));
+                showChoices(that._subtractArray(choices, that.assignedTags()));
             };
 
             this.tagList
                 .addClass('tagit')
                 .addClass('ui-widget ui-widget-content ui-corner-all')
                 // create the input field.
-                .append($('<li class="tagit-new"></li>\n').append(this._tagInput))
+                .append($('<li class="tagit-new"></li>').append(this._tagInput))
                 .click(function(e) {
                     var target = $(e.target);
-                    if (target.hasClass('close')) {
-                        // Removes a tag when the little 'x' is clicked.
-                        // Event is binded to the UL, otherwise a new tag (LI > A) wouldn't have this event attached to it.
-                        self.removeTag(target.parent());
-                    } else if (target.hasClass('tagit-label') && self.options.onTagClicked) {
-                        self.options.onTagClicked(target.parent());
+                    if (target.hasClass('tagit-label')) {
+                        that._trigger('onTagClicked', e, target.closest('.tagit-choice'));
                     } else {
                         // Sets the focus() to the input field, if the user clicks anywhere inside the UL.
                         // This is needed because the input field needs to be of a small size.
-                        self._tagInput.focus();
+                        that._tagInput.focus();
                     }
                 });
 
-            // Add existing tags.
+            // Add existing tags from the list, if any.
             this.tagList.children('li').each(function() {
                 if (!$(this).hasClass('tagit-new')) {
-                    self.createTag($(this).html(), $(this).attr('class'));
+                    that.createTag($(this).html(), $(this).attr('class'));
                     $(this).remove();
                 }
             });
 
+            // Single field support.
             if (this.options.singleField) {
                 if (this.options.singleFieldNode) {
-                    // Add existing tags from the input field
+                    // Add existing tags from the input field.
                     var node = $(this.options.singleFieldNode);
                     var tags = node.val().split(this.options.singleFieldDelimiter);
                     node.val('');
                     $.each(tags, function(index, tag) {
-                        self.createTag(tag);
+                        that.createTag(tag);
                     });
                 } else {
                     // Create our single field input after our list.
@@ -97,52 +103,59 @@
                 }
             }
 
+            // Events.
             this._tagInput
                 .keydown(function(event) {
-                    var keyCode = event.keyCode || event.which;
-                    // Backspace is not detected within a keypress, so using a keydown
-                    if (keyCode == BACKSPACE && self._tagInput.val() === '') {
-                        var tag = self.tagList.children('.tagit-choice:last');
-                        if (!self.options.removeConfirmation || tag.hasClass('remove')) {
+                    // Backspace is not detected within a keypress, so it must use keydown.
+                    if (event.which == $.ui.keyCode.BACKSPACE && that._tagInput.val() === '') {
+                        var tag = that._lastTag();
+                        if (!that.options.removeConfirmation || tag.hasClass('remove')) {
                             // When backspace is pressed, the last tag is deleted.
-                            self.removeTag(tag);
-                        } else if (self.options.removeConfirmation) {
-                            tag.addClass('remove');
+                            that.removeTag(tag);
+                        } else if (that.options.removeConfirmation) {
+                            tag.addClass('remove ui-state-highlight');
                         }
+                    } else if (that.options.removeConfirmation) {
+                        that._lastTag().removeClass('remove ui-state-highlight');
                     }
-                })
-                .keypress(function(event) {
-                    var keyCode = event.keyCode || event.which;
-                    // Comma/Space/Enter are all valid delimiters for new tags. except when there is an open quote or if setting allowSpaces = true
+
+                    // Comma/Space/Enter are all valid delimiters for new tags,
+                    // except when there is an open quote or if setting allowSpaces = true.
+                    // Tab will also create a tag, unless the tag input is empty, in which case it isn't caught.
                     if (
-                        keyCode == COMMA ||
-                        keyCode == ENTER ||
-                        keyCode == TAB ||
+                        event.which == $.ui.keyCode.COMMA ||
+                        event.which == $.ui.keyCode.ENTER ||
                         (
-                            keyCode == SPACE && 
-                            self.options.allowSpaces !== true &&
+                            event.which == $.ui.keyCode.TAB &&
+                            that._tagInput.val() !== ''
+                        ) ||
+                        (
+                            event.which == $.ui.keyCode.SPACE &&
+                            that.options.allowSpaces !== true &&
                             (
-                                ($.trim(self._tagInput.val()).replace( /^s*/, '' ).charAt(0) != '"') ||
+                                $.trim(that._tagInput.val()).replace( /^s*/, '' ).charAt(0) != '"' ||
                                 (
-                                    $.trim(self._tagInput.val()).charAt(0) == '"' &&
-                                    $.trim(self._tagInput.val()).charAt($.trim(self._tagInput.val()).length - 1) == '"' &&
-                                    $.trim(self._tagInput.val()).length - 1 !== 0
+                                    $.trim(that._tagInput.val()).charAt(0) == '"' &&
+                                    $.trim(that._tagInput.val()).charAt($.trim(that._tagInput.val()).length - 1) == '"' &&
+                                    $.trim(that._tagInput.val()).length - 1 !== 0
                                 )
                             )
                         )
                     ) {
                         event.preventDefault();
-                        self.createTag(self._cleanedInput());
-                    }
-                    if (self.options.removeConfirmation) {
-                        self.tagList.children('.tagit-choice:last').removeClass('remove');
+                        that.createTag(that._cleanedInput());
+
+                        // The autocomplete doesn't close automatically when TAB is pressed.
+                        // So let's ensure that it closes.
+                        that._tagInput.autocomplete('close');
                     }
                 }).blur(function(e){
                     // Create a tag when the element loses focus (unless it's empty).
-                    self.createTag(self._cleanedInput());
+                    that.createTag(that._cleanedInput());
                 });
                 
 
+            // Autocomplete.
             if (this.options.availableTags || this.options.tagSource) {
                 this._tagInput.autocomplete({
                     source: this.options.tagSource,
@@ -153,10 +166,10 @@
                         // The only artifact of this is that while the user holds down the mouse button
                         // on the selected autocomplete item, a tag is shown with the pre-autocompleted text,
                         // and is changed to the autocompleted text upon mouseup.
-                        if (self._tagInput.val() === '') {
-                            self.removeTag(self.tagList.children('.tagit-choice:last'), false);
+                        if (that._tagInput.val() === '') {
+                            that.removeTag(that._lastTag(), false);
                         }
-                        self.createTag(ui.item.value);
+                        that.createTag(ui.item.value);
                         // Preventing the tag input to be updated with the chosen value.
                         return false;
                     }
@@ -166,12 +179,16 @@
 
         _cleanedInput: function() {
             // Returns the contents of the tag input, cleaned and ready to be passed to createTag
-            return $.trim(this._tagInput.val().replace(/^'|"$|,+$/g, ''));
+            return $.trim(this._tagInput.val().replace(/^"(.*)"$/, '$1'));
+        },
+
+        _lastTag: function() {
+            return this.tagList.children('.tagit-choice:last');
         },
 
         assignedTags: function() {
             // Returns an array of tag string values
-            var self = this;
+            var that = this;
             var tags = [];
             if (this.options.singleField) {
                 tags = $(this.options.singleFieldNode).val().split(this.options.singleFieldDelimiter);
@@ -180,7 +197,7 @@
                 }
             } else {
                 this.tagList.children('.tagit-choice').each(function() {
-                    tags.push(self.tagLabel(this));
+                    tags.push(that.tagLabel(this));
                 });
             }
             return tags;
@@ -211,10 +228,10 @@
         },
 
         _isNew: function(value) {
-            var self = this;
+            var that = this;
             var isNew = true;
             this.tagList.children('.tagit-choice').each(function(i) {
-                if (self._formatStr(value) == self._formatStr(self.tagLabel(this))) {
+                if (that._formatStr(value) == that._formatStr(that.tagLabel(this))) {
                     isNew = false;
                     return;
                 }
@@ -223,18 +240,16 @@
         },
 
         _formatStr: function(str) {
-            if(this.options.caseSensitive) {
+            if (this.options.caseSensitive) {
                 return str;
             }
             return $.trim(str.toLowerCase());
         },
 
         createTag: function(value, additionalClass) {
+            that = this;
             // Automatically trims the value of leading and trailing whitespace.
             value = $.trim(value);
-
-            // Cleaning the input.
-            this._tagInput.val('');
 
             if (!this._isNew(value) || value === '') {
                 return false;
@@ -247,10 +262,22 @@
                 .addClass('tagit-choice ui-widget-content ui-state-default ui-corner-all')
                 .addClass(additionalClass)
                 .append(label);
+
+            // Button for removing the tag.
+            var removeTagIcon = $('<span></span>')
+                .addClass('ui-icon ui-icon-close');
             var removeTag = $('<a></a>')
-                .addClass('ui-icon ui-icon-close close');
+                .addClass('close')
+                .append(removeTagIcon)
+                .click(function(e) {
+                    var target = $(e.target);
+                    console.log(target);
+                    // Removes a tag when the little 'x' is clicked.
+                    that.removeTag(tag);
+                });
             tag.append(removeTag);
 
+            // Unless options.singleField is set, each tag has a hidden input field inline.
             if (this.options.singleField) {
                 var tags = this.assignedTags();
                 tags.push(value);
@@ -260,9 +287,10 @@
                 tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + this.options.itemName + '[' + this.options.fieldName + '][]">');
             }
 
-            if (this.options.onTagAdded) {
-                this.options.onTagAdded(tag);
-            }
+            this._trigger('onTagAdded', null, tag);
+
+            // Cleaning the input.
+            this._tagInput.val('');
 
             // insert tag
             this._tagInput.parent().before(tag);
@@ -273,12 +301,11 @@
 
             tag = $(tag);
 
-            if (this.options.onTagRemoved) {
-                this.options.onTagRemoved(tag);
-            }
+            this._trigger('onTagRemoved', null, tag);
+
             if (this.options.singleField) {
                 var tags = this.assignedTags();
-                var removedTagLabel = tag.children('.tagit-label').text();
+                var removedTagLabel = this.tagLabel(tag);
                 tags = $.grep(tags, function(el){
                     return el != removedTagLabel;
                 });
@@ -295,10 +322,10 @@
         },
 
         removeAll: function() {
-            // Removes all tags
-            var self = this;
+            // Removes all tags. Takes an optional `animate` argument.
+            var that = this;
             this.tagList.children('.tagit-choice').each(function(index, tag) {
-                self.removeTag(tag);
+                that.removeTag(tag, false);
             });
         }
 
