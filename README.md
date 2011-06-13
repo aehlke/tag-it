@@ -18,7 +18,7 @@ First, load [jQuery](http://jquery.com/) (1.5.x or greater), [jQuery UI](http://
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/tag-it.js" type="text/javascript" charset="utf-8"></script>
 
-The plugin requires a jQuery UI theme to be present, as well as its own included base CSS file ([jquery.tagit.css](http://github.com/aehlke/tag-it/raw/master/css/jquery.tagit.css). Here we use the Flick theme as an example:
+The plugin requires a jQuery UI theme to be present, as well as its own included base CSS file ([jquery.tagit.css](http://github.com/aehlke/tag-it/raw/master/css/jquery.tagit.css)). Here we use the Flick theme as an example:
 
     <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
 	<link href="css/jquery.tagit.css" rel="stylesheet" type="text/css">
@@ -56,7 +56,7 @@ This will turn the list into a tag-it list:
         </li>
     </ul>
 
-There are several other possible configurations and ways to instantiate the widget, including one that uses a single comma-delimited `input` field rather than one per tag, so see the **Options** documentation below as well as the [examples page](http://aehlke.github.com/tag-it/example.html) which demonstrates most of them.
+There are several other possible configurations and ways to instantiate the widget, including one that uses a single comma-delimited `input` field rather than one per tag, so see the **Options** documentation below as well as the [examples page](http://aehlke.github.com/tag-it/examples.html) which demonstrates most of them.
 
 
 ## Theming
