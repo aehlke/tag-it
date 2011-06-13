@@ -20,6 +20,9 @@ hr {
 }
 
 
+ul#nav li {
+    padding:0;
+}
 
 .myform {
 	padding:20px 0px;
