@@ -61,7 +61,7 @@ code {
     margin:0;
     padding:0;
 }
-ul {
+ul, li {
     list-style:disc;
 }
 div#wrapper {
@@ -174,8 +174,5 @@ ul.tagit {
 }
 #feature-list {
     margin-top:2.5em;
-}
-#feature-list li {
-    list-style:disc;
 }
 
