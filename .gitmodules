@@ -1,6 +1,0 @@
-[submodule "Super-Theme-Switcher"]
-	path = Super-Theme-Switcher
-	url = git://github.com/harborhoffer/Super-Theme-Switcher.git
-[submodule "Aristo-jQuery-UI-Theme"]
-	path = Aristo-jQuery-UI-Theme
-	url = git://github.com/taitems/Aristo-jQuery-UI-Theme.git
