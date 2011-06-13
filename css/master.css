@@ -173,6 +173,7 @@ ul.tagit {
     top: .1em;
 }
 #feature-list {
-    margin-top: 2.5em;
+    margin-top:2.5em;
+    list-style:disc;
 }
 
