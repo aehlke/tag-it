@@ -56,7 +56,7 @@ This will turn the list into a tag-it list:
         </li>
     </ul>
 
-There are several other possible configurations and ways to instantiate the widget, including one that uses a single comma-delimited `input` field rather than one per tag, so see the **Options** documentation below as well as the [examples page](http://aehlke.github.com/tag-it/example.html) which demonstrates most of them.
+There are several other possible configurations and ways to instantiate the widget, including one that uses a single comma-delimited `input` field rather than one per tag, so see the **Options** documentation below as well as the [examples page](http://aehlke.github.com/tag-it/examples.html) which demonstrates most of them.
 
 
 ## Theming
