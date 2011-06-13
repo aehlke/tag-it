@@ -176,3 +176,10 @@ ul.tagit {
     margin-top:2.5em;
 }
 
+#disqus-container {
+    margin-top: 2em;
+}
+#disqus-container h3 {
+    font-size: 1em;
+    font-family: inherit;
+}
