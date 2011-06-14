@@ -27,10 +27,7 @@ ul.tagit li.tagit-choice .close {
     right: .4em;
 }
 ul.tagit li.tagit-choice .ui-icon {
-    background-image: none;
-    text-indent: inherit;
-    width: inherit;
-    height: inherit;
+    display: none;
 }
 ul.tagit li.tagit-choice .close .text-icon {
     display: inline;

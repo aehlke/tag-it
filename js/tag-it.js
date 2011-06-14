@@ -270,7 +270,6 @@
                 .addClass('close')
                 .append(removeTagIcon)
                 .click(function(e) {
-                    var target = $(e.target);
                     // Removes a tag when the little 'x' is clicked.
                     that.removeTag(tag);
                 });
