@@ -1,4 +1,29 @@
-
+/*
+* jQuery UI Tag-it!
+*
+* @version v2.0 (06/2011)
+*
+* Copyright 2011, Levy Carneiro Jr.
+* Released under the MIT license.
+* http://aehlke.github.com/tag-it/LICENSE
+*
+* Homepage:
+*   http://aehlke.github.com/tag-it/
+*
+* Authors:
+*   Levy Carneiro Jr.
+*   Martin Rehfeld
+*   Tobias Schmidt
+*   Skylar Challand
+*   Alex Ehlke
+*
+* Maintainer:
+*   Alex Ehlke - Twitter: @aehlke
+*
+* Dependencies:
+*   jQuery v1.4+
+*   jQuery UI v1.8+
+*/
 (function($) {
 
     $.widget('ui.tagit', {
@@ -9,19 +34,33 @@
             tagSource         : null,
             removeConfirmation: false,
             caseSensitive     : true,
-            allowSpaces       : false, // when enabled, quotes are not neccesary for inputting multi-word tags
 
-            // The below options are for using a single field instead of several for our form values.
-            singleField: false, // When enabled, will use a single hidden field for the form, rather than 
-                                  // one per tag. It will delimit tags in the field with singleFieldDelimiter.
+            // When enabled, quotes are not neccesary
+            // for inputting multi-word tags.
+            allowSpaces: false,
+
+            // The below options are for using a single field instead of several
+            // for our form values.
+            //
+            // When enabled, will use a single hidden field for the form,
+            // rather than one per tag. It will delimit tags in the field
+            // with singleFieldDelimiter.
+            singleField: false,
+
             singleFieldDelimiter: ',',
-            singleFieldNode: null, // Set this to an input DOM node to use an existing form field.
-                                     // Any text in it will be erased on init. But it will be populated with 
-                                     // the text of tags as they are created, delimited by singleFieldDelimiter.
-                                     // If this is not set, we create an input node for it, with the name 
-                                     // given in settings.fieldName, ignoring settings.itemName.
 
-            tabIndex: null, // Optionally set a tabindex attribute on the input that gets created for tag-it.
+            // Set this to an input DOM node to use an existing form field.
+            // Any text in it will be erased on init. But it will be
+            // populated with the text of tags as they are created,
+            // delimited by singleFieldDelimiter.
+            // If this is not set, we create an input node for it,
+            // with the name // given in settings.fieldName,
+            // ignoring settings.itemName.
+            singleFieldNode: null,
+
+            // Optionally set a tabindex attribute on the input that gets
+            // created for tag-it.
+            tabIndex: null,
 
 
             // Event callbacks.
@@ -37,8 +76,8 @@
 
             // There are 2 kinds of DOM nodes this widget can be instantiated on:
             //     1. UL, OL, or some element containing either of these.
-            //     2. INPUT, in which case 'singleField' is overridden to true, a UL is created 
-            //        and the INPUT is hidden.
+            //     2. INPUT, in which case 'singleField' is overridden to true,
+            //        a UL is created and the INPUT is hidden.
             if (this.element.is('input')) {
                 this.tagList = $('<ul></ul>').insertAfter(this.element);
                 this.options.singleField = true;
@@ -66,15 +105,16 @@
             this.tagList
                 .addClass('tagit')
                 .addClass('ui-widget ui-widget-content ui-corner-all')
-                // create the input field.
+                // Create the input field.
                 .append($('<li class="tagit-new"></li>').append(this._tagInput))
                 .click(function(e) {
                     var target = $(e.target);
                     if (target.hasClass('tagit-label')) {
                         that._trigger('onTagClicked', e, target.closest('.tagit-choice'));
                     } else {
-                        // Sets the focus() to the input field, if the user clicks anywhere inside the UL.
-                        // This is needed because the input field needs to be of a small size.
+                        // Sets the focus() to the input field, if the user
+                        // clicks anywhere inside the UL. This is needed
+                        // because the input field needs to be of a small size.
                         that._tagInput.focus();
                     }
                 });
