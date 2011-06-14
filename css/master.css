@@ -61,7 +61,7 @@ code {
     margin:0;
     padding:0;
 }
-ul, li {
+#wrapper ul, #wrapper li {
     list-style:disc;
 }
 div#wrapper {
