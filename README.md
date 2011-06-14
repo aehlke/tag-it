@@ -12,7 +12,7 @@ Check the [example.html](http://aehlke.github.com/tag-it/example.html) for sever
 
 ## Usage
 
-First, load [jQuery](http://jquery.com/) (1.5.x or greater), [jQuery UI](http://jqueryui.com/) (1.8.x or greater), and the plugin:
+First, load [jQuery](http://jquery.com/) (v1.4 or greater), [jQuery UI](http://jqueryui.com/) (v1.8 or greater), and the plugin:
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
