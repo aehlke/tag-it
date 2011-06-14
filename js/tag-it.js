@@ -45,6 +45,11 @@
             // When enabled, will use a single hidden field for the form,
             // rather than one per tag. It will delimit tags in the field
             // with singleFieldDelimiter.
+            //
+            // The easiest way to use singleField is to just instantiate tag-it
+            // on an INPUT element, in which case singleField is automatically
+            // set to true, and singleFieldNode is set to that element. This 
+            // way, you don't need to fiddle with these options.
             singleField: false,
 
             singleFieldDelimiter: ',',
