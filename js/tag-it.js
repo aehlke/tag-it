@@ -53,8 +53,9 @@
             // Any text in it will be erased on init. But it will be
             // populated with the text of tags as they are created,
             // delimited by singleFieldDelimiter.
+            //
             // If this is not set, we create an input node for it,
-            // with the name // given in settings.fieldName,
+            // with the name given in settings.fieldName, 
             // ignoring settings.itemName.
             singleFieldNode: null,
 
