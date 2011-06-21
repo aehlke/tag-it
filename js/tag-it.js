@@ -279,7 +279,7 @@
             this.tagList.children('.tagit-choice').each(function(i) {
                 if (that._formatStr(value) == that._formatStr(that.tagLabel(this))) {
                     isNew = false;
-                    return;
+                    return false;
                 }
             });
             return isNew;
