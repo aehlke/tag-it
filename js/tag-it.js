@@ -342,7 +342,7 @@
             // insert tag
             this._tagInput.parent().before(tag);
 
-            this._trigger('onTagsSet', null, tag);
+            this._trigger('onTagsSet', null);
         },
         
         removeTag: function(tag, animate) {
@@ -369,7 +369,7 @@
                 tag.remove();
             }
 
-            this._trigger('onTagsSet', null, tag);
+            this._trigger('onTagsSet', null);
         },
 
         removeAll: function() {
@@ -379,7 +379,7 @@
                 that.removeTag(tag, false);
             });
 
-            this._trigger('onTagsSet', null, tag);
+            this._trigger('onTagsSet', null);
         }
 
     });
