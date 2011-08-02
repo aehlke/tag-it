@@ -34,6 +34,8 @@
             tagSource         : null,
             removeConfirmation: false,
             caseSensitive     : true,
+	    minChars: 2, // tags must have at least 2 chars
+	    selectionLimit: 5, // max of 5 tags per product 
 
             // When enabled, quotes are not neccesary
             // for inputting multi-word tags.
@@ -183,7 +185,8 @@
                                 (
                                     $.trim(that._tagInput.val()).charAt(0) == '"' &&
                                     $.trim(that._tagInput.val()).charAt($.trim(that._tagInput.val()).length - 1) == '"' &&
-                                    $.trim(that._tagInput.val()).length - 1 !== 0
+                                    $.trim(that._tagInput.val()).length - 1 !== 0 &&
+									$.trim(that._tagInput.val()).length >= this.options.minChars
                                 )
                             )
                         )
@@ -205,6 +208,7 @@
             if (this.options.availableTags || this.options.tagSource) {
                 this._tagInput.autocomplete({
                     source: this.options.tagSource,
+					minLength: 2,
                     select: function(event, ui) {
                         // Delete the last tag if we autocomplete something despite the input being empty
                         // This happens because the input's blur event causes the tag to be created when
@@ -231,7 +235,7 @@
         _lastTag: function() {
             return this.tagList.children('.tagit-choice:last');
         },
-
+			
         assignedTags: function() {
             // Returns an array of tag string values
             var that = this;
@@ -301,43 +305,51 @@
                 return false;
             }
 
+			// Added tag limit check (if limit is hit, clear input and do nothing)
+			if(this.assignedTags().length === this.options.selectionLimit) {
+				this._tagInput.val('');
+				return false;
+			}
+
             var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
 
-            // Create tag.
-            var tag = $('<li></li>')
-                .addClass('tagit-choice ui-widget-content ui-state-default ui-corner-all')
-                .addClass(additionalClass)
-                .append(label);
+            	// Create tag.
+            	var tag = $('<li></li>')
+                	.addClass('tagit-choice ui-widget-content ui-state-default ui-corner-all')
+                	.addClass(additionalClass)
+                	.append(label);
 
-            // Button for removing the tag.
-            var removeTagIcon = $('<span></span>')
-                .addClass('ui-icon ui-icon-close');
-            var removeTag = $('<a><span class="text-icon">\xd7</span></a>') // \xd7 is an X
-                .addClass('close')
-                .append(removeTagIcon)
-                .click(function(e) {
-                    // Removes a tag when the little 'x' is clicked.
-                    that.removeTag(tag);
-                });
-            tag.append(removeTag);
+            	// Button for removing the tag.
+            	var removeTagIcon = $('<span></span>')
+                	.addClass('ui-icon ui-icon-close');
+            	var removeTag = $('<a><span class="text-icon">\xd7</span></a>') // \xd7 is an X
+                	.addClass('close')
+                	.append(removeTagIcon)
+                	.click(function(e) {
+                    	// Removes a tag when the little 'x' is clicked.
+                    	that.removeTag(tag);
+                	});
+            	tag.append(removeTag);
 
-            // Unless options.singleField is set, each tag has a hidden input field inline.
-            if (this.options.singleField) {
-                var tags = this.assignedTags();
-                tags.push(value);
-                this._updateSingleTagsField(tags);
-            } else {
-                var escapedValue = label.html();
-                tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + this.options.itemName + '[' + this.options.fieldName + '][]">');
-            }
+            	// Unless options.singleField is set, each tag has a hidden input field inline.
+            	if (this.options.singleField) {
+                	var tags = this.assignedTags();
+                	tags.push(value);
+                	this._updateSingleTagsField(tags);
+            	} else {
+                	var escapedValue = label.html();
+                	tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + this.options.itemName + '[' + this.options.fieldName + '][]">');
+            	}
 
-            this._trigger('onTagAdded', null, tag);
+            	this._trigger('onTagAdded', null, tag);
 
-            // Cleaning the input.
-            this._tagInput.val('');
+            	// Cleaning the input.
+            	this._tagInput.val('');
 
-            // insert tag
-            this._tagInput.parent().before(tag);
+            	// insert tag
+			 	this._tagInput.parent().before(tag); 
+			
+            
         },
         
         removeTag: function(tag, animate) {
@@ -376,5 +388,3 @@
     });
 
 })(jQuery);
-
-
