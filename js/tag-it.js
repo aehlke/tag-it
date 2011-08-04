@@ -293,7 +293,7 @@
         },
 
         createTag: function(value, additionalClass) {
-            that = this;
+            var that = this;
             // Automatically trims the value of leading and trailing whitespace.
             value = $.trim(value);
 
