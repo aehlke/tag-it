@@ -203,6 +203,9 @@
                     //check chars range
                     else if (event.which != $.ui.keyCode.BACKSPACE && $.trim(that._tagInput.val()).length === that.options.maxChars){
                         event.preventDefault();
+                    }else if (that.assignedTags().length == that.options.maxCount)
+                    {
+                        event.preventDefault();
                     }
 
                 }).blur(function(e){
