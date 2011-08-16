@@ -72,7 +72,12 @@
             // Event callbacks.
             onTagAdded  : null,
             onTagRemoved: null,
-            onTagClicked: null
+            onTagClicked: null,
+
+            //restrictions
+            maxChars :  10,
+            maxCount : 3,
+            allowNotInList : true
         },
 
 
@@ -88,6 +93,7 @@
                 this.tagList = $('<ul></ul>').insertAfter(this.element);
                 this.options.singleField = true;
                 this.options.singleFieldNode = this.element;
+                this.display_orig = this.element.css('display');
                 this.element.css('display', 'none');
             } else {
                 this.tagList = this.element.find('ul, ol').andSelf().last();
@@ -164,11 +170,10 @@
                     } else if (that.options.removeConfirmation) {
                         that._lastTag().removeClass('remove ui-state-highlight');
                     }
-
                     // Comma/Space/Enter are all valid delimiters for new tags,
                     // except when there is an open quote or if setting allowSpaces = true.
                     // Tab will also create a tag, unless the tag input is empty, in which case it isn't caught.
-                    if (
+                    else if (
                         event.which == $.ui.keyCode.COMMA ||
                         event.which == $.ui.keyCode.ENTER ||
                         (
@@ -195,6 +200,11 @@
                         // So let's ensure that it closes.
                         that._tagInput.autocomplete('close');
                     }
+                    //check chars range
+                    else if (event.which != $.ui.keyCode.BACKSPACE && $.trim(that._tagInput.val()).length === that.options.maxChars){
+                        event.preventDefault();
+                    }
+
                 }).blur(function(e){
                     // Create a tag when the element loses focus (unless it's empty).
                     that.createTag(that._cleanedInput());
@@ -221,6 +231,16 @@
                     }
                 });
             }
+        },
+
+        destroy : function()
+        {
+            if (this.element)
+            {
+                this.element.css('display', this.display_orig);
+            }
+
+            $(this.tagList).remove();
         },
 
         _cleanedInput: function() {
