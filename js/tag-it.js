@@ -201,10 +201,10 @@
                         that._tagInput.autocomplete('close');
                     }
                     //check chars range
-                    else if (event.which != $.ui.keyCode.BACKSPACE && $.trim(that._tagInput.val()).length === that.options.maxChars){
-                        event.preventDefault();
-                    }else if (that.assignedTags().length == that.options.maxCount)
-                    {
+                    else if (event.which != $.ui.keyCode.BACKSPACE &&
+                                ($.trim(that._tagInput.val()).length === that.options.maxChars ||
+                                    that.assignedTags().length == that.options.maxCount)
+                                 ){
                         event.preventDefault();
                     }
 
