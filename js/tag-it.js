@@ -369,7 +369,7 @@
         },
 
         removeAll: function() {
-            // Removes all tags. Takes an optional `animate` argument.
+            // Removes all tags.
             var that = this;
             this.tagList.children('.tagit-choice').each(function(index, tag) {
                 that.removeTag(tag, false);
