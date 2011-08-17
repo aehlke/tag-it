@@ -123,6 +123,13 @@ For example, the user can enter `John Smith` instead of `"John Smith"`.
 
 Defaults to *false*.
 
+### animate (boolean)
+
+When animate is enabled, single tag removals will be animated with a fade out
+effect. This requires the Effects API of jQuery UI.
+
+Defaults to *true*.
+
 ### singleField (boolean)
 
 When enabled, will use a single hidden field for the form, rather than one per tag.
