@@ -39,6 +39,9 @@
             // for inputting multi-word tags.
             allowSpaces: false,
 
+            // Whether to animate tag removals or not.
+            animate: true,
+
             // The below options are for using a single field instead of several
             // for our form values.
             //
@@ -341,7 +344,7 @@
         },
         
         removeTag: function(tag, animate) {
-            if (typeof animate === 'undefined') { animate = true; }
+            animate = animate || this.options.animate;
 
             tag = $(tag);
 
@@ -366,7 +369,7 @@
         },
 
         removeAll: function() {
-            // Removes all tags. Takes an optional `animate` argument.
+            // Removes all tags.
             var that = this;
             this.tagList.children('.tagit-choice').each(function(index, tag) {
                 that.removeTag(tag, false);
