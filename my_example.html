@@ -24,9 +24,7 @@
             var sampleTags = ['c++', 'java', 'php', 'coldfusion', 'javascript', 'asp', 'ruby', 'python', 'c', 'scala', 'groovy', 'haskell', 'perl', 'erlang', 'apl', 'cobol', 'go', 'lua'];
 
             $('#tagField').tagit({
-                singleField : true,
-                singleFieldNode : $('#tagField'),
-                
+
                 maxChars : 5,
                 maxCount : 3,
                 allowNotInList: false,
@@ -62,8 +60,7 @@
      If you instantiate Tag-it on an INPUT element, it will default to being singleField, with that INPUT element as the singleFieldNode. This is the simplest way to have a gracefully-degrading tag widget.
  </p>
  <div style="width: 500px">
- <!--<input name="tags" id="tagField" value="Apple, Orange">-->
- <textarea rows="5" cols="10" id="tagField">Apple, Orange</textarea>
+ <input name="tags" id="tagField" value="Apple, Orange">
  <input type="submit" value="Submit">
  </div>
 
