@@ -110,7 +110,11 @@
                 });
                 showChoices(this._subtractArray(choices, this.assignedTags()));
             };
-            this.options.tagSource = $.proxy(this.options.tagSource, this);
+
+            // Bind tagSource callback functions to this context.
+            if ($.isFunction(this.options.tagSource)) {
+                this.options.tagSource = $.proxy(this.options.tagSource, this);
+            }
 
             this.tagList
                 .addClass('tagit')
