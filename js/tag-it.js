@@ -200,9 +200,9 @@
                         event.preventDefault();
 
                         if (that.options.allowNotInList !== false)
-                        {
                             that.createTag(that._cleanedInput());
-                        }
+                        else
+                            that._trigger("onNotAllowed", event, that);
 
                         // The autocomplete doesn't close automatically when TAB is pressed.
                         // So let's ensure that it closes.
@@ -213,15 +213,15 @@
                         var func;
 
                         if($.trim(that._tagInput.val()).length === that.options.maxChars)
-                                    func = that.options.onMaxChars;
+                                    func = "onMaxChars";
 
                         if(that.assignedTags().length == that.options.maxCount)
-                                    func = that.options.onMaxCount;
+                                    func = "onMaxCount";
 
                         if (func !== undefined)
                         {
                             if (func)
-                                func(event.target, that.options);
+                                that._trigger(func, null, that);
 
                             event.preventDefault();
                         }

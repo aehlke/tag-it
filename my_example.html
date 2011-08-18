@@ -23,13 +23,17 @@
             $('#tagField').tagit({
                 availableTags: sampleTags,
                 allowNotInList: false,
-                onMaxChars: function()
+                onMaxChars: function(widget, input)
                 {
                     console.log("onMaxChars");
                 },
                 onMaxCount: function()
                 {
                     console.log("onMaxCount");
+                },
+                onNotAllowed: function()
+                {
+                    console.log("onNotAllowed");
                 }
             });
         });
