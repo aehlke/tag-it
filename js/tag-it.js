@@ -77,7 +77,11 @@
             //restrictions
             maxChars :  10,
             maxCount : 3,
-            allowNotInList : true
+            allowNotInList : true,
+
+            onMaxChars : null,
+            onMaxCount : null,
+            onNotAllowed : null
         },
 
 
@@ -204,17 +208,29 @@
                         // So let's ensure that it closes.
                         //that._tagInput.autocomplete('close');
                     }
-                    //check chars range
-                    else if (event.which != $.ui.keyCode.BACKSPACE &&
-                                ($.trim(that._tagInput.val()).length === that.options.maxChars ||
-                                    that.assignedTags().length == that.options.maxCount)
-                                 ){
-                        event.preventDefault();
+                    //check restrictions
+                    else if (event.which != $.ui.keyCode.BACKSPACE){
+                        var func;
+
+                        if($.trim(that._tagInput.val()).length === that.options.maxChars)
+                                    func = that.options.onMaxChars;
+
+                        if(that.assignedTags().length == that.options.maxCount)
+                                    func = that.options.onMaxCount;
+
+                        if (func !== undefined)
+                        {
+                            if (func)
+                                func(event.target, that.options);
+
+                            event.preventDefault();
+                        }
                     }
 
                 }).blur(function(e){
                     // Create a tag when the element loses focus (unless it's empty).
-                    that.createTag(that._cleanedInput());
+                    if (that.options.allowNotInList !== false)
+                        that.createTag(that._cleanedInput());
                 });
                 
 
