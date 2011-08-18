@@ -81,9 +81,7 @@
 
             onMaxChars : null,
             onMaxCount : null,
-            onNotAllowed : null,
-            
-            maxHeight : 200
+            onNotAllowed : null
         },
 
 
@@ -260,12 +258,15 @@
 
         destroy : function()
         {
+
             if (this.element)
             {
                 this.element.css('display', this.display_orig);
             }
 
             $(this.tagList).remove();
+
+            $.Widget.prototype.destroy.apply(this, arguments);
         },
 
         _cleanedInput: function() {

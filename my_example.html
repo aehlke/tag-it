@@ -18,12 +18,15 @@
 	<script src="js/tag-it.js" type="text/javascript" charset="utf-8"></script>
 
     <script>
-        $(document).ready(function(){
+
+        function create_it()
+        {
             var sampleTags = ['c++', 'java', 'php', 'coldfusion', 'javascript', 'asp', 'ruby', 'python', 'c', 'scala', 'groovy', 'haskell', 'perl', 'erlang', 'apl', 'cobol', 'go', 'lua'];
+
             $('#tagField').tagit({
-                //maxChars : 5,
-                //maxCount : 3,
-                //allowNotInList: false,
+                maxChars : 5,
+                maxCount : 3,
+                allowNotInList: false,
                 availableTags: sampleTags,
                 onMaxChars: function(widget, input)
                 {
@@ -38,6 +41,15 @@
                     console.log("onNotAllowed");
                 }
             });
+        }
+
+        function destroy_it()
+        {
+            $("#tagField").tagit("destroy");
+        }
+        
+        $(document).ready(function(){
+            //create_it();
         });
     </script>
 </head>
@@ -46,18 +58,13 @@
  <p>
      If you instantiate Tag-it on an INPUT element, it will default to being singleField, with that INPUT element as the singleFieldNode. This is the simplest way to have a gracefully-degrading tag widget.
  </p>
- <div style="width: 900px">
+ <div style="width: 500px">
  <input name="tags" id="tagField" value="Apple, Orange">
  <input type="submit" value="Submit">
  </div>
 
  </form>
 <button onclick='destroy_it();'>destroy it!</button>
-<script type="text/javascript">
-    function destroy_it()
-    {
-        $("#tagField").tagit("destroy");
-    }
-</script>
+<button onclick='create_it();'>create it!</button>
 </body>
 </html>
