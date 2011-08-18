@@ -21,7 +21,8 @@
         $(document).ready(function(){
             var sampleTags = ['c++', 'java', 'php', 'coldfusion', 'javascript', 'asp', 'ruby', 'python', 'c', 'scala', 'groovy', 'haskell', 'perl', 'erlang', 'apl', 'cobol', 'go', 'lua'];
             $('#tagField').tagit({
-                availableTags: sampleTags
+                availableTags: sampleTags,
+                allowNotInList: false
             });
         });
     </script>

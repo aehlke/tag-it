@@ -194,11 +194,15 @@
                         )
                     ) {
                         event.preventDefault();
-                        that.createTag(that._cleanedInput());
+
+                        if (that.options.allowNotInList !== false)
+                        {
+                            that.createTag(that._cleanedInput());
+                        }
 
                         // The autocomplete doesn't close automatically when TAB is pressed.
                         // So let's ensure that it closes.
-                        that._tagInput.autocomplete('close');
+                        //that._tagInput.autocomplete('close');
                     }
                     //check chars range
                     else if (event.which != $.ui.keyCode.BACKSPACE &&
