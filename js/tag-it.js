@@ -75,13 +75,15 @@
             onTagClicked: null,
 
             //restrictions
-            maxChars :  10,
-            maxCount : 3,
+            maxChars :  0,
+            maxCount : 0,
             allowNotInList : true,
 
             onMaxChars : null,
             onMaxCount : null,
-            onNotAllowed : null
+            onNotAllowed : null,
+            
+            maxHeight : 200
         },
 
 
@@ -212,10 +214,10 @@
                     else if (event.which != $.ui.keyCode.BACKSPACE){
                         var func;
 
-                        if($.trim(that._tagInput.val()).length === that.options.maxChars)
+                        if(that.options.maxChars && $.trim(that._tagInput.val()).length === that.options.maxChars)
                                     func = "onMaxChars";
 
-                        if(that.assignedTags().length == that.options.maxCount)
+                        if(that.options.maxCount && that.assignedTags().length == that.options.maxCount)
                                     func = "onMaxCount";
 
                         if (func !== undefined)

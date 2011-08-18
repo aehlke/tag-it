@@ -21,8 +21,10 @@
         $(document).ready(function(){
             var sampleTags = ['c++', 'java', 'php', 'coldfusion', 'javascript', 'asp', 'ruby', 'python', 'c', 'scala', 'groovy', 'haskell', 'perl', 'erlang', 'apl', 'cobol', 'go', 'lua'];
             $('#tagField').tagit({
+                //maxChars : 5,
+                //maxCount : 3,
+                //allowNotInList: false,
                 availableTags: sampleTags,
-                allowNotInList: false,
                 onMaxChars: function(widget, input)
                 {
                     console.log("onMaxChars");
