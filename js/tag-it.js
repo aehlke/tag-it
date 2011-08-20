@@ -223,7 +223,7 @@
                     else{
                         var func;
 
-                        if (event.which != $.ui.keyCode.BACKSPACE){
+                        if (event.which != $.ui.keyCode.BACKSPACE && event.which != $.ui.keyCode.TAB){
 
                             if(that.options.maxChars && $.trim(that._tagInput.val()).length === that.options.maxChars)
                                         func = "onMaxChars";
@@ -296,9 +296,9 @@
                 "font-spacing" : this._tagInput.css("font-spacing"),
                 margin: this._tagInput.css("margin"),
                 padding: this._tagInput.css("padding")});
-            sensor.text(this._tagInput.val() + "W");
+            sensor.text(this._tagInput.val() + "WW");
             $("body").append(sensor);
-            var w  = sensor.width() + 10;
+            var w  = sensor.width();
             sensor.remove();
 
             this._tagInput.css("width", w);
