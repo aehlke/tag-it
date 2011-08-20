@@ -135,6 +135,17 @@
                     }
                 });
 
+            //Input type default width
+            this._updateInputTagWidth();
+
+            // Position (position, top, left, width)
+            this.tagList.css({
+               position : this.element.css("position"),
+               top : this.element.css("top"),
+               left : this.element.css("left"),
+               width : this.element.css("width")
+            });
+
             // Add existing tags from the list, if any.
             this.tagList.children('li').each(function() {
                 if (!$(this).hasClass('tagit-new')) {
@@ -209,14 +220,17 @@
                         //that._tagInput.autocomplete('close');
                     }
                     //check restrictions
-                    else if (event.which != $.ui.keyCode.BACKSPACE){
+                    else{
                         var func;
 
-                        if(that.options.maxChars && $.trim(that._tagInput.val()).length === that.options.maxChars)
-                                    func = "onMaxChars";
+                        if (event.which != $.ui.keyCode.BACKSPACE){
 
-                        if(that.options.maxCount && that.assignedTags().length == that.options.maxCount)
-                                    func = "onMaxCount";
+                            if(that.options.maxChars && $.trim(that._tagInput.val()).length === that.options.maxChars)
+                                        func = "onMaxChars";
+
+                            if(that.options.maxCount && that.assignedTags().length == that.options.maxCount)
+                                        func = "onMaxCount";
+                        }
 
                         if (func !== undefined)
                         {
@@ -225,6 +239,8 @@
 
                             event.preventDefault();
                         }
+                        else
+                            that._updateInputTagWidth();
                     }
 
                 }).blur(function(e){
@@ -267,6 +283,25 @@
             $(this.tagList).remove();
 
             $.Widget.prototype.destroy.apply(this, arguments);
+        },
+
+        _updateInputTagWidth : function()
+        {
+            //get necessary text width
+            var sensor = $('<span />').css({
+                "font-family" : this._tagInput.css("font-family"),
+                "font-size" : this._tagInput.css("font-size"),
+                "font-style" : this._tagInput.css("font-style"),
+                "font-variant" : this._tagInput.css("font-variant"),
+                "font-spacing" : this._tagInput.css("font-spacing"),
+                margin: this._tagInput.css("margin"),
+                padding: this._tagInput.css("padding")});
+            sensor.text(this._tagInput.val() + "W");
+            $("body").append(sensor);
+            var w  = sensor.width() + 10;
+            sensor.remove();
+
+            this._tagInput.css("width", w);
         },
 
         _cleanedInput: function() {
