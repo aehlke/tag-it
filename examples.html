@@ -21,7 +21,7 @@
     <link href="css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
 
     <!-- jQuery and jQuery UI are required dependencies. -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
 
     <!-- The real deal -->
@@ -105,15 +105,16 @@
                 availableTags: sampleTags,
                 removeConfirmation: true
             });
-			
-			//-------------------------------
+            
+            //-------------------------------
             // Full Autocomplete
             //-------------------------------
             $('#autocompleteTags').tagit({
                 availableTags: sampleTags,
                 showAllOnFocus: true,
-				delay: 0,
-				minLength: 0
+                delay: 0,
+                minLength: 0,
+                autocompleteHeader: 'Suggestions are:'
             });
             
         });
@@ -135,7 +136,7 @@
     
     <div id="content">
         <p>These demo various features of Tag-it. View the source to see how each works.</p>
-		<p>To see Autocomplete in action use any of this tags: 'c++', 'java', 'php', 'coldfusion', 'javascript', 'asp', 'ruby', 'python', 'c', 'scala', 'groovy', 'haskell', 'perl', 'erlang', 'apl', 'cobol', 'go', 'lua'</p>
+        <p>To see Autocomplete in action use any of this tags: 'c++', 'java', 'php', 'coldfusion', 'javascript', 'asp', 'ruby', 'python', 'c', 'scala', 'groovy', 'haskell', 'perl', 'erlang', 'apl', 'cobol', 'go', 'lua'</p>
         <hr>
         <h3>Minimal</h3>
            <form>
@@ -231,10 +232,12 @@
         </form>
 
         <hr>
-        <h3>Show Autocomplete on focus</h3>
+        <h3>Autocomplete options</h3>
            <form>
             <p>
-                Sometimes it's usefull to show all available tags for autocomplete. This can be set with showAllOnFocus. Additionaly autocomplete can be tuned with delay and minLength attributes (same as in jQuery UI Autocomplete).
+                Sometimes it's usefull to show all available tags for autocomplete, this can be set with showAllOnFocus. 
+                Additionaly autocomplete can be tuned with delay and minLength attributes (same as in jQuery UI Autocomplete).
+                To set header text for autocomplete list, user autocompleteHeader attribute.
             </p>
             <ul id="autocompleteTags"></ul>
             <input type="submit" value="Submit">

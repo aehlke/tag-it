@@ -34,6 +34,7 @@
             caseSensitive     : true,
 
             // Autocomplete settings
+            autocompleteHeader : null,
             availableTags     : [],
             tagSource          : null,
             minLength          : 1,
@@ -106,15 +107,18 @@
                 this._tagInput.attr('tabindex', this.options.tabIndex);
             }
 
-            this.options.tagSource = this.options.tagSource || function(search, showChoices) {
-                var filter = search.term.toLowerCase();
-                var choices = $.grep(that.options.availableTags, function(element) {
-                    // Only match autocomplete options that begin with the search term.
-                    // (Case insensitive.)
-                    return (element.toLowerCase().indexOf(filter) === 0);
-                });
-                showChoices(that._subtractArray(choices, that.assignedTags()));
-            };
+            if (!this.options.tagSource && this.options.availableTags) {
+                this.options.tagSource = function(search, showChoices) {
+                    var filter = search.term.toLowerCase();
+                    var choices = $.grep(that.options.availableTags, function(element) {
+                        // Only match autocomplete options that begin with the search term.
+                        // (Case insensitive.)
+                        return (element.toLowerCase().indexOf(filter) === 0);
+                    });
+                    showChoices(that._subtractArray(choices, that.assignedTags()));
+                };
+            }
+            
 
             this.tagList
                 .addClass('tagit')
@@ -201,39 +205,57 @@
 
                         // The autocomplete doesn't close automatically when TAB is pressed.
                         // So let's ensure that it closes.
-                        that._tagInput.autocomplete('close');
+                        that._tagInput.tagitAutocomplete('close');
                     }
                 }).blur(function(e){
-                    // Create a tag when the element loses focus (unless it's empty).
-                    that.createTag(that._cleanedInput());
+                    //If autocomplete is enabled and suggestion was clicked, just delete the input, autocomplete will put value itself
+                    if (that.options.tagSource && $(that._tagInput).data('autocomplete_list').data('mouseover')) {
+                        that._cleanedInput();
+                    } else {
+                        that.createTag(that._cleanedInput());
+                    }
                 });
                 
 
             // Autocomplete.
-            if (this.options.availableTags || this.options.tagSource) {
-                this._tagInput.autocomplete({
+            //Extending UI Autocomplete to rewrite how it renders
+            $.widget( "custom.tagitAutocomplete", $.ui.autocomplete, {
+                _renderMenu: function( ul, items ) {
+                    //Assign autocomplete list to html element, for it to be accessible in other parts of the code.
+                    $(this.element).data('autocomplete_list', ul);
+                    
+                    //We need to store if mouse over autocomplete list to predict if it was clicked when input blured.
+                    ul.data('mouseover', false);
+                    ul.mouseenter(function(){$(this).data('mouseover', true);});
+                    ul.mouseleave(function(){$(this).data('mouseover', false);});
+                    
+                    if (that.options.autocompleteHeader) {
+                        ul.prepend("<li class='ui-autocomplete-header'>"+ that.options.autocompleteHeader +"</li>");
+                    }
+                    
+                    var self = this;
+                    $.each( items, function( index, item ) {
+                        self._renderItem( ul, item );
+                    });
+                },
+            });
+            if (this.options.tagSource) {
+                this._tagInput.tagitAutocomplete({
                     source: this.options.tagSource,
                     minLength: this.options.minLength,
                     delay: this.options.delay,
+                    autofocus: true,
                     select: function(event, ui) {
-                        // Delete the last tag if we autocomplete something despite the input being empty
-                        // This happens because the input's blur event causes the tag to be created when
-                        // the user clicks an autocomplete item.
-                        // The only artifact of this is that while the user holds down the mouse button
-                        // on the selected autocomplete item, a tag is shown with the pre-autocompleted text,
-                        // and is changed to the autocompleted text upon mouseup.
-                        if (that._tagInput.val() === '') {
-                            that.removeTag(that._lastTag(), false);
-                        }
                         that.createTag(ui.item.value);
                         // Preventing the tag input to be updated with the chosen value.
                         return false;
                     },
+                    appendTo:this.tagList[0],
                 });
                 //Show all posibilities on focus
                 if (this.options.showAllOnFocus) {
                     this._tagInput.focus(function(event, ui) {
-                        $(this).autocomplete( "search", '');
+                        $(this).tagitAutocomplete( "search", '');
                     })
                 }
             }
