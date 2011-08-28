@@ -284,7 +284,7 @@
 
             // Autocomplete.
             if (this.options.availableTags || this.options.tagSource) {
-                this._tagInput.autocomplete({
+                var autocomplete = this._tagInput.autocomplete({
                     source: this.options.tagSource,
                     select: function(event, ui) {
                         // Delete the last tag if we autocomplete something despite the input being empty
@@ -301,6 +301,8 @@
                         return false;
                     }
                 });
+                
+                autocomplete.data("tagit", this);
             }
         },
 
@@ -447,6 +449,8 @@
                 var escapedValue = label.html();
                 tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + this.options.itemName + '[' + this.options.fieldName + '][]">');
             }
+
+            tag.data("tagit", this);
 
             this._trigger('onTagAdded', null, tag);
 

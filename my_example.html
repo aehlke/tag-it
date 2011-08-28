@@ -19,9 +19,38 @@
 
     <script>
 
+        function getTagItTags(array)
+        {
+            return $.map(array, function(element) {
+                        var key =  typeof element.key != 'undefined' ? element.key : -1;
+                        var val = typeof element.value != 'undefined' ? element.value :
+                                (typeof element.label != 'undefined'  ? element.label : element);
+                        var label = typeof element.label != 'undefined'  ? element.label : val;
+                        return {value : val, label : label, key : key};
+            });
+        }
+
+        function getTagKey($tagit, tag)
+        {
+            var vn = $tagit.options.valuesNode;
+            if (vn){
+                var value = $(":first", tag).text();
+                var item = $.grep(getTagItTags($tagit.options.availableTags), function(element){
+                    return element.value == value;
+                });
+
+                return item.length > 0 ? item[0].key : -1;
+            }
+        }
+
+        function tagitExpellExistent(items, existent)
+        {
+            return $.grep(items, function(e) {return $.inArray(existent,  e.value);});
+        }
+
         function create_it()
         {
-            var sampleTags = ['c++', 'java', 'php', 'coldfusion', 'javascript', 'asp', 'ruby', 'python', 'c', 'scala', 'groovy', 'haskell', 'perl', 'erlang', 'apl', 'cobol', 'go', 'lua'];
+            var sampleTags = [{key : 0, value : 'c++'}, {key : 1, label : 'java'} , {key : 2, value : 'php', label : 'php [2]'} , 'coldfusion', 'javascript', 'asp', 'ruby', 'python', 'c', 'scala', 'groovy', 'haskell', 'perl', 'erlang', 'apl', 'cobol', 'go', 'lua'];
 
             $('#tagField').tagit({
 
@@ -30,6 +59,20 @@
                 allowNotInList: false,
                 availableTags: sampleTags,
                 animate : false,
+                valuesNode : $("#tagFieldVlues"),
+                tagSource : function(search, showChoices)
+                {
+                    var that = (this.element).data("tagit");
+                    var filter = search.term.toLowerCase();
+                    var choices = getTagItTags(that.options.availableTags);
+                    choices = $.grep(choices, function(element) {
+                        // Only match autocomplete options that begin with the search term.
+                        // (Case insensitive.)
+                         return (element.value.toLowerCase().indexOf(filter) === 0);
+                    });
+
+                    showChoices(tagitExpellExistent(choices, that.assignedTags()));
+                },
                 onMaxChars: function(widget, input)
                 {
                     console.log("onMaxChars");
@@ -41,6 +84,39 @@
                 onNotAllowed: function()
                 {
                     console.log("onNotAllowed");
+                },
+
+                onTagAdded: function(event, tag) {
+
+                    var that = tag.data("tagit");
+                    var vn = that.options.valuesNode;
+
+                    if (vn){
+                        var value = $(":first", tag).text();
+                        var item = $.grep(getTagItTags(that.options.availableTags), function(element){
+                            return element.value == value;
+                        });
+
+                        var key = item.length > 0 ? item[0].key : -1;
+
+                        vn.val((vn.val() ? vn.val() + "," : "") + key);
+                    }
+                },
+
+                onTagRemoved: function(event, tag) {
+
+                    var that = tag.data("tagit");
+                    var vn = that.options.valuesNode;
+
+                    if (vn){
+                        var val = $(":first", tag).text();
+                        var values = $(this).val().split(',');
+                        var i = values.indexOf(val);
+                        var keys = vn.val().split(',');
+                        keys.splice(i, 1);
+                        vn.val(keys.join(','));
+                    }
+
                 }
             });
         }
@@ -51,7 +127,7 @@
         }
         
         $(document).ready(function(){
-            //create_it();
+            create_it();
         });
     </script>
 </head>
@@ -60,7 +136,8 @@
  <p>
      If you instantiate Tag-it on an INPUT element, it will default to being singleField, with that INPUT element as the singleFieldNode. This is the simplest way to have a gracefully-degrading tag widget.
  </p>
-    <input name="tags" id="tagField" value="Apple, Orange" style="top: 200px; width: 300px; position: absolute;">
+    <input name="tags" id="tagField" value="Apple, Orange" style="width: 300px">
+    <input name="tags" id="tagFieldVlues" readonly>
 
  </form>
 <button onclick='destroy_it();'>destroy it!</button>
