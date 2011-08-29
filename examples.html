@@ -52,6 +52,17 @@
 			    availableTags: sampleTags
 		    });
 
+            // notAllowedFieldTags is an example of checking if provided tag is allowed.
+        $('#notAllowedFieldTags').tagit({
+          availableTags: sampleTags,
+          tagIsAllowed: function(value) {
+            if(-1 === $.inArray(value, sampleTags)) return false;
+            return true;
+          },
+          onTagNotAllowed: function(evt, value) {
+            $("#notAllowedErrors").html('Tag "' + value + '" is not allowed.');
+          }
+		    });
 
             //-------------------------------
             // Preloading data in markup
@@ -161,6 +172,18 @@
             <input name="tags" id="singleFieldTags2" value="Apple, Orange">
 			<input type="submit" value="Submit">
 	    </form>
+
+        <hr>
+        <h3>Not allowed tags</h3>
+   	    <form>
+		    <p>
+                You can also provide a function that checks if tag is allowed.
+                </p>
+                <p id="notAllowedErrors"></p>
+            <input name="tags" id="notAllowedFieldTags">
+			<input type="submit" value="Submit">
+	    </form>
+
 
         <hr>
         <h3>Spaces Allowed Without Quotes</h3>
