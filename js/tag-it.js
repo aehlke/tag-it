@@ -103,13 +103,18 @@
 
             this.options.tagSource = this.options.tagSource || function(search, showChoices) {
                 var filter = search.term.toLowerCase();
-                var choices = $.grep(that.options.availableTags, function(element) {
+                var choices = $.grep(this.options.availableTags, function(element) {
                     // Only match autocomplete options that begin with the search term.
                     // (Case insensitive.)
                     return (element.toLowerCase().indexOf(filter) === 0);
                 });
-                showChoices(that._subtractArray(choices, that.assignedTags()));
+                showChoices(this._subtractArray(choices, this.assignedTags()));
             };
+
+            // Bind tagSource callback functions to this context.
+            if ($.isFunction(this.options.tagSource)) {
+                this.options.tagSource = $.proxy(this.options.tagSource, this);
+            }
 
             this.tagList
                 .addClass('tagit')
