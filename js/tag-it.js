@@ -29,16 +29,16 @@
     $.widget('ui.tagit', {
         options: {
             itemName          : 'item',
-            fieldName          : 'tags',
+            fieldName         : 'tags',
             removeConfirmation: false,
             caseSensitive     : true,
 
             // Autocomplete settings
-            autocompleteHeader : null,
+            autocompleteHeader: null,
             availableTags     : [],
-            tagSource          : null,
-            minLength          : 1,
-            delay                  :300,
+            tagSource         : null,
+            minLength         : 1,
+            delay             : 300,
             showAllOnFocus : false,
             
             // When enabled, quotes are not neccesary
@@ -102,7 +102,7 @@
                 this.tagList = this.element.find('ul, ol').andSelf().last();
             }
 
-            this._tagInput = $('<input type="text">').addClass('ui-widget-content');
+            this._tagInput = $('<input type="text" />').addClass('ui-widget-content');
             if (this.options.tabIndex) {
                 this._tagInput.attr('tabindex', this.options.tabIndex);
             }
@@ -110,13 +110,17 @@
             if (!this.options.tagSource && this.options.availableTags) {
                 this.options.tagSource = function(search, showChoices) {
                     var filter = search.term.toLowerCase();
-                    var choices = $.grep(that.options.availableTags, function(element) {
+                var choices = $.grep(this.options.availableTags, function(element) {
                         // Only match autocomplete options that begin with the search term.
                         // (Case insensitive.)
                         return (element.toLowerCase().indexOf(filter) === 0);
                     });
-                    showChoices(that._subtractArray(choices, that.assignedTags()));
+                showChoices(this._subtractArray(choices, this.assignedTags()));
                 };
+
+            // Bind tagSource callback functions to this context.
+            if ($.isFunction(this.options.tagSource)) {
+                this.options.tagSource = $.proxy(this.options.tagSource, this);
             }
             
 
@@ -157,7 +161,7 @@
                     });
                 } else {
                     // Create our single field input after our list.
-                    this.options.singleFieldNode = this.tagList.after('<input type="hidden" style="display:none;" value="" name="' + this.options.fieldName + '">');
+                    this.options.singleFieldNode = this.tagList.after('<input type="hidden" style="display:none;" value="" name="' + this.options.fieldName + '" />');
                 }
             }
 
@@ -250,7 +254,7 @@
                         // Preventing the tag input to be updated with the chosen value.
                         return false;
                     },
-                    appendTo:this.tagList[0],
+                    appendTo:this.tagList[0],//Autocomplete list should be appended to tagit element, instead of <body> 
                 });
                 //Show all posibilities on focus
                 if (this.options.showAllOnFocus) {
@@ -351,7 +355,7 @@
             var removeTagIcon = $('<span></span>')
                 .addClass('ui-icon ui-icon-close');
             var removeTag = $('<a><span class="text-icon">\xd7</span></a>') // \xd7 is an X
-                .addClass('close')
+                .addClass('tagit-close')
                 .append(removeTagIcon)
                 .click(function(e) {
                     // Removes a tag when the little 'x' is clicked.
@@ -366,7 +370,7 @@
                 this._updateSingleTagsField(tags);
             } else {
                 var escapedValue = label.html();
-                tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + this.options.itemName + '[' + this.options.fieldName + '][]">');
+                tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + this.options.itemName + '[' + this.options.fieldName + '][]" />');
             }
 
             this._trigger('onTagAdded', null, tag);

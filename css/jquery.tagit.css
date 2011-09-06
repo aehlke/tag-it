@@ -22,7 +22,7 @@ ul.tagit li.tagit-choice a.tagit-label {
     cursor: pointer;
     text-decoration: none;
 }
-ul.tagit li.tagit-choice .close {
+ul.tagit li.tagit-choice .tagit-close {
     cursor: pointer;
     position: absolute;
     right: .1em;
@@ -31,7 +31,7 @@ ul.tagit li.tagit-choice .close {
 }
 
 /* used for some custom themes that don't need image icons */
-ul.tagit li.tagit-choice .close .text-icon {
+ul.tagit li.tagit-choice .tagit-close .text-icon {
     display: none;
 }
 
