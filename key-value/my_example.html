@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <!-- These 2 CSS files are required: any 1 jQuery UI theme CSS, plus the Tag-it base CSS. -->
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="../css/jquery.tagit.css">
+
+    <!-- This is an optional CSS theme that only applies to this widget. Use it in addition to the jQuery UI theme. -->
+    <link href="../css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+
+    <!-- jQuery and jQuery UI are required dependencies. -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.js" type="text/javascript" charset="utf-8"></script>
+
+    <!-- The real deal -->
+	<script src="../js/tag-it.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="my_example.js" type="text/javascript"></script>
+
+    <script>
+    </script>
+</head>
+<body>
+<form>
+ <p>
+     If you instantiate Tag-it on an INPUT element, it will default to being singleField, with that INPUT element as the singleFieldNode. This is the simplest way to have a gracefully-degrading tag widget.
+ </p>
+    Static list (available tags)<br/>
+    <input name="tags" id="listTagField" value="Apple, Orange" style="width: 300px">
+    <input name="tags" id="listTagFieldVlues" readonly>
+    <br/><br/>Ajax<br/>
+    <input name="tags" id="ajaxTagField" value="Apple, Orange" style="width: 300px">
+    <input name="tags" id="ajaxTagFieldVlues" readonly>
+ </form>
+<script type="text/javascript">
+     var sampleTags = [{key : 0, value : 'c++'}, {key : 1, label : 'java'} , {key : 2, value : 'php', label : 'php [2]'} , 'coldfusion', 'javascript', 'asp', 'ruby', 'python', 'c', 'scala', 'groovy', 'haskell', 'perl', 'erlang', 'apl', 'cobol', 'go', 'lua'];
+
+    $('#listTagField').tagit({
+        availableTags: sampleTags,
+        animate : false,
+        valuesNode : $("#listTagFieldVlues")});
+
+
+</script>
+</body>
+</html>
