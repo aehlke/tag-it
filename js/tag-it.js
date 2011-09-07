@@ -83,6 +83,7 @@
             //max number of tags
             maxCount : 0,
             //allow tags which are not in tagSource list
+            //if parameter undefined or null it considered as true
             allowNotInList : true,
 
             //events raised when user input restrictions occurs
@@ -149,7 +150,9 @@
                position : this.element.css("position"),
                top : this.element.css("top"),
                left : this.element.css("left"),
-               width : this.element.css("width")
+               width : this.element.css("width"),
+               margin : this.element.css("margin"),
+               display : this.element.css("margin")
             });
 
             // Add existing tags from the list, if any.
@@ -221,8 +224,7 @@
                         //Creating tags which are not from list is only available when options.allowNotInList = true
                         if (that.options.allowNotInList !== false){
                             that.createTag(that._cleanedInput());
-                        }
-                        else{
+                        }else{
                             that._trigger("onNotAllowed", event, that);
                         }
 
@@ -231,8 +233,7 @@
                         // The autocomplete doesn't close automatically when TAB is pressed.
                         // So let's ensure that it closes.
                         //that._tagInput.autocomplete('close');
-                    }
-                    else{
+                    }else{
                         var func;
 
                         //check restrictions on maxCharCount and on maxCount
@@ -240,13 +241,11 @@
 
                             //check if text in the input tag has length less than options.maxChars
 
-                            if(that.options.maxChars && $.trim(that._tagInput.val()).length === that.options.maxChars){
+                            if(that.options.maxChars && $.trim(that._tagInput.val()).length >= that.options.maxChars){
                                         func = "onMaxChars";
                             }
-
                             //check if number of tags less than options.maxCount
-
-                            if(that.options.maxCount && that.assignedTags().length == that.options.maxCount){
+                            else if(that.options.maxCount && that.assignedTags().length >= that.options.maxCount){
                                         func = "onMaxCount";
                             }
                         }
@@ -306,8 +305,7 @@
             }
         },
 
-        destroy : function()
-        {
+        destroy : function(){
             //destroy widget
 
             if (this.element)
@@ -320,8 +318,7 @@
             $.Widget.prototype.destroy.apply(this, arguments);
         },
 
-        _updateInputTagWidth : function()
-        {
+        _updateInputTagWidth : function(){
             //function update width of the input tag on the base of the width of text inside.
             
             //calculate text width
