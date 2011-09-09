@@ -3,8 +3,6 @@ current one is deprecated, though still functional.
 
 * Add keyboard shortcuts for highlighting tags to remove them upon backspace.
 
-* minLength for autocomplete
-
 * hide the singleFieldNode
 
 * add quotesAllowed option (or quotedSpacesAllowed)
