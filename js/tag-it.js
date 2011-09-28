@@ -71,11 +71,12 @@
             // created for tag-it.
             tabIndex: null,
 
-
             // Event callbacks.
             onTagAdded  : null,
             onTagRemoved: null,
-            onTagClicked: null
+            onTagClicked: null,
+
+            requireAutocomplete: false
         },
 
 
@@ -158,21 +159,21 @@
             }
 
             // Events.
-            this._tagInput
-                .keydown(function(event) {
-                    // Backspace is not detected within a keypress, so it must use keydown.
-                    if (event.which == $.ui.keyCode.BACKSPACE && that._tagInput.val() === '') {
-                        var tag = that._lastTag();
-                        if (!that.options.removeConfirmation || tag.hasClass('remove')) {
-                            // When backspace is pressed, the last tag is deleted.
-                            that.removeTag(tag);
-                        } else if (that.options.removeConfirmation) {
-                            tag.addClass('remove ui-state-highlight');
-                        }
+            this._tagInput.keydown(function(event) {
+                // Backspace is not detected within a keypress, so it must use keydown.
+                if (event.which == $.ui.keyCode.BACKSPACE && that._tagInput.val() === '') {
+                    var tag = that._lastTag();
+                    if (!that.options.removeConfirmation || tag.hasClass('remove')) {
+                        // When backspace is pressed, the last tag is deleted.
+                        that.removeTag(tag);
                     } else if (that.options.removeConfirmation) {
-                        that._lastTag().removeClass('remove ui-state-highlight');
+                        tag.addClass('remove ui-state-highlight');
                     }
+                } else if (that.options.removeConfirmation) {
+                    that._lastTag().removeClass('remove ui-state-highlight');
+                }
 
+                if (that.options.requireAutocomplete !== true) {
                     // Comma/Space/Enter are all valid delimiters for new tags,
                     // except when there is an open quote or if setting allowSpaces = true.
                     // Tab will also create a tag, unless the tag input is empty, in which case it isn't caught.
@@ -203,11 +204,17 @@
                         // So let's ensure that it closes.
                         that._tagInput.autocomplete('close');
                     }
-                }).blur(function(e){
+                } else if (event.which == $.ui.keyCode.ENTER) {
+                    event.preventDefault();
+                }
+            });
+
+            if (this.options.requireAutocomplete !== true) {
+                this._tagInput.blur(function(e) {
                     // Create a tag when the element loses focus (unless it's empty).
                     that.createTag(that._cleanedInput());
                 });
-                
+            }
 
             // Autocomplete.
             if (this.options.availableTags || this.options.tagSource) {
