@@ -102,19 +102,26 @@
                 this._tagInput.attr('tabindex', this.options.tabIndex);
             }
 
-            this.options.tagSource = this.options.tagSource || function(search, showChoices) {
-                var filter = search.term.toLowerCase();
-                var choices = $.grep(this.options.availableTags, function(element) {
-                    // Only match autocomplete options that begin with the search term.
-                    // (Case insensitive.)
-                    return (element.toLowerCase().indexOf(filter) === 0);
-                });
-                showChoices(this._subtractArray(choices, this.assignedTags()));
-            };
+            if (!this.options.tagSource && this.options.availableTags.length > 0) {
+                this.options.tagSource = function(search, showChoices) {
+                    var filter = search.term.toLowerCase();
+                    var choices = $.grep(that.options.availableTags, function(element) {
+                        // Only match autocomplete options that begin with the search term.
+                        // (Case insensitive.)
+                        return (element.toLowerCase().indexOf(filter) === 0);
+                    });
+                    showChoices(that._subtractArray(choices, this.assignedTags()));
+                };
+            }
 
             // Bind tagSource callback functions to this context.
             if ($.isFunction(this.options.tagSource)) {
                 this.options.tagSource = $.proxy(this.options.tagSource, this);
+            }
+
+            // cannot require autocomplete without an autocomplete source
+            if (!this.options.tagSource) {
+                this.options.requireAutocomplete = false;
             }
 
             this.tagList
@@ -217,7 +224,7 @@
             }
 
             // Autocomplete.
-            if (this.options.availableTags || this.options.tagSource) {
+            if (this.options.tagSource) {
                 this._tagInput.autocomplete({
                     source: this.options.tagSource,
                     select: function(event, ui) {
