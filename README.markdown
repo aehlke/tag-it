@@ -123,6 +123,15 @@ For example, the user can enter `John Smith` instead of `"John Smith"`.
 
 Defaults to *false*.
 
+### delimiterKeyCodes: (Array)
+
+KeyCodes to treat as tag delimiters during user input.
+E.g. for delimiting on semicolons:
+
+    $("#mytags").tagit({
+        delimiterKeyCodes: [56, 186]
+    });
+
 ### singleField (boolean)
 
 When enabled, will use a single hidden field for the form, rather than one per tag.
