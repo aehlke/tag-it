@@ -147,6 +147,14 @@ Optionally set a *tabindex* attribute on the `input` that gets created for tag-i
 
 Defaults to *null*
 
+### requireAutocomplete (boolean)
+
+When enabled, tags will only be created when selected from options presented
+by autocomplete.
+
+Defaults to *false*, and is ignored if neither **availableTags** or
+**tagSource** are defined.
+
 
 ## Events
 
