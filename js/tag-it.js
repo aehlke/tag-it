@@ -71,7 +71,10 @@
             // created for tag-it.
             tabIndex: null,
 
-            // Hint animation
+            // Display title attribute as hint.
+            hints: true,
+
+            // Hint animation.
             hintHideEffect: 'fade',
             hintHideEffectOptions: {},
             hintHideEffectSpeed: 200,
@@ -163,9 +166,11 @@
             }
 
             this._hintOverlay = $('<li></li>').addClass('tagit-hint ui-widget-content').text(this.element.attr('title'));
-            this.tagList.prepend(this._hintOverlay);
-            if (that.tagList.children('.tagit-choice').size() != 0) {
-                that._hintOverlay.hide();
+            if (this.options.hints && this.element.attr('title') !== undefined) {
+                this.tagList.prepend(this._hintOverlay);
+            }
+            if (this.tagList.children('.tagit-choice').size() != 0) {
+                this._hintOverlay.hide();
             }
 
             // Events.
