@@ -71,6 +71,10 @@
             // created for tag-it.
             tabIndex: null,
 
+            // Hint animation
+            hintHideEffect: 'fade',
+            hintHideEffectOptions: {},
+            hintHideEffectSpeed: 200,
 
             // Event callbacks.
             onTagAdded  : null,
@@ -97,6 +101,7 @@
             }
 
             this._tagInput = $('<input type="text" />').addClass('ui-widget-content');
+
             if (this.options.tabIndex) {
                 this._tagInput.attr('tabindex', this.options.tabIndex);
             }
@@ -157,6 +162,12 @@
                 }
             }
 
+            this._hintOverlay = $('<li></li>').addClass('tagit-hint ui-widget-content').text(this.element.attr('title'));
+            this.tagList.prepend(this._hintOverlay);
+            if (that.tagList.children('.tagit-choice').size() != 0) {
+                that._hintOverlay.hide();
+            }
+
             // Events.
             this._tagInput
                 .keydown(function(event) {
@@ -206,8 +217,15 @@
                 }).blur(function(e){
                     // Create a tag when the element loses focus (unless it's empty).
                     that.createTag(that._cleanedInput());
+                    if (that.tagList.children('.tagit-choice').size() == 0) {
+                        that._hintOverlay.show();
+                    }
+                }).focus(function(e) {
+                    that._hintOverlay.hide(
+                        that.options.hintHideEffect,
+                        that.options.hintHideEffectOptions,
+                        that.options.hintHideEffectSpeed);
                 });
-                
 
             // Autocomplete.
             if (this.options.availableTags || this.options.tagSource) {

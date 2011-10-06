@@ -132,7 +132,7 @@
             <p>
                 Vanilla example &mdash; the absolute minimum amount of code required, no configuration. No autocomplete, either. See the other examples for that.
             </p>
-		    <ul id="myTags"></ul>
+		    <ul id="myTags" title="Enter tags separated by commas"></ul>
 	        <input type="submit" value="Submit">
 	    </form>
 
@@ -148,7 +148,7 @@
                 Normally this input field will be hidden &mdash; we leave it visible here so you can see how it is manipulated by the widget:
                 <input name="tags" id="mySingleField" value="Apple, Orange" disabled="true"> <!-- only disabled for demonstration purposes -->
             </p>
-		    <ul id="singleFieldTags"></ul>
+		    <ul id="singleFieldTags" title="Enter tags separated by commas"></ul>
 			<input type="submit" value="Submit">
 	    </form>
 
@@ -158,7 +158,7 @@
 		    <p>
                 If you instantiate Tag-it on an INPUT element, it will default to being singleField, with that INPUT element as the singleFieldNode. This is the simplest way to have a gracefully-degrading tag widget.
             </p>
-            <input name="tags" id="singleFieldTags2" value="Apple, Orange">
+            <input name="tags" id="singleFieldTags2" value="Apple, Orange" title="Enter tags separated by commas">
 			<input type="submit" value="Submit">
 	    </form>
 
