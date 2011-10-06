@@ -104,6 +104,7 @@
             }
 
             this._tagInput = $('<input type="text" />').addClass('ui-widget-content');
+            this._hintOverlay = $('<li></li>').addClass('tagit-hint ui-widget-content').text(this.element.attr('title'));
 
             if (this.options.tabIndex) {
                 this._tagInput.attr('tabindex', this.options.tabIndex);
@@ -165,7 +166,6 @@
                 }
             }
 
-            this._hintOverlay = $('<li></li>').addClass('tagit-hint ui-widget-content').text(this.element.attr('title'));
             if (this.options.hints && this.element.attr('title') !== undefined) {
                 this.tagList.prepend(this._hintOverlay);
             }
@@ -367,11 +367,15 @@
             // Cleaning the input.
             this._tagInput.val('');
 
+            // Hide any hint text (possible if createTag is called externally)
+            this._hintOverlay.hide();
+
             // insert tag
             this._tagInput.parent().before(tag);
         },
         
         removeTag: function(tag, animate) {
+            var that = this;
             animate = animate || this.options.animate;
 
             tag = $(tag);
@@ -394,6 +398,14 @@
             } else {
                 tag.remove();
             }
+
+            // Show any hint text
+            tag.queue(function(next) {
+                if (!that._tagInput.is(':focus') && that.tagList.children('.tagit-choice').size() == 0) {
+                    that._hintOverlay.show();
+                }
+                next();
+            });
         },
 
         removeAll: function() {
