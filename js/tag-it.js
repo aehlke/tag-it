@@ -71,12 +71,13 @@
             // created for tag-it.
             tabIndex: null,
 
+            // Whether to only create tags only from autocomplete suggestions
+            requireAutocomplete: false,
+
             // Event callbacks.
             onTagAdded  : null,
             onTagRemoved: null,
-            onTagClicked: null,
-
-            requireAutocomplete: false
+            onTagClicked: null
         },
 
 
