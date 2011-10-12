@@ -104,7 +104,7 @@
             }
 
             this._tagInput = $('<input type="text" />').addClass('ui-widget-content');
-            this._hintOverlay = $('<li></li>').addClass('tagit-hint ui-widget-content').text(this.element.attr('title'));
+            this._hintOverlay = $('<li></li>').addClass('tagit-hint ui-widget-content').text(this.element.attr('title')||"");
 
             if (this.options.tabIndex) {
                 this._tagInput.attr('tabindex', this.options.tabIndex);
