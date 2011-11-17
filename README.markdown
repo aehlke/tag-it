@@ -147,6 +147,11 @@ Optionally set a *tabindex* attribute on the `input` that gets created for tag-i
 
 Defaults to *null*
 
+### placeholderText (String)
+Optionally set a *placeholder* attribute on the `input` that gets created for tag-it user input.
+
+Defaults to *null*
+
 
 ## Events
 
