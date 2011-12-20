@@ -183,6 +183,17 @@ The function receives the click event and the tag as parameters.
         }
     });
 
+### onTagsSet (function, Callback)
+
+Can be used to add custom behaviour after a Tag has been added to
+or removed from the DOM. The function receives an empty event.
+
+    $("#mytags").tagit({
+        onTagsSet: function(event) {
+            // do something special
+        }
+    });
+
 
 ## Methods
 

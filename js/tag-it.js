@@ -75,7 +75,10 @@
             // Event callbacks.
             onTagAdded  : null,
             onTagRemoved: null,
-            onTagClicked: null
+            onTagClicked: null,
+
+            // Callback for submitting tags when changed
+            onTagsSet: null,
         },
 
 
@@ -346,6 +349,8 @@
 
             // insert tag
             this._tagInput.parent().before(tag);
+
+            this._trigger('onTagsSet', null);
         },
         
         removeTag: function(tag, animate) {
@@ -371,6 +376,8 @@
             } else {
                 tag.remove();
             }
+
+            this._trigger('onTagsSet', null);
         },
 
         removeAll: function() {
@@ -379,6 +386,8 @@
             this.tagList.children('.tagit-choice').each(function(index, tag) {
                 that.removeTag(tag, false);
             });
+
+            this._trigger('onTagsSet', null);
         }
 
     });
