@@ -70,6 +70,9 @@
             // Optionally set a tabindex attribute on the input that gets
             // created for tag-it.
             tabIndex: null,
+            
+            // Classes added to the created input
+            inputClasses: '',
 
 
             // Event callbacks.
@@ -96,7 +99,7 @@
                 this.tagList = this.element.find('ul, ol').andSelf().last();
             }
 
-            this._tagInput = $('<input type="text" />').addClass('ui-widget-content');
+            this._tagInput = $('<input type="text" />').addClass('ui-widget-content ' + this.options.inputClasses);
             if (this.options.tabIndex) {
                 this._tagInput.attr('tabindex', this.options.tabIndex);
             }
