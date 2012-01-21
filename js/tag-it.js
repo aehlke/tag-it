@@ -380,6 +380,19 @@
             this.tagList.children('.tagit-choice').each(function(index, tag) {
                 that.removeTag(tag, false);
             });
+        },
+        
+        destroy : function(){
+            //destroy widget
+
+            if (this.element)
+            {
+                this.element.css('display', this.display_orig);
+            }
+
+            $(this.tagList).remove();
+
+            $.Widget.prototype.destroy.apply(this, arguments);
         }
 
     });
