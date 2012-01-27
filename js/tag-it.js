@@ -36,7 +36,10 @@
             caseSensitive     : true,
             placeholderText   : null,
 
-            // When enabled, quotes are not neccesary
+            // jQuery UI autocomplete field pass-through
+            minLength         : 0,
+
+            // When enabled, quotes are not necessary
             // for inputting multi-word tags.
             allowSpaces: false,
 
@@ -211,12 +214,13 @@
                     // Create a tag when the element loses focus (unless it's empty).
                     that.createTag(that._cleanedInput());
                 });
-                
+
 
             // Autocomplete.
             if (this.options.availableTags || this.options.tagSource) {
                 this._tagInput.autocomplete({
                     source: this.options.tagSource,
+                    minLength: this.options.minLength,
                     select: function(event, ui) {
                         // Delete the last tag if we autocomplete something despite the input being empty
                         // This happens because the input's blur event causes the tag to be created when
@@ -351,7 +355,7 @@
             // insert tag
             this._tagInput.parent().before(tag);
         },
-        
+
         removeTag: function(tag, animate) {
             animate = animate || this.options.animate;
 
