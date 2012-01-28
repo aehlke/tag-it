@@ -98,6 +98,16 @@ Used as source for the autocompletion.
 
 Defaults to an empty array *[]*.
 
+### autocompleteOptions
+
+Configure options available for jQuery UI Autocomplete widget
+
+    $("#mytags").tagit({
+        autocompleteOptions: {delay:0, minLength:2}
+    });
+
+Default sets autocomplete source to tagSource or availableTags, and positions autocomplete underneath tag input. See full list of available options [here](http://jqueryui.com/demos/autocomplete/).
+
 ### tagSource (function)
 
 Can be overwritten in order to use custom autocompletion sources like Ajax requests.

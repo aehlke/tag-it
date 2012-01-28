@@ -34,7 +34,7 @@
             tagSource         : null,
             removeConfirmation: false,
             caseSensitive     : true,
-            acOptions         : false,
+            autocompleteOptions         : false,
 
             // When enabled, quotes are not neccesary
             // for inputting multi-word tags.
@@ -212,7 +212,7 @@
 
             // Autocomplete.
             if (this.options.availableTags || this.options.tagSource) {
-                var acOptions = $.extend({
+                var autocompleteOptions = $.extend({
                     source: this.options.tagSource,
                     select: function(event, ui) {
                         // Delete the last tag if we autocomplete something despite the input being empty
@@ -227,8 +227,8 @@
                         that.createTag(ui.item.value);
                         // Preventing the tag input to be updated with the chosen value.
                         return false;
-                    } }, this.options.acOptions);
-                this._tagInput.autocomplete( acOptions);
+                    } }, this.options.autocompleteOptions);
+                this._tagInput.autocomplete( autocompleteOptions);
             }
         },
 
@@ -380,19 +380,6 @@
             this.tagList.children('.tagit-choice').each(function(index, tag) {
                 that.removeTag(tag, false);
             });
-        },
-        
-        destroy : function(){
-            //destroy widget
-
-            if (this.element)
-            {
-                this.element.css('display', this.display_orig);
-            }
-
-            $(this.tagList).remove();
-
-            $.Widget.prototype.destroy.apply(this, arguments);
         }
 
     });
