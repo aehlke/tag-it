@@ -34,7 +34,7 @@
             tagSource         : null,
             removeConfirmation: false,
             caseSensitive     : true,
-            autocompleteOptions         : false,
+            autocompleteOptions         : {},
 
             // When enabled, quotes are not neccesary
             // for inputting multi-word tags.
