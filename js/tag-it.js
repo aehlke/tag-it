@@ -34,7 +34,6 @@
             tagSource         : null,
             removeConfirmation: false,
             caseSensitive     : true,
-            placeholderText   : null,
 
             // When enabled, quotes are not neccesary
             // for inputting multi-word tags.
@@ -100,9 +99,6 @@
             this._tagInput = $('<input type="text" />').addClass('ui-widget-content');
             if (this.options.tabIndex) {
                 this._tagInput.attr('tabindex', this.options.tabIndex);
-            }
-            if (this.options.placeholderText) {
-                this._tagInput.attr('placeholder', this.options.placeholderText);
             }
 
             this.options.tagSource = this.options.tagSource || function(search, showChoices) {
@@ -181,7 +177,6 @@
                     // except when there is an open quote or if setting allowSpaces = true.
                     // Tab will also create a tag, unless the tag input is empty, in which case it isn't caught.
                     if (
-                        event.which == $.ui.keyCode.COMMA ||
                         event.which == $.ui.keyCode.ENTER ||
                         (
                             event.which == $.ui.keyCode.TAB &&
@@ -207,7 +202,18 @@
                         // So let's ensure that it closes.
                         that._tagInput.autocomplete('close');
                     }
-                }).blur(function(e){
+                })
+                .keypress(function(event) {
+                    if (event.charCode == 44) {
+                        event.preventDefault();
+                        that.createTag(that._cleanedInput());
+
+                        // The autocomplete doesn't close automatically when TAB is pressed.
+                        // So let's ensure that it closes.
+                        that._tagInput.autocomplete('close');
+                    }
+                })
+                .blur(function(e){
                     // Create a tag when the element loses focus (unless it's empty).
                     that.createTag(that._cleanedInput());
                 });
@@ -388,5 +394,3 @@
     });
 
 })(jQuery);
-
-
