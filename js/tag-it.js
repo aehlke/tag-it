@@ -72,6 +72,13 @@
             // created for tag-it.
             tabIndex: null,
 
+            // If autoFocus is on, the first item in the autocomplete list is focused as soon as
+            // the list pops up. If the user presses enter when a suggested tag has been autofocused,
+            // it will create a tag from the autofocused text instead of what the user has typed
+            autoFocus: false,
+
+            // The delay between when the user types and when the autocomplete box is created
+            delay: 300,
 
             // Event callbacks.
             onTagAdded  : null,
@@ -201,7 +208,13 @@
                         )
                     ) {
                         event.preventDefault();
-                        that.createTag(that._cleanedInput());
+
+                        if (that.options.autoFocus && event.which == $.ui.keyCode.ENTER && this.focusedTag != undefined)
+                           // If autofocus is on, create tag from the autofocused tag when user presses enter key.
+                           that.createTag(this.focusedTag);
+                        else
+                           // Otherwise, create tag from the current text in the text box.
+                           that.createTag(that._cleanedInput());
 
                         // The autocomplete doesn't close automatically when TAB is pressed.
                         // So let's ensure that it closes.
@@ -230,7 +243,13 @@
                         that.createTag(ui.item.value);
                         // Preventing the tag input to be updated with the chosen value.
                         return false;
-                    }
+                    },
+                    // Used to store the autofocused item when autoFocus is enabled
+                    focus: function(event, ui) { this.focusedTag = ui.item.value; },
+                    close: function(event, ui) { this.focusedTag = undefined; },
+                    // Pass along autoFocus and delay options to autocomplete widget
+                    autoFocus: that.options.autoFocus,
+                    delay: that.options.delay
                 });
             }
         },
