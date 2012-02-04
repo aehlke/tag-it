@@ -152,6 +152,15 @@ Optionally set a *placeholder* attribute on the `input` that gets created for ta
 
 Defaults to *null*
 
+### autoFocus (Boolean)
+If autoFocus is enabled, the first item in the autocomplete list will be focused. If the user presses enter, the focused item will be inserted instead of what the user has typed.
+
+Defaults to *false*
+
+### delay (Integer)
+Controls the delay before the autocomplete list pops up.
+
+Defaults to *300*
 
 ## Events
 
