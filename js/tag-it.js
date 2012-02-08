@@ -76,7 +76,8 @@
             // Event callbacks.
             onTagAdded  : null,
             onTagRemoved: null,
-            onTagClicked: null
+            onTagClicked: null,
+            onTagExists : null
         },
 
 
@@ -285,16 +286,16 @@
             }
         },
 
-        _isNew: function(value) {
+        _exists: function(value) {
             var that = this;
-            var isNew = true;
-            this.tagList.children('.tagit-choice').each(function(i) {
+            var exists = false;
+            this.tagList.find('.tagit-choice').each(function(i) {
                 if (that._formatStr(value) == that._formatStr(that.tagLabel(this))) {
-                    isNew = false;
+                    exists = this;
                     return false;
                 }
             });
-            return isNew;
+            return exists;
         },
 
         _formatStr: function(str) {
@@ -309,7 +310,12 @@
             // Automatically trims the value of leading and trailing whitespace.
             value = $.trim(value);
 
-            if (!this._isNew(value) || value === '') {
+            if (value === '')
+                return false;
+
+            var existing_tag = this._exists(value);
+            if (existing_tag) {
+                this._trigger('onTagExists', null, existing_tag);
                 return false;
             }
 
