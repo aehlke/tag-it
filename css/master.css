@@ -93,11 +93,18 @@ ul#nav li {
     font-weight: bold;
 }
 ul#nav a, .highlighted {
-    background-color:#FFFBD0;
+    background-color:#FFF8AC;
     padding: .3em .4em;
 }
 ul#nav a {
     padding: .4em .5em;
+}
+#twitter {
+    position:absolute;
+    top:3.1em;
+    right:0;
+    width:106px;
+    padding: .6em .6em .4em .65em;
 }
 #footer {
     border-top:1px dotted;
