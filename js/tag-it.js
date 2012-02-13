@@ -74,9 +74,12 @@
 
 
             // Event callbacks.
-            onTagAdded  : null,
+            onTagAdding: null,
+            onTagAdded: null,
+            onTagRemoving: null,
             onTagRemoved: null,
-            onTagClicked: null
+            onTagClicked: null,
+            onBlur: null
         },
 
 
@@ -97,7 +100,7 @@
                 this.tagList = this.element.find('ul, ol').andSelf().last();
             }
 
-            this._tagInput = $('<input type="text" />').addClass('ui-widget-content');
+            this._tagInput = $('<input type="text" />').addClass('ui-widget-content').blur(function () { that._trigger('onBlur', null) });
             if (this.options.tabIndex) {
                 this._tagInput.attr('tabindex', this.options.tabIndex);
             }
@@ -343,13 +346,15 @@
                 tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + this.options.itemName + '[' + this.options.fieldName + '][]" />');
             }
 
-            this._trigger('onTagAdded', null, tag);
+            this._trigger('onTagAdding', null, tag);
 
             // Cleaning the input.
             this._tagInput.val('');
 
             // insert tag
             this._tagInput.parent().before(tag);
+
+            this._trigger('onTagAdded', null, tag);
         },
         
         removeTag: function(tag, animate) {
@@ -357,7 +362,7 @@
 
             tag = $(tag);
 
-            this._trigger('onTagRemoved', null, tag);
+            this._trigger('onTagRemoving', null, tag);
 
             if (this.options.singleField) {
                 var tags = this.assignedTags();
@@ -375,6 +380,8 @@
             } else {
                 tag.remove();
             }
+
+            this._trigger('onTagRemoved', null, tag);
         },
 
         removeAll: function() {
