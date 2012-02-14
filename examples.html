@@ -69,11 +69,11 @@
             var eventTags = $('#eventTags');
             eventTags.tagit({
                 availableTags: sampleTags,
-                onTagRemoving: function(evt, tag) {
+                beforeRemoving: function(evt, tag) {
                     console.log(evt);
                     alert('This tag is being removed: ' + eventTags.tagit('tagLabel', tag));
                 },
-				onTagRemoved: function(evt, tag) {
+				afterRemoving: function(evt, tag) {
                     console.log(evt);
                     alert('This tag has been removed: ' + eventTags.tagit('tagLabel', tag));
                 },
@@ -82,13 +82,13 @@
                     alert('This tag was clicked: ' + eventTags.tagit('tagLabel', tag));
                 },
 				onBlur: function(){ alert('Blur event'); }
-            }).tagit('option', 'onTagAdding', function(evt, tag) {
+            }).tagit('option', 'beforeAdding', function(evt, tag) {
                 // Add this callbackafter we initialize the widget,
-                // so that onTagAdding doesn't get called on page load.
+                // so that beforeAdding doesn't get called on page load.
                 alert('This tag is being added: ' + eventTags.tagit('tagLabel', tag));
-            }).tagit('option', 'onTagAdded', function(evt, tag) {
+            }).tagit('option', 'afterAdding', function(evt, tag) {
                 // Add this callbackafter we initialize the widget,
-                // so that onTagAdded doesn't get called on page load.
+                // so that afterAdding doesn't get called on page load.
                 alert('This tag has been added: ' + eventTags.tagit('tagLabel', tag));
             });
 
