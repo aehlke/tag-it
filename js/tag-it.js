@@ -76,7 +76,8 @@
             // Event callbacks.
             onTagAdded  : null,
             onTagRemoved: null,
-            onTagClicked: null
+            onTagClicked: null,
+            onTagChanged: null
         },
 
 
@@ -350,6 +351,8 @@
 
             // insert tag
             this._tagInput.parent().before(tag);
+
+            this._trigger('onTagChanged', null, tag);
         },
         
         removeTag: function(tag, animate) {
@@ -375,6 +378,7 @@
             } else {
                 tag.remove();
             }
+            this._trigger('onTagChanged', null, tag);
         },
 
         removeAll: function() {
