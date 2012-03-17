@@ -3,19 +3,19 @@
 
 
 ul.tagit {
-	border-style: solid;
-	border-width: 1px;
-	border-color: #C6C6C6;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #C6C6C6;
     background: inherit;
 }
 ul.tagit li.tagit-choice {
     -moz-border-radius: 6px;
     border-radius: 6px;
     -webkit-border-radius: 6px;
-	border: 1px solid #CAD8F3;
+    border: 1px solid #CAD8F3;
 
     background: none;
-	background-color: #DEE7F8;
+    background-color: #DEE7F8;
 
     color: #555;
     font-weight: normal;
@@ -45,7 +45,7 @@ ul.tagit li.tagit-choice a.tagit-close .text-icon:hover {
     color: #222;
 }
 ul.tagit input[type="text"] {
-	color: #333333;
+    color: #333333;
     background: none;
 }
  
