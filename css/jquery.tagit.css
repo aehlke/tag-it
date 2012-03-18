@@ -9,6 +9,12 @@ ul.tagit li {
     float: left;
     margin: 2px 5px 2px 0;
 }
+ul.tagit li.tagit-hint {
+    border: none;
+    padding: .25em 4px .25em 0;
+    color: #888888;
+    position: absolute;
+}
 ul.tagit li.tagit-choice {
     padding: .2em 18px .2em .5em;
     position: relative;

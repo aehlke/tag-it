@@ -72,6 +72,13 @@
             // created for tag-it.
             tabIndex: null,
 
+            // Display title attribute as hint.
+            hints: true,
+
+            // Hint animation.
+            hintHideEffect: 'fade',
+            hintHideEffectOptions: {},
+            hintHideEffectSpeed: 200,
 
             // Event callbacks.
             onTagAdded  : null,
@@ -98,6 +105,8 @@
             }
 
             this._tagInput = $('<input type="text" />').addClass('ui-widget-content');
+            this._hintOverlay = $('<li></li>').addClass('tagit-hint ui-widget-content').text(this.element.attr('title')||"");
+
             if (this.options.tabIndex) {
                 this._tagInput.attr('tabindex', this.options.tabIndex);
             }
@@ -161,6 +170,13 @@
                 }
             }
 
+            if (this.options.hints && this.element.attr('title') !== undefined) {
+                this.tagList.prepend(this._hintOverlay);
+            }
+            if (this.tagList.children('.tagit-choice').size() != 0) {
+                this._hintOverlay.hide();
+            }
+
             // Events.
             this._tagInput
                 .keydown(function(event) {
@@ -210,8 +226,15 @@
                 }).blur(function(e){
                     // Create a tag when the element loses focus (unless it's empty).
                     that.createTag(that._cleanedInput());
+                    if (that.tagList.children('.tagit-choice').size() == 0) {
+                        that._hintOverlay.show();
+                    }
+                }).focus(function(e) {
+                    that._hintOverlay.hide(
+                        that.options.hintHideEffect,
+                        that.options.hintHideEffectOptions,
+                        that.options.hintHideEffectSpeed);
                 });
-                
 
             // Autocomplete.
             if (this.options.availableTags || this.options.tagSource) {
@@ -348,11 +371,15 @@
             // Cleaning the input.
             this._tagInput.val('');
 
+            // Hide any hint text (possible if createTag is called externally)
+            this._hintOverlay.hide();
+
             // insert tag
             this._tagInput.parent().before(tag);
         },
         
         removeTag: function(tag, animate) {
+            var that = this;
             animate = animate || this.options.animate;
 
             tag = $(tag);
@@ -375,6 +402,14 @@
             } else {
                 tag.remove();
             }
+
+            // Show any hint text
+            tag.queue(function(next) {
+                if (!that._tagInput.is(':focus') && that.tagList.children('.tagit-choice').size() == 0) {
+                    that._hintOverlay.show();
+                }
+                next();
+            });
         },
 
         removeAll: function() {

@@ -153,6 +153,37 @@ Optionally set a *placeholder* attribute on the `input` that gets created for ta
 Defaults to *null*
 
 
+### hints (boolean)
+
+Display the content of the 'title' attribute as a hint inside the control,
+which will fade out on focus and return on blur (when no tags have been
+added).
+
+Defaults to *true*
+
+
+### hintHideEffect (String)
+
+The name of the jQuery UI effect to use when hiding hint text ('fade', 'fold',
+'scale', etc).
+
+Defaults to *"fade"*
+
+
+### hintHideEffectOptions (Object)
+
+An object containing key&value options for the hint hide effect.
+
+Defaults to *{}*
+
+
+### hintHideEffectSpeed (integer)
+
+The speed of the hint hide effect.
+
+Defaults to *200*
+
+
 ## Events
 
 ### onTagAdded (function, Callback)
