@@ -52,3 +52,11 @@ ul.tagit input[type="text"] {
     background-color: inherit;
     outline: none;
 }
+
+/*Autocomplete header text*/
+li.ui-autocomplete-header {
+    font-weight: bold;
+    padding: .2em .4em;
+    margin: .8em 0 .2em;
+    line-height: 1.5;
+}
