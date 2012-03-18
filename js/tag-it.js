@@ -181,23 +181,19 @@
                     // except when there is an open quote or if setting allowSpaces = true.
                     // Tab will also create a tag, unless the tag input is empty, in which case it isn't caught.
                     if (
-                        event.which == $.ui.keyCode.COMMA ||
                         event.which == $.ui.keyCode.ENTER ||
                         (
                             event.which == $.ui.keyCode.TAB &&
                             that._tagInput.val() !== ''
                         ) ||
                         (
+                            event.which == $.ui.keyCode.COMMA &&
+                            that._tagInputHasClosedQuotes()
+                        ) ||
+                        (
                             event.which == $.ui.keyCode.SPACE &&
                             that.options.allowSpaces !== true &&
-                            (
-                                $.trim(that._tagInput.val()).replace( /^s*/, '' ).charAt(0) != '"' ||
-                                (
-                                    $.trim(that._tagInput.val()).charAt(0) == '"' &&
-                                    $.trim(that._tagInput.val()).charAt($.trim(that._tagInput.val()).length - 1) == '"' &&
-                                    $.trim(that._tagInput.val()).length - 1 !== 0
-                                )
-                            )
+                            that._tagInputHasClosedQuotes()
                         )
                     ) {
                         event.preventDefault();
@@ -242,6 +238,16 @@
 
         _lastTag: function() {
             return this.tagList.children('.tagit-choice:last');
+        },
+
+        _tagInputHasClosedQuotes: function() {
+            var inputVal = this._tagInput.val();
+            return $.trim(inputVal).replace( /^s*/, '' ).charAt(0) != '"' ||
+            (
+                $.trim(inputVal).charAt(0) == '"' &&
+                $.trim(inputVal).charAt($.trim(inputVal).length - 1) == '"' &&
+                $.trim(inputVal).length - 1 !== 0
+            )
         },
 
         assignedTags: function() {
