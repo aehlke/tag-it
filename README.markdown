@@ -188,6 +188,16 @@ The function receives the click event and the tag as parameters.
         }
     });
 
+### onTagExists (function, Callback)
+
+Can be used to add custom behaviour when an attempt is made to add a Tag that already exists.
+The function receives an empty event, and the existing tag as parameters.
+
+    $('#myTags').tagit({
+        onTagExists: function(event, tag) {
+            // do something special
+        }
+    });
 
 ## Methods
 

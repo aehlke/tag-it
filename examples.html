@@ -76,6 +76,10 @@
                 onTagClicked: function(evt, tag) {
                     console.log(tag);
                     alert('This tag was clicked: ' + eventTags.tagit('tagLabel', tag));
+                },
+                onTagExists: function(evt, tag) {
+                    console.log("existing", tag);
+                    $(tag).effect('highlight');
                 }
             }).tagit('option', 'onTagAdded', function(evt, tag) {
                 // Add this callbackafter we initialize the widget,
