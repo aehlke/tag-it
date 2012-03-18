@@ -105,6 +105,17 @@
                 this._tagInput.attr('placeholder', this.options.placeholderText);
             }
 
+            // Copy the attributes from the original element into _tagInput
+            // First determine the attributes to be copied
+            var attrsNoCopy = ["type", "class", "id", "name", "style", "value"];
+            var elemAttrs = $.grep(this.element[0].attributes, function (el) {
+                return jQuery.inArray(el.name, attrsNoCopy) == -1;
+            });
+            // And then assign the attributes to the new input
+            for (var i=0; i<elemAttrs.length; i++) {
+                this._tagInput.attr(elemAttrs[i].name, elemAttrs[i].value);
+            }
+
             this.options.tagSource = this.options.tagSource || function(search, showChoices) {
                 var filter = search.term.toLowerCase();
                 var choices = $.grep(this.options.availableTags, function(element) {
