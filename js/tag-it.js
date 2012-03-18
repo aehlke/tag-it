@@ -76,7 +76,21 @@
             // Event callbacks.
             onTagAdded  : null,
             onTagRemoved: null,
-            onTagClicked: null
+            onTagClicked: null,
+
+            //user input restrictions
+            //max number of characters in single tag
+            maxChars :  0,
+            //max number of tags
+            maxCount : 0,
+            //allow tags which are not in tagSource list
+            //if parameter undefined or null it considered as true
+            allowNotInList : true,
+
+            //events raised when user input restrictions occurs
+            onMaxChars : null,
+            onMaxCount : null,
+            onNotAllowed : null
         },
 
 
@@ -137,6 +151,19 @@
                     }
                 });
 
+            //Set input tag default width
+            this._updateInputTagWidth();
+
+            // Position, must be inherited from original html element (position, top, left, width)
+            this.tagList.css({
+               position : this.element.css("position"),
+               top : this.element.css("top"),
+               left : this.element.css("left"),
+               width : this.element.css("width"),
+               margin : this.element.css("margin"),
+               display : this.element.css("margin")
+            });
+
             // Add existing tags from the list, if any.
             this.tagList.children('li').each(function() {
                 if (!$(this).hasClass('tagit-new')) {
@@ -176,11 +203,11 @@
                     } else if (that.options.removeConfirmation) {
                         that._lastTag().removeClass('remove ui-state-highlight');
                     }
-
+                    
                     // Comma/Space/Enter are all valid delimiters for new tags,
                     // except when there is an open quote or if setting allowSpaces = true.
                     // Tab will also create a tag, unless the tag input is empty, in which case it isn't caught.
-                    if (
+                    else if (
                         event.which == $.ui.keyCode.COMMA ||
                         event.which == $.ui.keyCode.ENTER ||
                         (
@@ -201,21 +228,71 @@
                         )
                     ) {
                         event.preventDefault();
-                        that.createTag(that._cleanedInput());
+
+                        //if we are here then tag has been created by typing and hence supposed not from list of tags.
+                        //Creating tags which are not from list is only available when options.allowNotInList = true
+                        if (that.options.allowNotInList !== false){
+                            that.createTag(that._cleanedInput());
+                        }else{
+                            that._trigger("onNotAllowed", event, that);
+                        }
+
+                        //The bottom comment doesn't valid now. All works without forced 'close'
 
                         // The autocomplete doesn't close automatically when TAB is pressed.
                         // So let's ensure that it closes.
-                        that._tagInput.autocomplete('close');
+                        //that._tagInput.autocomplete('close');
+                    }else{
+                        var func;
+
+                        //check restrictions on maxCharCount and on maxCount
+                        if (event.which != $.ui.keyCode.BACKSPACE && event.which != $.ui.keyCode.TAB){
+
+                            //check if text in the input tag has length less than options.maxChars
+
+                            if(that.options.maxChars && $.trim(that._tagInput.val()).length >= that.options.maxChars){
+                                        func = "onMaxChars";
+                            }
+                            //check if number of tags less than options.maxCount
+                            else if(that.options.maxCount && that.assignedTags().length >= that.options.maxCount){
+                                        func = "onMaxCount";
+                            }
+                        }
+
+                        if (func !== undefined){
+                            //some restriction has occur
+                            if (func){
+                                that._trigger(func, null, that);
+                            }
+
+                            event.preventDefault();
+                        }
+                        else{
+                            //length of the text in input tag changed, update input tag width
+                            that._updateInputTagWidth();
+                        }
                     }
+
                 }).blur(function(e){
+                    //Widget loose focus, suppose created tag not from list.
+                    //Creating tags which are not from list is only available when options.allowNotInList = true
+
                     // Create a tag when the element loses focus (unless it's empty).
-                    that.createTag(that._cleanedInput());
-                });
+                    if (that.options.allowNotInList !== false){
+                        that.createTag(that._cleanedInput());
+                    }
+                }).keyup(function(e){
+                        if (event.which == $.ui.keyCode.UP ||event.which == $.ui.keyCode.DOWN){
+                            //user select some tag from drop down list of autocomplete control by up or down key
+                            //should update input tag width in order to selected text fits to the input element width
+                            that._updateInputTagWidth();
+                        }
+                    });
                 
 
             // Autocomplete.
             if (this.options.availableTags || this.options.tagSource) {
-                this._tagInput.autocomplete({
+                var autocomplete = this._tagInput.autocomplete({
                     source: this.options.tagSource,
                     select: function(event, ui) {
                         // Delete the last tag if we autocomplete something despite the input being empty
@@ -232,7 +309,43 @@
                         return false;
                     }
                 });
+                
+                autocomplete.data("tagit", this);
             }
+        },
+
+        destroy : function(){
+            //destroy widget
+
+            if (this.element)
+            {
+                this.element.css('display', this.display_orig);
+            }
+
+            $(this.tagList).remove();
+
+            $.Widget.prototype.destroy.apply(this, arguments);
+        },
+
+        _updateInputTagWidth : function(){
+            //function update width of the input tag on the base of the width of text inside.
+            
+            //calculate text width
+            var sensor = $('<span />').css({
+                "font-family" : this._tagInput.css("font-family"),
+                "font-size" : this._tagInput.css("font-size"),
+                "font-style" : this._tagInput.css("font-style"),
+                "font-variant" : this._tagInput.css("font-variant"),
+                "font-spacing" : this._tagInput.css("font-spacing"),
+                margin: this._tagInput.css("margin"),
+                padding: this._tagInput.css("padding")});
+            sensor.text(this._tagInput.val() + "W");
+            $("body").append(sensor);
+            var w  = sensor.width();
+            sensor.remove();
+
+            //update input tag width
+            this._tagInput.css("width", w);
         },
 
         _cleanedInput: function() {
@@ -343,10 +456,13 @@
                 tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + this.options.itemName + '[' + this.options.fieldName + '][]" />');
             }
 
+            tag.data("tagit", this);
+
             this._trigger('onTagAdded', null, tag);
 
             // Cleaning the input.
             this._tagInput.val('');
+            that._updateInputTagWidth();
 
             // insert tag
             this._tagInput.parent().before(tag);
