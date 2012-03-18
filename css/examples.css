@@ -25,15 +25,15 @@ ul#nav li {
 }
 
 .myform {
-	padding:20px 0px;
+    padding:20px 0px;
 }
 .myform div.line {
-	clear:both;
-	min-height:50px;
-	margin-bottom:15px;
+    clear:both;
+    min-height:50px;
+    margin-bottom:15px;
 }
 .myform label {
-	display:block;
-	font-weight:bold;
-	margin-bottom:5px;
+    display:block;
+    font-weight:bold;
+    margin-bottom:5px;
 }
