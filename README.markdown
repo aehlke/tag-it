@@ -125,6 +125,12 @@ For example, the user can enter `John Smith` instead of `"John Smith"`.
 
 Defaults to *false*.
 
+### readOnly (boolean)
+
+When enabled, tag-it just render tags. It disables the ability to edit tags.
+
+Defaults to *false*.
+
 ### singleField (boolean)
 
 When enabled, will use a single hidden field for the form, rather than one per tag.
