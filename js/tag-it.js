@@ -20,6 +20,9 @@
 * Maintainer:
 *   Alex Ehlke - Twitter: @aehlke
 *
+* A minor bug fix guy:
+*   Ben Petersen - Twitter: @bapetersen
+*
 * Dependencies:
 *   jQuery v1.4+
 *   jQuery UI v1.8+
@@ -42,6 +45,11 @@
 
             // Whether to animate tag removals or not.
             animate: true,
+            // swing is the defalt jQuery animation.
+            // currently this really does nothing, but with a little 
+            // tweaking it could be useful if someone really wanted to 
+            // allow the use of easing plugins like http://gsgd.co.uk/sandbox/jquery/easing/
+            easing: "swing",
 
             // The below options are for using a single field instead of several
             // for our form values.
@@ -353,8 +361,13 @@
         },
         
         removeTag: function(tag, animate) {
+
+            // var keyword should be used to avoid creating a global.
+            // var animate = animate || this.options.animate
             animate = animate || this.options.animate;
 
+            // var keyword to avoid global!
+            // var tag = $(tag);    
             tag = $(tag);
 
             this._trigger('onTagRemoved', null, tag);
@@ -369,7 +382,9 @@
             }
             // Animate the removal.
             if (animate) {
-                tag.fadeOut('fast').hide('blind', {direction: 'horizontal'}, 'fast', function(){
+                // one place where easing plugin functionality could enhance, if
+                // fadeOut() was changed to animate a css object
+                tag.fadeOut('fast', this.options.easing, function(){
                     tag.remove();
                 }).dequeue();
             } else {
