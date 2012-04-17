@@ -105,7 +105,21 @@
                 availableTags: sampleTags,
                 removeConfirmation: true
             });
+			
+			
+            //-------------------------------
+            // Associated data
+            //-------------------------------			
+			$('#associateDataTags').tagit({
+			    onTagRemoved: function(event, tag) {
+					alert(tag.data("tagit").key);
+				}
+			
+			});
+			$("#associateDataTags").tagit("createTag", "Tag with data" , "" , {key:"associated data"});
             
+			
+			
 	    });
 	</script>
 
@@ -219,7 +233,17 @@
             </ul>
 			<input type="submit" value="Submit">
 	    </form>
-
+		
+		<hr>		
+        <h3>Associate Data</h3>
+   	    <form>
+			<p>
+                Associate data to a tag at creation. The data is displayed when user removes the tag
+            </p>
+			<ul id="associateDataTags">
+            </ul>
+			<input type="submit" value="Submit">
+	    </form>
     </div>
 
 
