@@ -357,8 +357,6 @@
 
             tag = $(tag);
 
-            this._trigger('onTagRemoved', null, tag);
-
             if (this.options.singleField) {
                 var tags = this.assignedTags();
                 var removedTagLabel = this.tagLabel(tag);
@@ -367,6 +365,9 @@
                 });
                 this._updateSingleTagsField(tags);
             }
+
+            this._trigger('onTagRemoved', null, tag);
+
             // Animate the removal.
             if (animate) {
                 tag.fadeOut('fast').hide('blind', {direction: 'horizontal'}, 'fast', function(){
