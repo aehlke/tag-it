@@ -227,7 +227,7 @@
                         if (that._tagInput.val() === '') {
                             that.removeTag(that._lastTag(), false);
                         }
-                        that.createTag(ui.item.value);
+                        that.createTag(ui.item.value, ui.item.label);
                         // Preventing the tag input to be updated with the chosen value.
                         return false;
                     }
@@ -304,7 +304,7 @@
             return $.trim(str.toLowerCase());
         },
 
-        createTag: function(value, additionalClass) {
+        createTag: function(value, tagLabel, additionalClass) {
             var that = this;
             // Automatically trims the value of leading and trailing whitespace.
             value = $.trim(value);
@@ -312,8 +312,12 @@
             if (!this._isNew(value) || value === '') {
                 return false;
             }
-
-            var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
+            if (tagLabel) {
+                var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(tagLabel);
+            }
+            else {
+                var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
+            }
 
             // Create tag.
             var tag = $('<li></li>')
@@ -339,8 +343,13 @@
                 tags.push(value);
                 this._updateSingleTagsField(tags);
             } else {
-                var escapedValue = label.html();
-                tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + this.options.itemName + '[' + this.options.fieldName + '][]" />');
+                if (tagLabel) {
+                    tag.append('<input type="hidden" style="display:none;" value="' + value + '" name="' + this.options.itemName + '[' + this.options.fieldName + '][]" />');
+                }
+                else {
+                    escapedValue = label.html();
+                    tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + this.options.itemName + '[' + this.options.fieldName + '][]" />');
+                }
             }
 
             this._trigger('onTagAdded', null, tag);
