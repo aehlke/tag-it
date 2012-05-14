@@ -330,6 +330,7 @@
                 .click(function(e) {
                     // Removes a tag when the little 'x' is clicked.
                     that.removeTag(tag);
+                    return false;
                 });
             tag.append(removeTag);
 
