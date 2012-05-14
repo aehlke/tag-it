@@ -312,8 +312,12 @@
             if (!this._isNew(value) || value === '') {
                 return false;
             }
-
-            var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(tagLabel);
+            if (tagLabel) {
+                var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(tagLabel);
+            }
+            else {
+                var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
+            }
 
             // Create tag.
             var tag = $('<li></li>')
@@ -339,7 +343,13 @@
                 tags.push(value);
                 this._updateSingleTagsField(tags);
             } else {
-                tag.append('<input type="hidden" style="display:none;" value="' + value + '" name="' + this.options.itemName + '[' + this.options.fieldName + '][]" />');
+                if (tagLabel) {
+                    tag.append('<input type="hidden" style="display:none;" value="' + value + '" name="' + this.options.itemName + '[' + this.options.fieldName + '][]" />');
+                }
+                else {
+                    escapedValue = label.html();
+                    tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + this.options.itemName + '[' + this.options.fieldName + '][]" />');
+                }
             }
 
             this._trigger('onTagAdded', null, tag);
