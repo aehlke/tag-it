@@ -20,9 +20,6 @@
 * Maintainer:
 *   Alex Ehlke - Twitter: @aehlke
 *
-* A minor bug fix guy:
-*   Ben Petersen - Twitter: @bapetersen
-*
 * Dependencies:
 *   jQuery v1.4+
 *   jQuery UI v1.8+
@@ -384,7 +381,7 @@
             if (animate) {
                 // one place where easing plugin functionality could enhance, if
                 // fadeOut() was changed to animate a css object
-                tag.fadeOut('fast', this.options.easing, function(){
+                tag.fadeOut('fast').animate({width: "hide"}, 50, function(){
                     tag.remove();
                 }).dequeue();
             } else {
