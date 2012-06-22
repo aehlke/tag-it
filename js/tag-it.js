@@ -79,7 +79,7 @@
             onTagClicked: null
         },
 
-
+        init: true,
         _create: function() {
             // for handling static scoping inside callbacks
             var that = this;
@@ -233,6 +233,7 @@
                     }
                 });
             }
+            this.init=false;
         },
 
         _cleanedInput: function() {
@@ -343,7 +344,9 @@
                 tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + this.options.itemName + '[' + this.options.fieldName + '][]" />');
             }
 
-            this._trigger('onTagAdded', null, tag);
+            if (!this.init) {
+                this._trigger('onTagAdded', null, tag);
+            }
 
             // Cleaning the input.
             this._tagInput.val('');
