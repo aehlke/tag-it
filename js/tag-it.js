@@ -36,6 +36,9 @@
             caseSensitive     : true,
             placeholderText   : null,
 
+            // How much characters must be inserted before autocomplete starts the work
+            autocompleteMinLength : 0,
+
             // When enabled, quotes are not neccesary
             // for inputting multi-word tags.
             allowSpaces: false,
@@ -217,6 +220,7 @@
             if (this.options.availableTags || this.options.tagSource) {
                 this._tagInput.autocomplete({
                     source: this.options.tagSource,
+                    minLength: this.options.autocompleteMinLength,
                     select: function(event, ui) {
                         // Delete the last tag if we autocomplete something despite the input being empty
                         // This happens because the input's blur event causes the tag to be created when
