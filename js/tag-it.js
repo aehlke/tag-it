@@ -26,6 +26,14 @@
 */
 (function($) {
 
+    /**
+     * Defines the global autocomplete min length.
+     *
+     * @static int
+     *   the global autocomplete min length
+     */
+    var autocompleteMinLengthDefault = 0;
+
     $.widget('ui.tagit', {
         options: {
             itemName          : 'item',
@@ -37,7 +45,8 @@
             placeholderText   : null,
 
             // How much characters must be inserted before autocomplete starts the work
-            autocompleteMinLength : 0,
+            // -1 value because this determines we should use the global one.
+            autocompleteMinLength : -1,
 
             // When enabled, quotes are not neccesary
             // for inputting multi-word tags.
@@ -55,7 +64,7 @@
             //
             // The easiest way to use singleField is to just instantiate tag-it
             // on an INPUT element, in which case singleField is automatically
-            // set to true, and singleFieldNode is set to that element. This 
+            // set to true, and singleFieldNode is set to that element. This
             // way, you don't need to fiddle with these options.
             singleField: false,
 
@@ -67,7 +76,7 @@
             // delimited by singleFieldDelimiter.
             //
             // If this is not set, we create an input node for it,
-            // with the name given in settings.fieldName, 
+            // with the name given in settings.fieldName,
             // ignoring settings.itemName.
             singleFieldNode: null,
 
@@ -214,10 +223,14 @@
                     // Create a tag when the element loses focus (unless it's empty).
                     that.createTag(that._cleanedInput());
                 });
-                
+
 
             // Autocomplete.
             if (this.options.availableTags || this.options.tagSource) {
+                // If our min length options is -1 we have not provide it so set it to the static value.
+                if (this.options.autocompleteMinLength == -1) {
+                    this.options.autocompleteMinLength = autocompleteMinLengthDefault;
+                }
                 this._tagInput.autocomplete({
                     source: this.options.tagSource,
                     minLength: this.options.autocompleteMinLength,
@@ -391,6 +404,12 @@
 
     });
 
+    // Provide static method to set global auto complete min length.
+    $.extend($.ui.tagit, {
+        globalAutocompleteMinLength: function(minLength) {
+            autocompleteMinLengthDefault = minLength;
+        }
+    });
 })(jQuery);
 
 
