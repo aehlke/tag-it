@@ -304,11 +304,28 @@
             return $.trim(str.toLowerCase());
         },
 
-        createTag: function(value, additionalClass) {
+              createTag: function(value, additionalClass) {
+            
+        	// added 8/20/2012 by darrell hageman to handle copy and paste 
             var that = this;
+            
             // Automatically trims the value of leading and trailing whitespace.
             value = $.trim(value);
+         
+            
+            // added 8/20/2012 by darrell hageman
+            //load array 
+            var copy_pasted = value.split(/[\s,]+/);
 
+            // added 8/20/2012 by darrell hageman
+            // walk over array and load value into the tag 
+            
+            for (var i=0;i<copy_pasted.length;i++)
+            {
+            value = copy_pasted[i];
+            
+            //for each value create tag 
+            
             if (!this._isNew(value) || value === '') {
                 return false;
             }
@@ -350,7 +367,7 @@
 
             // insert tag
             this._tagInput.parent().before(tag);
-        },
+            } },
         
         removeTag: function(tag, animate) {
             animate = animate || this.options.animate;
