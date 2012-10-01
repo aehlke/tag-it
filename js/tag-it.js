@@ -140,7 +140,7 @@
             // Add existing tags from the list, if any.
             this.tagList.children('li').each(function() {
                 if (!$(this).hasClass('tagit-new')) {
-                    that.createTag($(this).html(), $(this).attr('class'));
+                    that.createTag($(this).text(), $(this).attr('class'));
                     $(this).remove();
                 }
             });
