@@ -68,15 +68,19 @@
             // ignoring settings.itemName.
             singleFieldNode: null,
 
+            // Checks if tag is allowed to add. By default always returns true.
+            tagIsAllowed: function(value) { return true; },
+
             // Optionally set a tabindex attribute on the input that gets
             // created for tag-it.
             tabIndex: null,
 
 
             // Event callbacks.
-            onTagAdded  : null,
-            onTagRemoved: null,
-            onTagClicked: null
+            onTagAdded     : null,
+            onTagNotAllowed: null,
+            onTagRemoved   : null,
+            onTagClicked   : null
         },
 
 
@@ -209,7 +213,7 @@
                     }
                 }).blur(function(e){
                     // Create a tag when the element loses focus (unless it's empty).
-                    that.createTag(that._cleanedInput());
+                    that._delayCreateTag(that._cleanedInput());
                 });
                 
 
@@ -224,15 +228,26 @@
                         // The only artifact of this is that while the user holds down the mouse button
                         // on the selected autocomplete item, a tag is shown with the pre-autocompleted text,
                         // and is changed to the autocompleted text upon mouseup.
-                        if (that._tagInput.val() === '') {
-                            that.removeTag(that._lastTag(), false);
-                        }
+                        that._blurLocked = true;
                         that.createTag(ui.item.value);
                         // Preventing the tag input to be updated with the chosen value.
                         return false;
                     }
                 });
             }
+        },
+        
+        _blurLocked: false, 
+
+        _delayCreateTag: function(value) {
+          var that = this;
+          window.setTimeout( function() { 
+            if(that._blurLocked) {
+              that._blurLocked = false;
+            } else {
+              that.createTag(that._cleanedInput(), false); 
+            }
+          }, 100);
         },
 
         _cleanedInput: function() {
@@ -297,6 +312,10 @@
             return isNew;
         },
 
+        _tagIsAllowed: function(value){
+          return this.options.tagIsAllowed(value);
+        },
+
         _formatStr: function(str) {
             if (this.options.caseSensitive) {
                 return str;
@@ -311,6 +330,12 @@
 
             if (!this._isNew(value) || value === '') {
                 return false;
+            }
+
+            if(!this._tagIsAllowed(value)) {
+              this._tagInput.val('');
+              this._trigger('onTagNotAllowed', null, value);
+              return false;
             }
 
             var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);

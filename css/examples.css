@@ -37,3 +37,6 @@ ul#nav li {
     font-weight:bold;
     margin-bottom:5px;
 }
+
+#notAllowedErrors{color: #722}
+
