@@ -29,7 +29,7 @@
     $.widget('ui.tagit', {
         options: {
             itemName          : 'item',
-            fieldName         : 'tags',
+            fieldName         : null,
             availableTags     : [],
             tagSource         : null,
             removeConfirmation: false,
@@ -339,8 +339,9 @@
                 tags.push(value);
                 this._updateSingleTagsField(tags);
             } else {
-                var escapedValue = label.html();
-                tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + this.options.itemName + '[' + this.options.fieldName + '][]" />');
+                var escapedValue = label.html(),
+                    field = (this.options.fieldName) ? '[' + this.options.fieldName + ']' : '';
+                tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + this.options.itemName + field + '[]" />');
             }
 
             this._trigger('onTagAdded', null, tag);
