@@ -353,7 +353,7 @@
         },
         
         removeTag: function(tag, animate) {
-            animate = animate || this.options.animate;
+            animate = typeof animate === "undefined" ? this.options.animate : animate;
 
             tag = $(tag);
 
