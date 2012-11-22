@@ -157,7 +157,9 @@
                     });
                 } else {
                     // Create our single field input after our list.
-                    this.options.singleFieldNode = this.tagList.after('<input type="hidden" style="display:none;" value="" name="' + this.options.fieldName + '" />');
+                    this.tagList.after('<input type="hidden" style="display:none;" value="" id="' + this.options.fieldName + '" name="' + this.options.fieldName + '" />');
+                    // Set the selector
+                    this.options.singleFieldNode = '#' + this.options.fieldName;
                 }
             }
 
