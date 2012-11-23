@@ -89,6 +89,8 @@ Used as source for the autocompletion.
         availableTags: ["c++", "java", "php", "javascript", "ruby", "python", "c"]
     });
 
+If you define your own **tagSource**, this option is unused (unless you choose to reference it yourself from your custom **tagSource** of course.)
+
 Defaults to an empty array *[]*.
 
 ### tagSource (function)
