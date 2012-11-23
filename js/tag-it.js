@@ -370,9 +370,13 @@
             }
             // Animate the removal.
             if (animate) {
-                tag.fadeOut('fast').hide('blind', {direction: 'horizontal'}, 'fast', function(){
+                var hide_args = ($.easing && $.easing.blind) ? ['blind', {direction: 'horizontal'}, 'fast'] : ['fast'];
+
+                hide_args.push(function() {
                     tag.remove();
-                }).dequeue();
+                });
+
+                tag.fadeOut('fast').hide.apply(this, hide_args).dequeue();
             } else {
                 tag.remove();
             }
