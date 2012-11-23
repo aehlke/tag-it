@@ -391,6 +391,14 @@
             }
         },
 
+        removeTagByName: function(tagName, animate) {
+            var toRemove = this._tags().find("input[value='" + tagName + "']").closest('.tagit-choice');
+            if (toRemove.length === 0) {
+                throw "No such tag exists with the name '" + tagName + "'";
+            }
+            this.removeTag(toRemove, animate);
+        },
+
         removeAll: function() {
             // Removes all tags.
             var that = this;
