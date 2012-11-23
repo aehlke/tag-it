@@ -1,0 +1,15 @@
+@charset "UTF-8";
+
+
+#nav {
+    left:0;
+}
+#header {
+    padding-top:3em;
+}
+
+#header h1, #header h2 {
+    margin: 0 0 .2em 0;
+    padding-top: 1.8em;
+}
+
