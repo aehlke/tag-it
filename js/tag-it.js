@@ -34,6 +34,7 @@
             removeConfirmation: false,
             caseSensitive     : true,
             placeholderText   : null,
+            allowDuplicates   : false,
 
             // When enabled, quotes are not neccesary
             // for inputting multi-word tags.
@@ -317,7 +318,7 @@
 
             value = $.trim(value);
 
-            if (!this._isNew(value) || value === '') {
+            if (!allowDuplicates && (!this._isNew(value) || value === '')) {
                 return false;
             }
 
@@ -359,7 +360,7 @@
             // insert tag
             this._tagInput.parent().before(tag);
         },
-        
+
         removeTag: function(tag, animate) {
             animate = typeof animate === "undefined" ? this.options.animate : animate;
 

@@ -107,6 +107,13 @@ whether the duplication check should do a case sensitive check or not.
 
 Defaults to *true*.
 
+### allowDuplicates (boolean)
+
+Allows duplicate tags to be created.
+One implication of this is that `removeTagByName` will remove all tags which match the given name.
+
+Defaults to *false*.
+
 ### allowSpaces (boolean)
 
 When allowSpaces is enabled the user is not required to wrap multi-word tags in quotation marks.
