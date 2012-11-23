@@ -370,13 +370,13 @@
             }
             // Animate the removal.
             if (animate) {
-                var hide_args = ($.easing && $.easing.blind) ? ['blind', {direction: 'horizontal'}, 'fast'] : ['fast'];
+                var hide_args = ($.effects && $.effects.blind) ? ['blind', {direction: 'horizontal'}, 'fast'] : ['fast'];
 
                 hide_args.push(function() {
                     tag.remove();
                 });
 
-                tag.fadeOut('fast').hide.apply(this, hide_args).dequeue();
+                tag.fadeOut('fast').hide.apply(tag, hide_args).dequeue();
             } else {
                 tag.remove();
             }
