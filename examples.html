@@ -68,20 +68,23 @@
             // Tag events
             //-------------------------------
             var eventTags = $('#eventTags');
+
+            var addEvent = function(text) {
+                $('#events_container').append(text + '<br>');
+            };
             eventTags.tagit({
                 availableTags: sampleTags,
                 onTagRemoved: function(evt, tag) {
-                    console.log(evt);
-                    alert('This tag is being removed: ' + eventTags.tagit('tagLabel', tag));
+                    addEvent('This tag is being removed: ' + eventTags.tagit('tagLabel', tag));
                 },
                 onTagClicked: function(evt, tag) {
-                    console.log(tag);
-                    alert('This tag was clicked: ' + eventTags.tagit('tagLabel', tag));
-                }
+                    addEvent('This tag was clicked: ' + eventTags.tagit('tagLabel', tag));
+                },
+                singleField:true
             }).tagit('option', 'onTagAdded', function(evt, tag) {
                 // Add this callbackafter we initialize the widget,
                 // so that onTagAdded doesn't get called on page load.
-                alert('This tag is being added: ' + eventTags.tagit('tagLabel', tag));
+                addEvent('This tag is being added: ' + eventTags.tagit('tagLabel', tag));
             });
 
             //-------------------------------
@@ -160,7 +163,6 @@
                 If you instantiate Tag-it on an INPUT element, it will default to being singleField, with that INPUT element as the singleFieldNode. This is the simplest way to have a gracefully-degrading tag widget.
             </p>
             <input name="tags" id="singleFieldTags2" value="Apple, Orange">
-			<input type="submit" value="Submit">
 	    </form>
 
         <hr>
@@ -170,7 +172,6 @@
    	    <form>
 			<p></p>
 			<ul id="allowSpacesTags"></ul>
-			<input type="submit" value="Submit">
 	    </form>
 
         <hr>
@@ -184,7 +185,6 @@
 			    <li>Tag1</li>
 			    <li>Tag2</li>
 		    </ul>
-	        <input type="submit" value="Submit">
 	    </form>
 
         <hr>
@@ -195,8 +195,8 @@
                 <li>Click my label</li>
                 <li>Remove me</li>
             </ul>
-			<input type="submit" value="Submit">
 	    </form>
+        <div id="events_container"></div>
 
         <hr>
         <h3>Methods</h3>
@@ -206,7 +206,6 @@
             <p><a href="#" onclick="var inp=prompt('Enter a tag value to test the createTag method.');$('#methodTags').tagit('createTag', inp);return false;">Create tag</a></p>
             <p><a href="#" onclick="var inp=prompt('Enter a tag value to test the removeTagByName method.');$('#methodTags').tagit('removeTagByName', inp);return false;">Remove tag by name</a></p>
             <p><a href="#" onclick="$('#methodTags').tagit('removeAll');return false;">Clear tags</a></p>
-			<input type="submit" value="Submit">
 	    </form>
 
         <hr>
@@ -219,11 +218,9 @@
                 <li>backspace me</li>
                 <li>me too</li>
             </ul>
-			<input type="submit" value="Submit">
 	    </form>
 
     </div>
-
 
 
 	<div id="footer"> 
