@@ -183,8 +183,8 @@
                     // Tab will also create a tag, unless the tag input is empty, 
                     // in which case it isn't caught.
                     if (
-                        event.which == $.ui.keyCode.COMMA ||
-                        event.which == $.ui.keyCode.ENTER ||
+                        event.which === $.ui.keyCode.COMMA ||
+                        event.which === $.ui.keyCode.ENTER ||
                         (
                             event.which == $.ui.keyCode.TAB &&
                             that._tagInput.val() !== ''
@@ -202,7 +202,11 @@
                             )
                         )
                     ) {
-                        event.preventDefault();
+                        // Enter submits the form if there's no text in the input.
+                        if (!(event.which === $.ui.keyCode.ENTER && that._tagInput.val() === '')) {
+                            event.preventDefault();
+                        }
+
                         that.createTag(that._cleanedInput());
 
                         // The autocomplete doesn't close automatically when TAB is pressed.
