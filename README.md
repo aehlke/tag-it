@@ -201,6 +201,11 @@ Adds new tag to the list. The `additionalClass` parameter is an optional way to 
 
     $("#mytags").tagit("createTag", "brand-new-tag");
 
+### removeTagByName(tagName, animate)
+Finds the tag with the value `tagName` and removes it. If no such tag is found, it'll throw an exception.
+
+    $("#mytags").tagit("removeTagByName", "my-tag");
+
 ### removeAll()
 Clears the widget of all tags -- removes each tag it contains, so the onTagRemoved event callback (if set in the options) will be called for each.
 
