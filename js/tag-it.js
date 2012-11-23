@@ -134,15 +134,8 @@
                     }
                 });
 
-            // Add existing tags from the list, if any.
-            this.tagList.children('li').each(function() {
-                if (!$(this).hasClass('tagit-new')) {
-                    that.createTag($(this).text(), $(this).attr('class'));
-                    $(this).remove();
-                }
-            });
-
             // Single field support.
+            var addedExistingFromSingleFieldNode = false;
             if (this.options.singleField) {
                 if (this.options.singleFieldNode) {
                     // Add existing tags from the input field.
@@ -151,12 +144,23 @@
                     node.val('');
                     $.each(tags, function(index, tag) {
                         that.createTag(tag);
+                        addedExistingFromSingleFieldNode = true;
                     });
                 } else {
                     // Create our single field input after our list.
                     this.options.singleFieldNode = $('<input type="hidden" style="display:none;" value="" name="' + this.options.fieldName + '" />');
                     this.tagList.after(this.options.singleFieldNode);
                 }
+            }
+
+            // Add existing tags from the list, if any.
+            if (!addedExistingFromSingleFieldNode) {
+                this.tagList.children('li').each(function() {
+                    if (!$(this).hasClass('tagit-new')) {
+                        that.createTag($(this).text(), $(this).attr('class'));
+                        $(this).remove();
+                    }
+                });
             }
 
             // Events.
