@@ -34,10 +34,14 @@
             tagSource         : null,
             removeConfirmation: false,
             caseSensitive     : true,
+            placeholderText   : null,
 
             // When enabled, quotes are not neccesary
             // for inputting multi-word tags.
             allowSpaces: false,
+
+            // Whether to animate tag removals or not.
+            animate: true,
 
             // The below options are for using a single field instead of several
             // for our form values.
@@ -93,20 +97,28 @@
                 this.tagList = this.element.find('ul, ol').andSelf().last();
             }
 
-            this._tagInput = $('<input type="text">').addClass('ui-widget-content');
+            this._tagInput = $('<input type="text" />').addClass('ui-widget-content');
             if (this.options.tabIndex) {
                 this._tagInput.attr('tabindex', this.options.tabIndex);
+            }
+            if (this.options.placeholderText) {
+                this._tagInput.attr('placeholder', this.options.placeholderText);
             }
 
             this.options.tagSource = this.options.tagSource || function(search, showChoices) {
                 var filter = search.term.toLowerCase();
-                var choices = $.grep(that.options.availableTags, function(element) {
+                var choices = $.grep(this.options.availableTags, function(element) {
                     // Only match autocomplete options that begin with the search term.
                     // (Case insensitive.)
                     return (element.toLowerCase().indexOf(filter) === 0);
                 });
-                showChoices(that._subtractArray(choices, that.assignedTags()));
+                showChoices(this._subtractArray(choices, this.assignedTags()));
             };
+
+            // Bind tagSource callback functions to this context.
+            if ($.isFunction(this.options.tagSource)) {
+                this.options.tagSource = $.proxy(this.options.tagSource, this);
+            }
 
             this.tagList
                 .addClass('tagit')
@@ -128,7 +140,7 @@
             // Add existing tags from the list, if any.
             this.tagList.children('li').each(function() {
                 if (!$(this).hasClass('tagit-new')) {
-                    that.createTag($(this).html(), $(this).attr('class'));
+                    that.createTag($(this).text(), $(this).attr('class'));
                     $(this).remove();
                 }
             });
@@ -145,7 +157,8 @@
                     });
                 } else {
                     // Create our single field input after our list.
-                    this.options.singleFieldNode = this.tagList.after('<input type="hidden" style="display:none;" value="" name="' + this.options.fieldName + '">');
+                    this.options.singleFieldNode = $('<input type="hidden" style="display:none;" value="" name="' + this.options.fieldName + '" />');
+                    this.tagList.after(this.options.singleFieldNode);
                 }
             }
 
@@ -279,7 +292,7 @@
             this.tagList.children('.tagit-choice').each(function(i) {
                 if (that._formatStr(value) == that._formatStr(that.tagLabel(this))) {
                     isNew = false;
-                    return;
+                    return false;
                 }
             });
             return isNew;
@@ -293,7 +306,7 @@
         },
 
         createTag: function(value, additionalClass) {
-            that = this;
+            var that = this;
             // Automatically trims the value of leading and trailing whitespace.
             value = $.trim(value);
 
@@ -313,7 +326,7 @@
             var removeTagIcon = $('<span></span>')
                 .addClass('ui-icon ui-icon-close');
             var removeTag = $('<a><span class="text-icon">\xd7</span></a>') // \xd7 is an X
-                .addClass('close')
+                .addClass('tagit-close')
                 .append(removeTagIcon)
                 .click(function(e) {
                     // Removes a tag when the little 'x' is clicked.
@@ -328,7 +341,7 @@
                 this._updateSingleTagsField(tags);
             } else {
                 var escapedValue = label.html();
-                tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + this.options.itemName + '[' + this.options.fieldName + '][]">');
+                tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + this.options.itemName + '[' + this.options.fieldName + '][]" />');
             }
 
             this._trigger('onTagAdded', null, tag);
@@ -341,7 +354,7 @@
         },
         
         removeTag: function(tag, animate) {
-            if (typeof animate === 'undefined') { animate = true; }
+            animate = typeof animate === "undefined" ? this.options.animate : animate;
 
             tag = $(tag);
 
@@ -366,7 +379,7 @@
         },
 
         removeAll: function() {
-            // Removes all tags. Takes an optional `animate` argument.
+            // Removes all tags.
             var that = this;
             this.tagList.children('.tagit-choice').each(function(index, tag) {
                 that.removeTag(tag, false);

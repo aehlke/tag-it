@@ -7,7 +7,7 @@ Tag-it was originally inspired by the "tag suggestion" form field in ZenDesk.com
 
 ![Screenshot](http://aehlke.github.com/tag-it/screenshot.png)
 
-Check the [example.html](http://aehlke.github.com/tag-it/example.html) for several demos.
+Check the [examples.html](http://aehlke.github.com/tag-it/examples.html) for several demos.
 
 
 ## Usage
@@ -144,6 +144,11 @@ Defaults to *null*, unless Tag-it was created on an `input` element, in which ca
 
 ### tabIndex (integer)
 Optionally set a *tabindex* attribute on the `input` that gets created for tag-it user input.
+
+Defaults to *null*
+
+### placeholderText (String)
+Optionally set a *placeholder* attribute on the `input` that gets created for tag-it user input.
 
 Defaults to *null*
 
