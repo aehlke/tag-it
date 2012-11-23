@@ -39,6 +39,9 @@
             // for inputting multi-word tags.
             allowSpaces: false,
 
+            // When enabled, allows duplicate entries
+            allowDuplicates   : false,
+
             // Whether to animate tag removals or not.
             animate: true,
 
@@ -70,6 +73,10 @@
             // created for tag-it.
             tabIndex: null,
 
+            // Optionally add a regex pattern that valid entries have to match
+            // Add a pattern like this one which will allow only numbers up to 999:
+            // pattern: /^\d{1,3}$/
+            pattern: null,
 
             // Event callbacks.
             onTagAdded  : null,
@@ -316,8 +323,8 @@
             var that = this;
 
             value = $.trim(value);
-
-            if (!this._isNew(value) || value === '') {
+            
+            if (!(this.options.allowDuplicates || this._isNew(value)) || value === '' || (this.options.pattern && !value.match(this.options.pattern))) {
                 return false;
             }
 
