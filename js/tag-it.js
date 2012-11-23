@@ -270,7 +270,7 @@
 
         _updateSingleTagsField: function(tags) {
             // Takes a list of tag string values, updates this.options.singleFieldNode.val to the tags delimited by this.options.singleFieldDelimiter
-            $(this.options.singleFieldNode).val(tags.join(this.options.singleFieldDelimiter));
+            $(this.options.singleFieldNode).val(tags.join(this.options.singleFieldDelimiter)).trigger('change');
         },
 
         _subtractArray: function(a1, a2) {
