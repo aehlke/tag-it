@@ -7,7 +7,6 @@ curl --progress-bar -f -d compilation_level=SIMPLE_OPTIMIZATIONS -d output_forma
 
 echo
 echo "Updating GitHub pages..."
-git stash -q
 if git checkout gh-pages -q; then
     git merge master
     git checkout master -q
