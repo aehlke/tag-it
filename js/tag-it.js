@@ -36,6 +36,10 @@
             placeholderText   : null,
             allowDuplicates   : false,
 
+            // When enabled, tag-it just render tags. 
+            // It disables the ability to edit tags.
+            readOnly: false,
+
             // When enabled, quotes are not neccesary
             // for inputting multi-word tags.
             allowSpaces: false,
@@ -109,6 +113,7 @@
             }
 
             this.tagInput = $('<input type="text" />').addClass('ui-widget-content');
+            if (this.options.readOnly) this.tagInput.attr('disabled', 'disabled');
             if (this.options.tabIndex) {
                 this.tagInput.attr('tabindex', this.options.tabIndex);
             }
@@ -346,17 +351,22 @@
                 .addClass(additionalClass)
                 .append(label);
 
-            // Button for removing the tag.
-            var removeTagIcon = $('<span></span>')
-                .addClass('ui-icon ui-icon-close');
-            var removeTag = $('<a><span class="text-icon">\xd7</span></a>') // \xd7 is an X
-                .addClass('tagit-close')
-                .append(removeTagIcon)
-                .click(function(e) {
-                    // Removes a tag when the little 'x' is clicked.
-                    that.removeTag(tag);
-                });
-            tag.append(removeTag);
+            if (this.options.readOnly){
+                tag.addClass('tagit-choice-read-only');
+            } else {
+                tag.addClass('tagit-choice-editable');
+                // Button for removing the tag.
+                var removeTagIcon = $('<span></span>')
+                    .addClass('ui-icon ui-icon-close');
+                var removeTag = $('<a><span class="text-icon">\xd7</span></a>') // \xd7 is an X
+                    .addClass('tagit-close')
+                    .append(removeTagIcon)
+                    .click(function(e) {
+                        // Removes a tag when the little 'x' is clicked.
+                        that.removeTag(tag);
+                    });
+                tag.append(removeTag);
+            }
 
             // Unless options.singleField is set, each tag has a hidden input field inline.
             if (this.options.singleField) {
