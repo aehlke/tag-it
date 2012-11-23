@@ -66,21 +66,12 @@ Tag-it is as easily themeable as any jQuery UI widget, using your own theme made
 
 ## Options
 
-Tag-it accepts several options to customize the behaviour:
-
-### itemName (String)
-
-Used to build the name of the hidden input field: `itemName[fieldName][]`.
-
-    $("#mytags").tagit({
-        itemName: "user"
-    });
-
-Defaults to *item*.
+Tag-it accepts several options to customize its behaviour:
 
 ### fieldName (String)
 
-Used to build the name of the hidden input field: `itemName[fieldName][]`.
+Each tag's hidden input field will have this name.
+If you're using PHP, you may want to use something like `itemName[fieldName][]` for this option's value.
 
     $("#mytags").tagit({
         fieldName: "skills"
@@ -138,7 +129,7 @@ Defaults to *","*
 
 Set this to an input DOM node to use an existing form field.
 Any text in it will be erased on init. But it will be populated with the text of tags as they are created, delimited by **singleFieldDelimiter**.
-If this is not set, we create an input node for it, with the name given in **fieldName**, ignoring **itemName**.
+If this is not set, we create an input node for it, with the name given in **fieldName**.
 
 Defaults to *null*, unless Tag-it was created on an `input` element, in which case **singleFieldNode** will be overridden with that element.
 
