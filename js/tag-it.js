@@ -28,7 +28,6 @@
 
     $.widget('ui.tagit', {
         options: {
-            itemName          : 'item',
             fieldName         : 'tags',
             availableTags     : [],
             tagSource         : null,
@@ -64,8 +63,7 @@
             // delimited by singleFieldDelimiter.
             //
             // If this is not set, we create an input node for it,
-            // with the name given in settings.fieldName, 
-            // ignoring settings.itemName.
+            // with the name given in settings.fieldName.
             singleFieldNode: null,
 
             // Optionally set a tabindex attribute on the input that gets
@@ -410,5 +408,4 @@
     });
 
 })(jQuery);
-
 
