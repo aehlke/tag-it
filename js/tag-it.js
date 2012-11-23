@@ -72,9 +72,23 @@
             tabIndex: null,
 
             // Event callbacks.
+            beforeTagAdded      : null,
+            afterTagAdded       : null,
+
+            beforeTagRemoved    : null,
+            afterTagRemoved     : null,
+
+            onTagClicked: null
+
+
+            // DEPRECATED:
+            //
+            // /!\ These event callbacks are deprecated and WILL BE REMOVED at some
+            // point in the future. They're here for backwards-compatibility.
+            // Use the above before/after event callbacks instead.
             onTagAdded  : null,
             onTagRemoved: null,
-            onTagClicked: null
+            // Do not use the above deprecated callbacks.
         },
 
         _create: function() {
@@ -125,7 +139,10 @@
                 .click(function(e) {
                     var target = $(e.target);
                     if (target.hasClass('tagit-label')) {
-                        that._trigger('onTagClicked', e, target.closest('.tagit-choice'));
+                        var tag = target.closest('.tagit-choice');
+                        if (!tag.hasClass('removed')) {
+                            that._trigger('onTagClicked', e, tag);
+                        }
                     } else {
                         // Sets the focus() to the input field, if the user
                         // clicks anywhere inside the UL. This is needed
@@ -143,7 +160,7 @@
                     var tags = node.val().split(this.options.singleFieldDelimiter);
                     node.val('');
                     $.each(tags, function(index, tag) {
-                        that.createTag(tag);
+                        that.createTag(tag, null, true);
                         addedExistingFromSingleFieldNode = true;
                     });
                 } else {
@@ -157,7 +174,7 @@
             if (!addedExistingFromSingleFieldNode) {
                 this.tagList.children('li').each(function() {
                     if (!$(this).hasClass('tagit-new')) {
-                        that.createTag($(this).text(), $(this).attr('class'));
+                        that.createTag($(this).text(), $(this).attr('class'), true);
                         $(this).remove();
                     }
                 });
@@ -245,11 +262,11 @@
         },
 
         _lastTag: function() {
-            return this.tagList.children('.tagit-choice:last');
+            return this.tagList.children('.tagit-choice:last:not(.removed)');
         },
 
         _tags: function() {
-            return this.tagList.children('.tagit-choice');
+            return this.tagList.children('.tagit-choice:not(.removed)');
         },
 
         assignedTags: function() {
@@ -312,7 +329,7 @@
             return $.trim(str.toLowerCase());
         },
 
-        createTag: function(value, additionalClass) {
+        createTag: function(value, additionalClass, duringInitialization) {
             var that = this;
 
             value = $.trim(value);
@@ -351,13 +368,18 @@
                 tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + this.options.itemName + '[' + this.options.fieldName + '][]" />');
             }
 
+            // DEPRECATED.
             this._trigger('onTagAdded', null, tag);
+
+            this._trigger('beforeTagAdded', null, tag, duringInitialization);
 
             // Cleaning the input.
             this.tagInput.val('');
 
             // insert tag
             this.tagInput.parent().before(tag);
+
+            this._trigger('afterTagAdded', null, tag, duringInitialization);
         },
 
         removeTag: function(tag, animate) {
@@ -365,7 +387,10 @@
 
             tag = $(tag);
 
+            // DEPRECATED.
             this._trigger('onTagRemoved', null, tag);
+
+            this._trigger('beforeTagRemoved', null, tag);
 
             if (this.options.singleField) {
                 var tags = this.assignedTags();
@@ -375,8 +400,9 @@
                 });
                 this._updateSingleTagsField(tags);
             }
-            // Animate the removal.
+
             if (animate) {
+                tag.addClass('removed'); // Excludes this tag from _tags.
                 var hide_args = ($.effects && $.effects.blind) ? ['blind', {direction: 'horizontal'}, 'fast'] : ['fast'];
 
                 hide_args.push(function() {
@@ -387,6 +413,8 @@
             } else {
                 tag.remove();
             }
+
+            this._trigger('afterTagRemoved', null, tag);
         },
 
         removeTagByName: function(tagName, animate) {

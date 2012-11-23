@@ -157,31 +157,46 @@ Defaults to *null*
 
 ## Events
 
-### onTagAdded (function, Callback)
+### beforeTagAdded (function, Callback)
 
 Can be used to add custom behaviour before the Tag is added to the DOM.
-The function receives an empty event, and the tag as parameters.
+
+The function receives an empty event, and two parameters: the `tag`, and `duringInitialization`.
+
+`duringInitialization` is a boolean indicating whether the tag was added during the initial construction of this widget,
+e.g. when initializing tag-it on an input with preloaded data. You can use this to tell whether the event was initiated by
+the user or by the widget's initialization.
 
     $("#mytags").tagit({
-        onTagAdded: function(event, tag) {
+        beforeTagAdded: function(event, tag) {
             // do something special
         }
     });
 
-### onTagRemoved (function, Callback)
+### afterTagAdded (function, Callback)
 
-Can be used to add custom behaviour before the Tag is removed from the DOM.
+Behaves the same as **beforeTagAdded** except that it fires after the tag has been added to the DOM.
+It too receives the `duringInitialization` parameter — see **beforeTagAdded** for details.
+
+### beforeTagRemoved (function, Callback)
+
+Can be used to add custom behaviour before the tag is removed from the DOM.
+
 The function receives an empty event, and the tag as parameters.
 
     $("#mytags").tagit({
-        onTagRemoved: function(event, tag) {
+        beforeTagRemoved: function(event, tag) {
             // do something special
         }
     });
+
+### afterTagRemoved (function, Callback)
+
+Behaves the same as **beforeTagRemoved** except that it fires after the tag has been removed from the DOM.
 
 ### onTagClicked (function, Callback)
 
-Can be used to add custom behaviour when the Tag is clicked from the DOM.
+Can be used to add custom behaviour when the Tag is clicked.
 The function receives the click event and the tag as parameters.
 
     $("#mytags").tagit({
