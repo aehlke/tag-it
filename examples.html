@@ -74,7 +74,7 @@
             };
             eventTags.tagit({
                 availableTags: sampleTags,
-                onTagRemoved: function(evt, tag) {
+                beforeTagRemoved: function(evt, tag) {
                     addEvent('This tag is being removed: ' + eventTags.tagit('tagLabel', tag));
                 },
                 onTagClicked: function(evt, tag) {
