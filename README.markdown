@@ -7,7 +7,7 @@ Tag-it was originally inspired by the "tag suggestion" form field in ZenDesk.com
 
 ![Screenshot](http://aehlke.github.com/tag-it/screenshot.png)
 
-Check the [examples.html](http://aehlke.github.com/tag-it/examples.html) for several demos.
+Check the [examples.html](http://aehlke.github.com/tag-it/examples.html) for several demos and <http://tag-it-autocomplete.heroku.com/> for example of application with Tag-it! and autocomplete.
 
 
 ## Usage
