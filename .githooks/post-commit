@@ -2,7 +2,7 @@
 
 if [ -a .commit ]; then
     rm .commit
-    git add js/tagit.min.js
+    git add js/tag-it.min.js
     git commit --amend -C HEAD --no-verify -q
 fi
 
