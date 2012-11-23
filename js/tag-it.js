@@ -250,6 +250,10 @@
             return this.tagList.children('.tagit-choice:last');
         },
 
+        _tags: function() {
+            return this.tagList.children('.tagit-choice');
+        },
+
         assignedTags: function() {
             // Returns an array of tag string values
             var that = this;
@@ -260,7 +264,7 @@
                     tags = [];
                 }
             } else {
-                this.tagList.children('.tagit-choice').each(function() {
+                this._tags().each(function() {
                     tags.push(that.tagLabel(this));
                 });
             }
@@ -294,7 +298,7 @@
         _isNew: function(value) {
             var that = this;
             var isNew = true;
-            this.tagList.children('.tagit-choice').each(function(i) {
+            this._tags().each(function(i) {
                 if (that._formatStr(value) == that._formatStr(that.tagLabel(this))) {
                     isNew = false;
                     return false;
@@ -390,7 +394,7 @@
         removeAll: function() {
             // Removes all tags.
             var that = this;
-            this.tagList.children('.tagit-choice').each(function(index, tag) {
+            this._tags().each(function(index, tag) {
                 that.removeTag(tag, false);
             });
         }
