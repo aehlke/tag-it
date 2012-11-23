@@ -213,8 +213,12 @@
                         that._tagInput.autocomplete('close');
                     }
                 }).blur(function(e){
-                    // Create a tag when the element loses focus (unless it's empty).
-                    that.createTag(that._cleanedInput());
+                    //If autocomplete is enabled and suggestion was clicked, don't add it
+                    if (that.options.tagSource && that._tagInput.data('autocomplete-open')) {
+                        that._cleanedInput();
+                    } else {
+                        that.createTag(that._cleanedInput());
+                    }
                 });
                 
 
@@ -222,16 +226,9 @@
             if (this.options.availableTags || this.options.tagSource) {
                 this._tagInput.autocomplete({
                     source: this.options.tagSource,
+                    open: function(){that._tagInput.data('autocomplete-open', true)},
+                    close: function(){that._tagInput.data('autocomplete-open', false)},
                     select: function(event, ui) {
-                        // Delete the last tag if we autocomplete something despite the input being empty
-                        // This happens because the input's blur event causes the tag to be created when
-                        // the user clicks an autocomplete item.
-                        // The only artifact of this is that while the user holds down the mouse button
-                        // on the selected autocomplete item, a tag is shown with the pre-autocompleted text,
-                        // and is changed to the autocompleted text upon mouseup.
-                        if (that._tagInput.val() === '') {
-                            that.removeTag(that._lastTag(), false);
-                        }
                         that.createTag(ui.item.value);
                         // Preventing the tag input to be updated with the chosen value.
                         return false;
