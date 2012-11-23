@@ -341,6 +341,7 @@
                 .click(function(e) {
                     // Removes a tag when the little 'x' is clicked.
                     that.removeTag(tag);
+                    return false;
                 });
             tag.append(removeTag);
 
@@ -368,8 +369,6 @@
 
             tag = $(tag);
 
-            this._trigger('onTagRemoved', null, tag);
-
             if (this.options.singleField) {
                 var tags = this.assignedTags();
                 var removedTagLabel = this.tagLabel(tag);
@@ -378,6 +377,9 @@
                 });
                 this._updateSingleTagsField(tags);
             }
+
+            this._trigger('onTagRemoved', null, tag);
+
             // Animate the removal.
             if (animate) {
                 var hide_args = ($.effects && $.effects.blind) ? ['blind', {direction: 'horizontal'}, 'fast'] : ['fast'];
