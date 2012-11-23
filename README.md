@@ -159,17 +159,20 @@ Defaults to *null*
 
 ### beforeTagAdded (function, Callback)
 
-Can be used to add custom behaviour before the Tag is added to the DOM.
+Can be used to add custom behaviour before the tag is added to the DOM.
 
-The function receives an empty event, and two parameters: the `tag`, and `duringInitialization`.
+The function receives an empty event, and an object containing the properties `tag` and `duringInitialization`.
 
 `duringInitialization` is a boolean indicating whether the tag was added during the initial construction of this widget,
 e.g. when initializing tag-it on an input with preloaded data. You can use this to tell whether the event was initiated by
 the user or by the widget's initialization.
 
+To cancel a tag from being added, simply return `false` in your event callback to bail out from adding the tag and stop propagation of the event.
+
     $("#mytags").tagit({
-        beforeTagAdded: function(event, tag) {
+        beforeTagAdded: function(event, ui) {
             // do something special
+            console.log(ui.tag);
         }
     });
 
@@ -182,11 +185,14 @@ It too receives the `duringInitialization` parameter — see **beforeTagAdded** 
 
 Can be used to add custom behaviour before the tag is removed from the DOM.
 
-The function receives an empty event, and the tag as parameters.
+To cancel a tag from being removed, simply return `false` in your event callback to bail out from removing the tag and stop propagation of the event.
+
+The function receives an empty event, and an object with a `tag` property.
 
     $("#mytags").tagit({
-        beforeTagRemoved: function(event, tag) {
+        beforeTagRemoved: function(event, ui) {
             // do something special
+            console.log(ui.tag);
         }
     });
 
@@ -196,12 +202,13 @@ Behaves the same as **beforeTagRemoved** except that it fires after the tag has 
 
 ### onTagClicked (function, Callback)
 
-Can be used to add custom behaviour when the Tag is clicked.
-The function receives the click event and the tag as parameters.
+Can be used to add custom behaviour when the tag is clicked.
+The function receives the click event and an objecting containing a `tag` field.
 
     $("#mytags").tagit({
-        onTagClicked: function(event, tag) {
+        onTagClicked: function(event, ui) {
             // do something special
+            console.log(ui.tag);
         }
     });
 
@@ -224,7 +231,7 @@ Finds the tag with the value `tagName` and removes it. If no such tag is found, 
     $("#mytags").tagit("removeTagByName", "my-tag");
 
 ### removeAll()
-Clears the widget of all tags -- removes each tag it contains, so the onTagRemoved event callback (if set in the options) will be called for each.
+Clears the widget of all tags — removes each tag it contains, so the **beforeTagRemoved** / **afterTagRemoved** event callbacks (if set) will be called for each.
 
     $("#mytags").tagit("removeAll");
 

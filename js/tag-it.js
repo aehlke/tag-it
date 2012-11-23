@@ -78,7 +78,7 @@
             beforeTagRemoved    : null,
             afterTagRemoved     : null,
 
-            onTagClicked: null
+            onTagClicked        : null,
 
 
             // DEPRECATED:
@@ -87,7 +87,7 @@
             // point in the future. They're here for backwards-compatibility.
             // Use the above before/after event callbacks instead.
             onTagAdded  : null,
-            onTagRemoved: null,
+            onTagRemoved: null
             // Do not use the above deprecated callbacks.
         },
 
@@ -371,26 +371,29 @@
             // DEPRECATED.
             this._trigger('onTagAdded', null, tag);
 
-            this._trigger('beforeTagAdded', null, tag, duringInitialization);
+            if (this._trigger('beforeTagAdded', null, {tag: tag, duringInitialization: duringInitialization}) === false) {
+                return;
+            }
 
-            // Cleaning the input.
             this.tagInput.val('');
 
-            // insert tag
+            // Insert tag.
             this.tagInput.parent().before(tag);
 
-            this._trigger('afterTagAdded', null, tag, duringInitialization);
+            this._trigger('afterTagAdded', null, {tag: tag, duringInitialization: duringInitialization});
         },
 
         removeTag: function(tag, animate) {
-            animate = typeof animate === "undefined" ? this.options.animate : animate;
+            animate = typeof animate === 'undefined' ? this.options.animate : animate;
 
             tag = $(tag);
 
             // DEPRECATED.
             this._trigger('onTagRemoved', null, tag);
 
-            this._trigger('beforeTagRemoved', null, tag);
+            if (this._trigger('beforeTagRemoved', null, {tag: tag}) === false) {
+                return;
+            }
 
             if (this.options.singleField) {
                 var tags = this.assignedTags();
@@ -414,7 +417,7 @@
                 tag.remove();
             }
 
-            this._trigger('afterTagRemoved', null, tag);
+            this._trigger('afterTagRemoved', null, {tag: tag});
         },
 
         removeTagByName: function(tagName, animate) {

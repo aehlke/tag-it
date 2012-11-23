@@ -74,17 +74,25 @@
             };
             eventTags.tagit({
                 availableTags: sampleTags,
-                beforeTagRemoved: function(evt, tag) {
-                    addEvent('This tag is being removed: ' + eventTags.tagit('tagLabel', tag));
+                beforeTagAdded: function(evt, ui) {
+                    if (!ui.duringInitialization) {
+                        addEvent('beforeTagAdded: ' + eventTags.tagit('tagLabel', ui.tag));
+                    }
                 },
-                onTagClicked: function(evt, tag) {
-                    addEvent('This tag was clicked: ' + eventTags.tagit('tagLabel', tag));
+                afterTagAdded: function(evt, ui) {
+                    if (!ui.duringInitialization) {
+                        addEvent('afterTagAdded: ' + eventTags.tagit('tagLabel', ui.tag));
+                    }
                 },
-                singleField:true
-            }).tagit('option', 'onTagAdded', function(evt, tag) {
-                // Add this callbackafter we initialize the widget,
-                // so that onTagAdded doesn't get called on page load.
-                addEvent('This tag is being added: ' + eventTags.tagit('tagLabel', tag));
+                beforeTagRemoved: function(evt, ui) {
+                    addEvent('beforeTagRemoved: ' + eventTags.tagit('tagLabel', ui.tag));
+                },
+                afterTagRemoved: function(evt, ui) {
+                    addEvent('afterTagRemoved: ' + eventTags.tagit('tagLabel', ui.tag));
+                },
+                onTagClicked: function(evt, ui) {
+                    addEvent('onTagClicked: ' + eventTags.tagit('tagLabel', ui.tag));
+                }
             });
 
             //-------------------------------
