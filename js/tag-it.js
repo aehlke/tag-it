@@ -180,7 +180,8 @@
 
                     // Comma/Space/Enter are all valid delimiters for new tags,
                     // except when there is an open quote or if setting allowSpaces = true.
-                    // Tab will also create a tag, unless the tag input is empty, in which case it isn't caught.
+                    // Tab will also create a tag, unless the tag input is empty, 
+                    // in which case it isn't caught.
                     if (
                         event.which == $.ui.keyCode.COMMA ||
                         event.which == $.ui.keyCode.ENTER ||
@@ -307,7 +308,7 @@
 
         createTag: function(value, additionalClass) {
             var that = this;
-            // Automatically trims the value of leading and trailing whitespace.
+
             value = $.trim(value);
 
             if (!this._isNew(value) || value === '') {
