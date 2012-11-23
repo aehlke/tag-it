@@ -318,7 +318,7 @@
 
             value = $.trim(value);
 
-            if (!allowDuplicates && (!this._isNew(value) || value === '')) {
+            if (!this.allowDuplicates && (!this._isNew(value) || value === '')) {
                 return false;
             }
 
