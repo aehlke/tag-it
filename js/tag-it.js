@@ -312,7 +312,8 @@
             return $.trim(str.toLowerCase());
         },
 
-        createTag: function(value, additionalClass) {
+        createTag: function(value, additionalClass , data) {
+			
             var that = this;
 
             value = $.trim(value);
@@ -329,6 +330,10 @@
                 .addClass(additionalClass)
                 .append(label);
 
+			if (data){
+				tag.data("tagit" , data)
+			}
+				
             // Button for removing the tag.
             var removeTagIcon = $('<span></span>')
                 .addClass('ui-icon ui-icon-close');
