@@ -202,7 +202,6 @@
                             )
                         )
                     ) {
-                        event.preventDefault();
                         that.createTag(that._cleanedInput());
 
                         // The autocomplete doesn't close automatically when TAB is pressed.
