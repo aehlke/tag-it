@@ -212,6 +212,14 @@ Clears the widget of all tags -- removes each tag it contains, so the onTagRemov
     $("#mytags").tagit("removeAll");
 
 
+## Properties
+
+### tagInput
+The `<input>` field which is used for entering new tags. It's a jQuery object, so you may use it to add a class or anything to it, e.g.:
+
+    $("#mytags").tagit("tagInput").addClass("fancy");
+
+
 ## Authors
 
 * [Levy Carneiro Jr.](http://github.com/levycarneiro) *original author*

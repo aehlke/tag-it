@@ -71,13 +71,11 @@
             // created for tag-it.
             tabIndex: null,
 
-
             // Event callbacks.
             onTagAdded  : null,
             onTagRemoved: null,
             onTagClicked: null
         },
-
 
         _create: function() {
             // for handling static scoping inside callbacks
@@ -96,12 +94,12 @@
                 this.tagList = this.element.find('ul, ol').andSelf().last();
             }
 
-            this._tagInput = $('<input type="text" />').addClass('ui-widget-content');
+            this.tagInput = $('<input type="text" />').addClass('ui-widget-content');
             if (this.options.tabIndex) {
-                this._tagInput.attr('tabindex', this.options.tabIndex);
+                this.tagInput.attr('tabindex', this.options.tabIndex);
             }
             if (this.options.placeholderText) {
-                this._tagInput.attr('placeholder', this.options.placeholderText);
+                this.tagInput.attr('placeholder', this.options.placeholderText);
             }
 
             this.options.tagSource = this.options.tagSource || function(search, showChoices) {
@@ -123,7 +121,7 @@
                 .addClass('tagit')
                 .addClass('ui-widget ui-widget-content ui-corner-all')
                 // Create the input field.
-                .append($('<li class="tagit-new"></li>').append(this._tagInput))
+                .append($('<li class="tagit-new"></li>').append(this.tagInput))
                 .click(function(e) {
                     var target = $(e.target);
                     if (target.hasClass('tagit-label')) {
@@ -132,7 +130,7 @@
                         // Sets the focus() to the input field, if the user
                         // clicks anywhere inside the UL. This is needed
                         // because the input field needs to be of a small size.
-                        that._tagInput.focus();
+                        that.tagInput.focus();
                     }
                 });
 
@@ -162,10 +160,10 @@
             }
 
             // Events.
-            this._tagInput
+            this.tagInput
                 .keydown(function(event) {
                     // Backspace is not detected within a keypress, so it must use keydown.
-                    if (event.which == $.ui.keyCode.BACKSPACE && that._tagInput.val() === '') {
+                    if (event.which == $.ui.keyCode.BACKSPACE && that.tagInput.val() === '') {
                         var tag = that._lastTag();
                         if (!that.options.removeConfirmation || tag.hasClass('remove')) {
                             // When backspace is pressed, the last tag is deleted.
@@ -186,23 +184,23 @@
                         event.which === $.ui.keyCode.ENTER ||
                         (
                             event.which == $.ui.keyCode.TAB &&
-                            that._tagInput.val() !== ''
+                            that.tagInput.val() !== ''
                         ) ||
                         (
                             event.which == $.ui.keyCode.SPACE &&
                             that.options.allowSpaces !== true &&
                             (
-                                $.trim(that._tagInput.val()).replace( /^s*/, '' ).charAt(0) != '"' ||
+                                $.trim(that.tagInput.val()).replace( /^s*/, '' ).charAt(0) != '"' ||
                                 (
-                                    $.trim(that._tagInput.val()).charAt(0) == '"' &&
-                                    $.trim(that._tagInput.val()).charAt($.trim(that._tagInput.val()).length - 1) == '"' &&
-                                    $.trim(that._tagInput.val()).length - 1 !== 0
+                                    $.trim(that.tagInput.val()).charAt(0) == '"' &&
+                                    $.trim(that.tagInput.val()).charAt($.trim(that.tagInput.val()).length - 1) == '"' &&
+                                    $.trim(that.tagInput.val()).length - 1 !== 0
                                 )
                             )
                         )
                     ) {
                         // Enter submits the form if there's no text in the input.
-                        if (!(event.which === $.ui.keyCode.ENTER && that._tagInput.val() === '')) {
+                        if (!(event.which === $.ui.keyCode.ENTER && that.tagInput.val() === '')) {
                             event.preventDefault();
                         }
 
@@ -210,7 +208,7 @@
 
                         // The autocomplete doesn't close automatically when TAB is pressed.
                         // So let's ensure that it closes.
-                        that._tagInput.autocomplete('close');
+                        that.tagInput.autocomplete('close');
                     }
                 }).blur(function(e){
                     // Create a tag when the element loses focus (unless it's empty).
@@ -220,7 +218,7 @@
 
             // Autocomplete.
             if (this.options.availableTags || this.options.tagSource) {
-                this._tagInput.autocomplete({
+                this.tagInput.autocomplete({
                     source: this.options.tagSource,
                     select: function(event, ui) {
                         // Delete the last tag if we autocomplete something despite the input being empty
@@ -229,7 +227,7 @@
                         // The only artifact of this is that while the user holds down the mouse button
                         // on the selected autocomplete item, a tag is shown with the pre-autocompleted text,
                         // and is changed to the autocompleted text upon mouseup.
-                        if (that._tagInput.val() === '') {
+                        if (that.tagInput.val() === '') {
                             that.removeTag(that._lastTag(), false);
                         }
                         that.createTag(ui.item.value);
@@ -242,7 +240,7 @@
 
         _cleanedInput: function() {
             // Returns the contents of the tag input, cleaned and ready to be passed to createTag
-            return $.trim(this._tagInput.val().replace(/^"(.*)"$/, '$1'));
+            return $.trim(this.tagInput.val().replace(/^"(.*)"$/, '$1'));
         },
 
         _lastTag: function() {
@@ -355,10 +353,10 @@
             this._trigger('onTagAdded', null, tag);
 
             // Cleaning the input.
-            this._tagInput.val('');
+            this.tagInput.val('');
 
             // insert tag
-            this._tagInput.parent().before(tag);
+            this.tagInput.parent().before(tag);
         },
 
         removeTag: function(tag, animate) {
