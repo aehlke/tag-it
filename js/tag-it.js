@@ -40,6 +40,9 @@
             // for inputting multi-word tags.
             allowSpaces: false,
 
+            // When disabled, tag-it only allows tags in availableTags
+            allowNotDefinedTags: true,
+
             // Whether to animate tag removals or not.
             animate: true,
 
@@ -310,7 +313,7 @@
             // Automatically trims the value of leading and trailing whitespace.
             value = $.trim(value);
 
-            if (!this._isNew(value) || value === '') {
+            if (!this._isNew(value) || value === '' || (!this.options.allowNotDefinedTags && $.inArray(value, this.options.availableTags)==-1)) {
                 return false;
             }
 
