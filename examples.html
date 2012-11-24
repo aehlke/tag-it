@@ -44,7 +44,8 @@
 			    availableTags: sampleTags,
 			    // This will make Tag-it submit a single form value, as a comma-delimited field.
 			    singleField: true,
-                singleFieldNode: $('#mySingleField')
+                singleFieldNode: $('#mySingleField'),
+                showAutocompleteOnFocus:true
 		    });
 
             // singleFieldTags2 is an INPUT element, rather than a UL as in the other 
@@ -204,17 +205,6 @@
 	    </form>
 
         <hr>
-        <h3>Events</h3>
-   	    <form>
-			<p>Example of tag events. Try adding or removing a tag, or clicking on a tag's label.</p>
-			<ul id="eventTags">
-                <li>Click my label</li>
-                <li>Remove me</li>
-            </ul>
-	    </form>
-        <div id="events_container"></div>
-
-        <hr>
 
         <h3>Read-only</h3>
         <form>
@@ -224,6 +214,18 @@
                 <li>Tag2</li>
             </ul>
         </form>
+
+        <hr>
+
+        <h3>Events</h3>
+        <form>
+			<p>Example of tag events. Try adding or removing a tag, or clicking on a tag's label.</p>
+			<ul id="eventTags">
+                <li>Click my label</li>
+                <li>Remove me</li>
+            </ul>
+	    </form>
+        <div id="events_container"></div>
 
         <hr>
 

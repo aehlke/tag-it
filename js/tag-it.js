@@ -42,6 +42,9 @@
             // unless overridden.
             autocomplete: {},
 
+            // Shows autocomplete before the user even types anything.
+            showAutocompleteOnFocus: false,
+
             // When enabled, quotes are unneccesary for inputting multi-word tags.
             allowSpaces: false,
 
@@ -136,6 +139,12 @@
                     });
                     showChoices(this._subtractArray(choices, this.assignedTags()));
                 };
+            }
+
+            if (this.options.showAutocompleteOnFocus) {
+                this.tagInput.focus(function(event, ui) {
+                    that._showAutocomplete();
+                });
             }
 
             // Bind autocomplete.source callback functions to this context.
@@ -333,6 +342,10 @@
             }
         },
 
+        _showAutocomplete: function() {
+            this.tagInput.autocomplete('search', '');
+        },
+
         _isNew: function(value) {
             var that = this;
             var isNew = true;
@@ -409,6 +422,10 @@
             this.tagInput.parent().before(tag);
 
             this._trigger('afterTagAdded', null, {tag: tag, duringInitialization: duringInitialization});
+
+            if (this.options.showAutocompleteOnFocus && !duringInitialization) {
+                setTimeout(function () { that._showAutocomplete(); }, 0);
+            }
         },
 
         removeTag: function(tag, animate) {
