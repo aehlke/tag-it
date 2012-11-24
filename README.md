@@ -99,7 +99,14 @@ Allows overriding the `source` and `select` options that are set by default,
 as well as adding any other options you want to pass to the jQuery UI Autocomplete widget, such as `minLength` or `delay`. 
 
 The `autocomplete.source` should be overridden if you want to use custom autocompletion sources, like an Ajax / XHR response.
-The default `autocomplete.source` function filters the strings in **availableTags** and subtracts the already assigned tags.
+
+For example:
+
+    $("#mytags").tagit({
+        autocomplete: {delay: 0, minLength: 2}
+    });
+
+The default `autocomplete.source` function filters the strings in **availableTags** and subtracts the already assigned tags. It also positions autocomplete underneath tag input. See the full list of available options [here](http://jqueryui.com/demos/autocomplete/).
 
 ### removeConfirmation (boolean)
 
