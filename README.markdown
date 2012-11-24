@@ -108,6 +108,14 @@ For example:
 
 The default `autocomplete.source` function filters the strings in **availableTags** and subtracts the already assigned tags. It also positions autocomplete underneath tag input. See the full list of available options [here](http://jqueryui.com/demos/autocomplete/).
 
+### showAutocompleteOnFocus (boolean)
+
+Shows autocomplete when the tag input first receives focus, before the user even types anything.
+
+If enabled, this will also make **autocomplete.minLength** default to `0` unless you override that, so that autocomplete can show up with a blank search.
+
+Defaults to *false*.
+
 ### removeConfirmation (boolean)
 
 When removeConfirmation is enabled the user has to press the backspace key twice to remove the last tag.
