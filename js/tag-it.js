@@ -30,22 +30,20 @@
         options: {
             fieldName         : 'tags',
             availableTags     : [],
-            tagSource         : null,
-            removeConfirmation: false,
+            removeConfirmation: false,  // Require confirmation to remove tags.
             caseSensitive     : true,
-            placeholderText   : null,
+            placeholderText   : null,   // Sets `placeholder` attr on input field.
             allowDuplicates   : false,
+            readOnly          : false,  // Disables editing.
 
-            // When enabled, tag-it just render tags. 
-            // It disables the ability to edit tags.
-            readOnly: false,
+            // Use to override or add any options to the autocomplete widget.
+            //
+            // By default, autocomplete.source will map to availableTags,
+            // unless overridden.
+            autocomplete: {},
 
-            // When enabled, quotes are not neccesary
-            // for inputting multi-word tags.
+            // When enabled, quotes are unneccesary for inputting multi-word tags.
             allowSpaces: false,
-
-            // Whether to animate tag removals or not.
-            animate: true,
 
             // The below options are for using a single field instead of several
             // for our form values.
@@ -60,6 +58,8 @@
             // way, you don't need to fiddle with these options.
             singleField: false,
 
+            // This is just used when preloading data from the field, and for
+            // populating the field with delimited tags as the user adds them.
             singleFieldDelimiter: ',',
 
             // Set this to an input DOM node to use an existing form field.
@@ -70,6 +70,9 @@
             // If this is not set, we create an input node for it,
             // with the name given in settings.fieldName.
             singleFieldNode: null,
+
+            // Whether to animate tag removals or not.
+            animate: true,
 
             // Optionally set a tabindex attribute on the input that gets
             // created for tag-it.
@@ -91,8 +94,10 @@
             // point in the future. They're here for backwards-compatibility.
             // Use the above before/after event callbacks instead.
             onTagAdded  : null,
-            onTagRemoved: null
-            // Do not use the above deprecated callbacks.
+            onTagRemoved: null,
+            // `autocomplete.source` is the replacement for tagSource.
+            tagSource: null
+            // Do not use the above deprecated options.
         },
 
         _create: function() {
@@ -121,17 +126,24 @@
                 this.tagInput.attr('placeholder', this.options.placeholderText);
             }
 
-            this.options.tagSource = this.options.tagSource || function(search, showChoices) {
-                var filter = search.term.toLowerCase();
-                var choices = $.grep(this.options.availableTags, function(element) {
-                    // Only match autocomplete options that begin with the search term.
-                    // (Case insensitive.)
-                    return (element.toLowerCase().indexOf(filter) === 0);
-                });
-                showChoices(this._subtractArray(choices, this.assignedTags()));
-            };
+            if (!this.options.autocomplete.source) {
+                this.options.autocomplete.source = function(search, showChoices) {
+                    var filter = search.term.toLowerCase();
+                    var choices = $.grep(this.options.availableTags, function(element) {
+                        // Only match autocomplete options that begin with the search term.
+                        // (Case insensitive.)
+                        return (element.toLowerCase().indexOf(filter) === 0);
+                    });
+                    showChoices(this._subtractArray(choices, this.assignedTags()));
+                };
+            }
 
-            // Bind tagSource callback functions to this context.
+            // Bind autocomplete.source callback functions to this context.
+            if ($.isFunction(this.options.autocomplete.source)) {
+                this.options.autocomplete.source = $.proxy(this.options.autocomplete.source, this);
+            }
+
+            // DEPRECATED.
             if ($.isFunction(this.options.tagSource)) {
                 this.options.tagSource = $.proxy(this.options.tagSource, this);
             }
@@ -245,15 +257,21 @@
                 });
 
             // Autocomplete.
-            if (this.options.availableTags || this.options.tagSource) {
-                this.tagInput.autocomplete({
-                    source: this.options.tagSource,
+            if (this.options.availableTags || this.options.tagSource || this.options.autocomplete.source) {
+                var autocompleteOptions = {
                     select: function(event, ui) {
                         that.createTag(ui.item.value);
                         // Preventing the tag input to be updated with the chosen value.
                         return false;
                     }
-                }).bind('autocompleteopen', function(event, ui) {
+                };
+                $.extend(autocompleteOptions, this.options.autocomplete);
+
+                // tagSource is deprecated, but takes precedence here since autocomplete.source is set by default,
+                // while tagSource is left null by default.
+                autocompleteOptions.source = this.options.tagSource || autocompleteOptions.source;
+
+                this.tagInput.autocomplete(autocompleteOptions).bind('autocompleteopen', function(event, ui) {
                     that.tagInput.data('autocomplete-open', true);
                 }).bind('autocompleteclose', function(event, ui) {
                     that.tagInput.data('autocomplete-open', false)

@@ -83,20 +83,23 @@ Defaults to *tags*.
 
 ### availableTags (Array)
 
-Used as source for the autocompletion.
+Used as source for the autocompletion, unless **autocomplete.source** is overridden.
 
     $("#mytags").tagit({
         availableTags: ["c++", "java", "php", "javascript", "ruby", "python", "c"]
     });
 
-If you define your own **tagSource**, this option is unused (unless you choose to reference it yourself from your custom **tagSource** of course.)
+If you define your own **autocomplete.source**, this option is unused (unless you choose to reference it yourself from your custom **autocomplete.source** of course.)
 
 Defaults to an empty array *[]*.
 
-### tagSource (function)
+### autocomplete (Object)
 
-Can be overwritten in order to use custom autocompletion sources like Ajax requests.
-The default function filters the strings in **availableTags** and subtracts the already assigned tags.
+Allows overriding the `source` and `select` options that are set by default,
+as well as adding any other options you want to pass to the jQuery UI Autocomplete widget, such as `minLength` or `delay`. 
+
+The `autocomplete.source` should be overridden if you want to use custom autocompletion sources, like an Ajax / XHR response.
+The default `autocomplete.source` function filters the strings in **availableTags** and subtracts the already assigned tags.
 
 ### removeConfirmation (boolean)
 
