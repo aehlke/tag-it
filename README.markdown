@@ -132,7 +132,7 @@ Defaults to *true*.
 ### allowDuplicates (boolean)
 
 Allows duplicate tags to be created.
-One implication of this is that `removeTagByName` will remove all tags which match the given name.
+One implication of this is that `removeTagByLabel` will remove all tags which match the given label.
 
 Defaults to *false*.
 
@@ -185,7 +185,7 @@ Defaults to *null*
 
 Can be used to add custom behaviour before the tag is added to the DOM.
 
-The function receives an empty event, and an object containing the properties `tag` and `duringInitialization`.
+The function receives an empty event, and an object containing the properties `tag`, `tagLabel`, and `duringInitialization`.
 
 `duringInitialization` is a boolean indicating whether the tag was added during the initial construction of this widget,
 e.g. when initializing tag-it on an input with preloaded data. You can use this to tell whether the event was initiated by
@@ -211,7 +211,7 @@ Can be used to add custom behaviour before the tag is removed from the DOM.
 
 To cancel a tag from being removed, simply return `false` in your event callback to bail out from removing the tag and stop propagation of the event.
 
-The function receives an empty event, and an object with a `tag` property.
+The function receives an empty event, and an object with `tag` and `tagLabel` properties.
 
     $("#mytags").tagit({
         beforeTagRemoved: function(event, ui) {
@@ -237,7 +237,7 @@ By default it will visually highlight the existing tag, unless you return *false
 ### onTagClicked (function, Callback)
 
 Can be used to add custom behaviour when the tag is clicked.
-The function receives the click event and an objecting containing a `tag` field.
+The function receives the click event and an objecting containing `tag` and `tagLabel` properties.
 
     $("#mytags").tagit({
         onTagClicked: function(event, ui) {
@@ -254,15 +254,15 @@ Returns an array of the text values of all the tags currently in the widget.
 
     $("#mytags").tagit("assignedTags");
 
-### createTag(tagName, additionalClass)
+### createTag(tagLabel, additionalClass)
 Adds new tag to the list. The `additionalClass` parameter is an optional way to add classes to the tag element.
 
     $("#mytags").tagit("createTag", "brand-new-tag");
 
-### removeTagByName(tagName, animate)
-Finds the tag with the value `tagName` and removes it. If no such tag is found, it'll throw an exception.
+### removeTagByLabel(tagLabel, animate)
+Finds the tag with the label `tagLabel` and removes it. If no such tag is found, it'll throw an exception.
 
-    $("#mytags").tagit("removeTagByName", "my-tag");
+    $("#mytags").tagit("removeTagByLabel", "my-tag");
 
 ### removeAll()
 Clears the widget of all tags — removes each tag it contains, so the **beforeTagRemoved** / **afterTagRemoved** event callbacks (if set) will be called for each.
