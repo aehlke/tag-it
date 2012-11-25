@@ -18,7 +18,7 @@ First, load [jQuery](http://jquery.com/) (v1.4 or greater), [jQuery UI](http://j
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/tag-it.js" type="text/javascript" charset="utf-8"></script>
 
-If you're using a custom jQuery UI build, it must contain the Core, Widget, Position, and Autocomplete components. The Effects Core with "Blind" Effect components are optional, but used if available.
+If you're using a custom jQuery UI build, it must contain the Core, Widget, Position, and Autocomplete components. The Effects Core with "Blind" and "Highlight" Effect components are optional, but used if available.
 
 The plugin requires a jQuery UI theme to be present, as well as its own included base CSS file ([jquery.tagit.css](http://github.com/aehlke/tag-it/raw/master/css/jquery.tagit.css)). Here we use the Flick theme as an example:
 
@@ -223,6 +223,16 @@ The function receives an empty event, and an object with a `tag` property.
 ### afterTagRemoved (function, Callback)
 
 Behaves the same as **beforeTagRemoved** except that it fires after the tag has been removed from the DOM.
+
+### onTagExists (function, Callback)
+
+Triggered when attempting to add a tag that has already been added in the widget. The callback receives an empty event,
+and an object containing the properties `existingTag` and `duringInitialization`, since technically you could try to preload
+duplicate tags during the widget initialization.
+
+If the **allowDuplicates** option is enabled, this will not be triggered.
+
+By default it will visually highlight the existing tag, unless you return *false* in your callback.
 
 ### onTagClicked (function, Callback)
 

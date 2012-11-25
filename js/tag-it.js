@@ -173,7 +173,7 @@
                     if (target.hasClass('tagit-label')) {
                         var tag = target.closest('.tagit-choice');
                         if (!tag.hasClass('removed')) {
-                            that._trigger('onTagClicked', e, tag);
+                            that._trigger('onTagClicked', e, {tag: tag});
                         }
                     } else {
                         // Sets the focus() to the input field, if the user
@@ -300,11 +300,11 @@
         },
 
         _lastTag: function() {
-            return this.tagList.children('.tagit-choice:last:not(.removed)');
+            return this.tagList.find('.tagit-choice:last:not(.removed)');
         },
 
         _tags: function() {
-            return this.tagList.children('.tagit-choice:not(.removed)');
+            return this.tagList.find('.tagit-choice:not(.removed)');
         },
 
         assignedTags: function() {
@@ -352,16 +352,20 @@
             this.tagInput.autocomplete('search', '');
         },
 
-        _isNew: function(value) {
+        _existingTag: function(value) {
             var that = this;
-            var isNew = true;
+            var tag = null;
             this._tags().each(function(i) {
                 if (that._formatStr(value) == that._formatStr(that.tagLabel(this))) {
-                    isNew = false;
+                    tag = $(this);
                     return false;
                 }
             });
-            return isNew;
+            return tag;
+        },
+
+        _isNew: function(value) {
+            return !this._existingTag(value);
         },
 
         _formatStr: function(str) {
@@ -371,12 +375,29 @@
             return $.trim(str.toLowerCase());
         },
 
+        _effectExists: function(name) {
+            return Boolean($.effects && ($.effects[name] || ($.effects.effect && $.effects.effect[name])));
+        },
+
         createTag: function(value, additionalClass, duringInitialization) {
             var that = this;
 
             value = $.trim(value);
 
-            if (!this.allowDuplicates && (!this._isNew(value) || value === '')) {
+            if (value === '') {
+                return false;
+            }
+
+            if (!this.allowDuplicates && !this._isNew(value)) {
+                var existingTag = this._existingTag(value);
+                if (this._trigger('onTagExists', null, {
+                    existingTag: existingTag,
+                    duringInitialization: duringInitialization
+                }) !== false) {
+                    if (this._effectExists('highlight')) {
+                        existingTag.effect('highlight');
+                    }
+                }
                 return false;
             }
 
@@ -457,7 +478,7 @@
 
             if (animate) {
                 tag.addClass('removed'); // Excludes this tag from _tags.
-                var hide_args = ($.effects && ($.effects.blind || $.effects.effect.blind)) ? ['blind', {direction: 'horizontal'}, 'fast'] : ['fast'];
+                var hide_args = this._effectExists('blind') ? ['blind', {direction: 'horizontal'}, 'fast'] : ['fast'];
 
                 hide_args.push(function() {
                     tag.remove();
