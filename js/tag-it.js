@@ -352,11 +352,11 @@
             this.tagInput.autocomplete('search', '');
         },
 
-        _existingTag: function(value) {
+        _findTagByName: function(name) {
             var that = this;
             var tag = null;
             this._tags().each(function(i) {
-                if (that._formatStr(value) == that._formatStr(that.tagLabel(this))) {
+                if (that._formatStr(name) == that._formatStr(that.tagLabel(this))) {
                     tag = $(this);
                     return false;
                 }
@@ -364,8 +364,8 @@
             return tag;
         },
 
-        _isNew: function(value) {
-            return !this._existingTag(value);
+        _isNew: function(name) {
+            return !this._findTagByName(name);
         },
 
         _formatStr: function(str) {
@@ -389,7 +389,7 @@
             }
 
             if (!this.allowDuplicates && !this._isNew(value)) {
-                var existingTag = this._existingTag(value);
+                var existingTag = this._findTagByName(value);
                 if (this._trigger('onTagExists', null, {
                     existingTag: existingTag,
                     duringInitialization: duringInitialization
@@ -493,8 +493,8 @@
         },
 
         removeTagByName: function(tagName, animate) {
-            var toRemove = this._tags().find("input[value='" + tagName + "']").closest('.tagit-choice');
-            if (toRemove.length === 0) {
+            var toRemove = this._findTagByName(tagName);
+            if (!toRemove) {
                 throw "No such tag exists with the name '" + tagName + "'";
             }
             this.removeTag(toRemove, animate);
