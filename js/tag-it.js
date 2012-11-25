@@ -493,7 +493,13 @@
         },
 
         removeTagByName: function(tagName, animate) {
-            var toRemove = this._tags().find("input[value='" + tagName + "']").closest('.tagit-choice');
+            var toRemove = [];
+            if (this.options.singleField) {
+                existingTags = $(this.options.singleFieldNode).val().split(",");
+                toRemove = this._tags().find("span.tagit-label:contains('" + tagName + "')").closest('.tagit-choice');
+            } else {
+                toRemove = this._tags().find("input[value='" + tagName + "']").closest('.tagit-choice');
+            }
             if (toRemove.length === 0) {
                 throw "No such tag exists with the name '" + tagName + "'";
             }
