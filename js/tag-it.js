@@ -342,9 +342,9 @@
         tagLabel: function(tag) {
             // Returns the tag's string label.
             if (this.options.singleField) {
-                return $(tag).children('.tagit-label').text();
+                return $(tag).find('.tagit-label:first').text();
             } else {
-                return $(tag).children('input').val();
+                return $(tag).find('input:first').val();
             }
         },
 
@@ -439,7 +439,11 @@
             // DEPRECATED.
             this._trigger('onTagAdded', null, tag);
 
-            if (this._trigger('beforeTagAdded', null, {tag: tag, duringInitialization: duringInitialization}) === false) {
+            if (this._trigger('beforeTagAdded', null, {
+                tag: tag,
+                tagLabel: this.tagLabel(tag),
+                duringInitialization: duringInitialization
+            }) === false) {
                 return;
             }
 
@@ -448,7 +452,11 @@
             // Insert tag.
             this.tagInput.parent().before(tag);
 
-            this._trigger('afterTagAdded', null, {tag: tag, duringInitialization: duringInitialization});
+            this._trigger('afterTagAdded', null, {
+                tag: tag,
+                tagLabel: this.tagLabel(tag),
+                duringInitialization: duringInitialization
+            });
 
             if (this.options.showAutocompleteOnFocus && !duringInitialization) {
                 setTimeout(function () { that._showAutocomplete(); }, 0);
@@ -463,7 +471,7 @@
             // DEPRECATED.
             this._trigger('onTagRemoved', null, tag);
 
-            if (this._trigger('beforeTagRemoved', null, {tag: tag}) === false) {
+            if (this._trigger('beforeTagRemoved', null, {tag: tag, tagLabel: this.tagLabel(tag)}) === false) {
                 return;
             }
 
@@ -489,7 +497,7 @@
                 tag.remove();
             }
 
-            this._trigger('afterTagRemoved', null, {tag: tag});
+            this._trigger('afterTagRemoved', null, {tag: tag, tagLabel: this.tagLabel(tag)});
         },
 
         removeTagByName: function(tagName, animate) {
