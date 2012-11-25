@@ -457,7 +457,7 @@
 
             if (animate) {
                 tag.addClass('removed'); // Excludes this tag from _tags.
-                var hide_args = ($.effects && $.effects.blind) ? ['blind', {direction: 'horizontal'}, 'fast'] : ['fast'];
+                var hide_args = ($.effects && ($.effects.blind || $.effects.effect.blind)) ? ['blind', {direction: 'horizontal'}, 'fast'] : ['fast'];
 
                 hide_args.push(function() {
                     tag.remove();
@@ -488,6 +488,5 @@
         }
 
     });
-
 })(jQuery);
 
