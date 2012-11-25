@@ -173,7 +173,7 @@
                     if (target.hasClass('tagit-label')) {
                         var tag = target.closest('.tagit-choice');
                         if (!tag.hasClass('removed')) {
-                            that._trigger('onTagClicked', e, {tag: tag});
+                            that._trigger('onTagClicked', e, {tag: tag, tagLabel: this.tagLabel(tag)});
                         }
                     } else {
                         // Sets the focus() to the input field, if the user
@@ -352,7 +352,7 @@
             this.tagInput.autocomplete('search', '');
         },
 
-        _findTagByName: function(name) {
+        _findTagByLabel: function(name) {
             var that = this;
             var tag = null;
             this._tags().each(function(i) {
@@ -365,7 +365,7 @@
         },
 
         _isNew: function(name) {
-            return !this._findTagByName(name);
+            return !this._findTagByLabel(name);
         },
 
         _formatStr: function(str) {
@@ -389,7 +389,7 @@
             }
 
             if (!this.allowDuplicates && !this._isNew(value)) {
-                var existingTag = this._findTagByName(value);
+                var existingTag = this._findTagByLabel(value);
                 if (this._trigger('onTagExists', null, {
                     existingTag: existingTag,
                     duringInitialization: duringInitialization
@@ -500,10 +500,10 @@
             this._trigger('afterTagRemoved', null, {tag: tag, tagLabel: this.tagLabel(tag)});
         },
 
-        removeTagByName: function(tagName, animate) {
-            var toRemove = this._findTagByName(tagName);
+        removeTagByLabel: function(tagLabel, animate) {
+            var toRemove = this._findTagByLabel(tagLabel);
             if (!toRemove) {
-                throw "No such tag exists with the name '" + tagName + "'";
+                throw "No such tag exists with the name '" + tagLabel + "'";
             }
             this.removeTag(toRemove, animate);
         },
