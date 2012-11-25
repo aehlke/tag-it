@@ -361,7 +361,6 @@
                     return false;
                 }
             });
-            console.log(tag);
             return tag;
         },
 
