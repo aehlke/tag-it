@@ -300,11 +300,11 @@
         },
 
         _lastTag: function() {
-            return this.tagList.children('.tagit-choice:last:not(.removed)');
+            return this.tagList.find('.tagit-choice:last:not(.removed)');
         },
 
         _tags: function() {
-            return this.tagList.children('.tagit-choice:not(.removed)');
+            return this.tagList.find('.tagit-choice:not(.removed)');
         },
 
         assignedTags: function() {
@@ -375,6 +375,10 @@
             return $.trim(str.toLowerCase());
         },
 
+        _effectExists: function(name) {
+            return Boolean($.effects && ($.effects[name] || ($.effects.effect && $.effects.effect[name])));
+        },
+
         createTag: function(value, additionalClass, duringInitialization) {
             var that = this;
 
@@ -385,7 +389,15 @@
             }
 
             if (!this.allowDuplicates && !this._isNew(value)) {
-                this._trigger('onTagExists', null, {existingTag: this._existingTag(value), duringInitialization: duringInitialization});
+                var existingTag = this._existingTag(value);
+                if (this._trigger('onTagExists', null, {
+                    existingTag: existingTag,
+                    duringInitialization: duringInitialization
+                }) !== false) {
+                    if (this._effectExists('highlight')) {
+                        existingTag.effect('highlight');
+                    }
+                }
                 return false;
             }
 
@@ -466,7 +478,7 @@
 
             if (animate) {
                 tag.addClass('removed'); // Excludes this tag from _tags.
-                var hide_args = ($.effects && ($.effects.blind || $.effects.effect.blind)) ? ['blind', {direction: 'horizontal'}, 'fast'] : ['fast'];
+                var hide_args = this._effectExists('blind') ? ['blind', {direction: 'horizontal'}, 'fast'] : ['fast'];
 
                 hide_args.push(function() {
                     tag.remove();
