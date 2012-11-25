@@ -94,6 +94,11 @@
                 },
                 onTagClicked: function(evt, ui) {
                     addEvent('onTagClicked: ' + eventTags.tagit('tagLabel', ui.tag));
+                },
+                onTagExists: function(evt, ui) {
+                                 console.log(ui);
+                                 console.log(ui.existingTag);
+                    addEvent('onTagExists: ' + eventTags.tagit('tagLabel', ui.existingTag));
                 }
             });
 
