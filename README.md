@@ -224,6 +224,14 @@ The function receives an empty event, and an object with a `tag` property.
 
 Behaves the same as **beforeTagRemoved** except that it fires after the tag has been removed from the DOM.
 
+### onTagExists (function, Callback)
+
+Triggered when attempting to add a tag that has already been added in the widget. The callback receives an empty event,
+and an object containing the properties `existingTag` and `duringInitialization`, since technically you could try to preload
+duplicate tags during the widget initialization.
+
+If the **allowDuplicates** option is enabled, this will not be triggered.
+
 ### onTagClicked (function, Callback)
 
 Can be used to add custom behaviour when the tag is clicked.
