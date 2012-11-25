@@ -173,7 +173,7 @@
                     if (target.hasClass('tagit-label')) {
                         var tag = target.closest('.tagit-choice');
                         if (!tag.hasClass('removed')) {
-                            that._trigger('onTagClicked', e, tag);
+                            that._trigger('onTagClicked', e, {tag: tag});
                         }
                     } else {
                         // Sets the focus() to the input field, if the user
@@ -352,16 +352,20 @@
             this.tagInput.autocomplete('search', '');
         },
 
-        _isNew: function(value) {
+        _existingTag: function(value) {
             var that = this;
-            var isNew = true;
+            var tag = null;
             this._tags().each(function(i) {
                 if (that._formatStr(value) == that._formatStr(that.tagLabel(this))) {
-                    isNew = false;
+                    tag = $(this);
                     return false;
                 }
             });
-            return isNew;
+            return tag;
+        },
+
+        _isNew: function(value) {
+            return !this._existingTag(value);
         },
 
         _formatStr: function(str) {
@@ -376,7 +380,12 @@
 
             value = $.trim(value);
 
-            if (!this.allowDuplicates && (!this._isNew(value) || value === '')) {
+            if (value === '') {
+                return false;
+            }
+
+            if (!this.allowDuplicates && !this._isNew(value)) {
+                this._trigger('onTagExists', null, {existingTag: this._existingTag(value), duringInitialization: duringInitialization});
                 return false;
             }
 
