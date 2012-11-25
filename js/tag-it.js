@@ -29,12 +29,15 @@
     $.widget('ui.tagit', {
         options: {
             fieldName         : 'tags',
+
+            // Used for autocomplete, unless you override `autocomplete.source`.
             availableTags     : [],
-            removeConfirmation: false,  // Require confirmation to remove tags.
+
+            allowDuplicates   : false,
             caseSensitive     : true,
             placeholderText   : null,   // Sets `placeholder` attr on input field.
-            allowDuplicates   : false,
             readOnly          : false,  // Disables editing.
+            removeConfirmation: false,  // Require confirmation to remove tags.
 
             // Use to override or add any options to the autocomplete widget.
             //
@@ -121,10 +124,13 @@
             }
 
             this.tagInput = $('<input type="text" />').addClass('ui-widget-content');
+
             if (this.options.readOnly) this.tagInput.attr('disabled', 'disabled');
+
             if (this.options.tabIndex) {
                 this.tagInput.attr('tabindex', this.options.tabIndex);
             }
+
             if (this.options.placeholderText) {
                 this.tagInput.attr('placeholder', this.options.placeholderText);
             }
