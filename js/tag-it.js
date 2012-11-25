@@ -176,13 +176,12 @@
             this.tagInput
                 .keydown(function(event) {
                     // Needed to allow the autocomplete menu to open when user hits the down arrow
-                    if (event.which !== $.ui.keyCode.DOWN)
-                        DOWN_PRESSED = false;
-
+                    DOWN_PRESSED = false;
+                    
                     // Capture DOWN key to begin search
                     if (event.which === $.ui.keyCode.DOWN && that.tagInput.val() === '') {
                         DOWN_PRESSED = true;
-                        that.tagInput.autocomplete( "search", "" );
+                        return;
                     }
 
                     // Clear the input and close the autocomplete on ESCAPE
