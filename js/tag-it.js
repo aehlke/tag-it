@@ -427,17 +427,10 @@
             }
 
             // Unless options.singleField is set, each tag has a hidden input field inline.
-            if (this.options.singleField) {
-                var tags = this.assignedTags();
-                tags.push(value);
-                this._updateSingleTagsField(tags);
-            } else {
+            if (!this.options.singleField) {
                 var escapedValue = label.html();
                 tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + this.options.fieldName + '" />');
             }
-
-            // DEPRECATED.
-            this._trigger('onTagAdded', null, tag);
 
             if (this._trigger('beforeTagAdded', null, {
                 tag: tag,
@@ -446,6 +439,15 @@
             }) === false) {
                 return;
             }
+
+            if (this.options.singleField) {
+                var tags = this.assignedTags();
+                tags.push(value);
+                this._updateSingleTagsField(tags);
+            }
+
+            // DEPRECATED.
+            this._trigger('onTagAdded', null, tag);
 
             this.tagInput.val('');
 
