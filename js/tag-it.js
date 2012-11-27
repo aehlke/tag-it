@@ -401,6 +401,16 @@
                 return false;
             }
 
+            // Allow user to cancel tag creation and singleField
+            // update if beforeTagAdded returns false
+            if (this._trigger('beforeTagAdded', null, {
+                tag: tag,
+                tagLabel: value,
+                duringInitialization: duringInitialization
+            }) === false) {
+                return;
+            }
+
             var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
 
             // Create tag.
@@ -438,14 +448,6 @@
 
             // DEPRECATED.
             this._trigger('onTagAdded', null, tag);
-
-            if (this._trigger('beforeTagAdded', null, {
-                tag: tag,
-                tagLabel: this.tagLabel(tag),
-                duringInitialization: duringInitialization
-            }) === false) {
-                return;
-            }
 
             this.tagInput.val('');
 
