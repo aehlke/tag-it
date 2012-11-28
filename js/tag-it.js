@@ -151,6 +151,10 @@
                 this.tagInput.focus(function(event, ui) {
                     that._showAutocomplete();
                 });
+
+                if (typeof this.options.autocomplete.minLength === 'undefined') {
+                    this.options.autocomplete.minLength = 0;
+                }
             }
 
             // Bind autocomplete.source callback functions to this context.
