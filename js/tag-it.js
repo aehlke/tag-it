@@ -28,17 +28,16 @@
 
     $.widget('ui.tagit', {
         options: {
-            fieldName         : 'tags',
-
-            // Used for autocomplete, unless you override `autocomplete.source`.
-            availableTags     : [],
-
             allowDuplicates   : false,
             caseSensitive     : true,
+            fieldName         : 'tags',
             placeholderText   : null,   // Sets `placeholder` attr on input field.
             readOnly          : false,  // Disables editing.
             removeConfirmation: false,  // Require confirmation to remove tags.
             tagLimit          : null,   // Max number of tags allowed (null for unlimited).
+
+            // Used for autocomplete, unless you override `autocomplete.source`.
+            availableTags     : [],
 
             // Use to override or add any options to the autocomplete widget.
             //
@@ -93,6 +92,7 @@
             afterTagRemoved     : null,
 
             onTagClicked        : null,
+            onTagLimitExceeded  : null,
 
 
             // DEPRECATED:
