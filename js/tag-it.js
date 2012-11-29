@@ -178,7 +178,7 @@
                     if (target.hasClass('tagit-label')) {
                         var tag = target.closest('.tagit-choice');
                         if (!tag.hasClass('removed')) {
-                            that._trigger('onTagClicked', e, {tag: tag, tagLabel: this.tagLabel(tag)});
+                            that._trigger('onTagClicked', e, {tag: tag, tagLabel: that.tagLabel(tag)});
                         }
                     } else {
                         // Sets the focus() to the input field, if the user
