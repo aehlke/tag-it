@@ -149,6 +149,14 @@ When enabled, tag-it just render tags. It disables the ability to edit tags.
 
 Defaults to *false*.
 
+### tagLimit (integer)
+
+Limits the total number of tags that can be entered at once. Note that if you use this option with preloaded data,
+it may truncate the number of preloaded tags. Set to `null` for unlimited tags. See the **onTagLimitExceeded** 
+callback for customizing this behavior.
+
+Defaults to *null*.
+
 ### singleField (boolean)
 
 When enabled, will use a single hidden field for the form, rather than one per tag.
@@ -185,7 +193,7 @@ Defaults to *null*
 
 Can be used to add custom behaviour before the tag is added to the DOM.
 
-The function receives an empty event, and an object containing the properties `tag`, `tagLabel`, and `duringInitialization`.
+The function receives a null event, and an object containing the properties `tag`, `tagLabel`, and `duringInitialization`.
 
 `duringInitialization` is a boolean indicating whether the tag was added during the initial construction of this widget,
 e.g. when initializing tag-it on an input with preloaded data. You can use this to tell whether the event was initiated by
@@ -211,7 +219,7 @@ Can be used to add custom behaviour before the tag is removed from the DOM.
 
 To cancel a tag from being removed, simply return `false` in your event callback to bail out from removing the tag and stop propagation of the event.
 
-The function receives an empty event, and an object with `tag` and `tagLabel` properties.
+The function receives a null event, and an object with `tag` and `tagLabel` properties.
 
     $("#mytags").tagit({
         beforeTagRemoved: function(event, ui) {
@@ -226,7 +234,7 @@ Behaves the same as **beforeTagRemoved** except that it fires after the tag has 
 
 ### onTagExists (function, Callback)
 
-Triggered when attempting to add a tag that has already been added in the widget. The callback receives an empty event,
+Triggered when attempting to add a tag that has already been added in the widget. The callback receives a null event,
 and an object containing the properties `existingTag` and `duringInitialization`, since technically you could try to preload
 duplicate tags during the widget initialization.
 
@@ -246,6 +254,10 @@ The function receives the click event and an objecting containing `tag` and `tag
         }
     });
 
+### onTagLimitExceeded (function, Callback)
+
+Called when attempting to create a tag while the tag limit has already been reached. Receives a null event,
+and an object with the property `duringInitialization`. This can only be called if **tagLimit** is set.
 
 ## Methods
 
