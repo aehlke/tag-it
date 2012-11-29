@@ -1,7 +1,8 @@
 # Tag-it: a jQuery UI plugin
 
-Tag-it was originally inspired by the "tag suggestion" form field in ZenDesk.com. Now it is a full jQuery UI widget, supporting various configurations and themes.
+Tag-it is a simple and configurable tag editing widget with autocomplete support.
 
+[Homepage](http://aehlke.github.com/tag-it/)
 
 ## Demo
 
@@ -39,26 +40,7 @@ Now, let's attach it to an existing `<ul>` box:
         <li>Tag2</li>
     </ul>
 
-This will turn the list into a tag-it list:
-
-    <ul id="mytags" class="tagit ui-widget ui-widget-content ui-corner-all">
-        <!-- Existing list items will be pre-added to the tags. -->
-        <li class="tagit-choice ui-widget-content ui-state-default ui-corner-all">
-            <span class="tagit-label">Tag1</span>
-            <a class="close"><span class="ui-icon ui-icon-close"></span></a>
-            <input type="hidden" style="display:none;" value="Tag1" name="item[tags][]">
-        </li>
-        <li class="tagit-choice ui-widget-content ui-state-default ui-corner-all">
-            <span class="tagit-label">Tag2</span>
-            <a class="close"><span class="ui-icon ui-icon-close"></span></a>
-            <input type="hidden" style="display:none;" value="Tag2" name="item[tags][]">
-        </li>
-        <li class="tagit-new">
-            <input type="text" class="ui-widget-content ui-autocomplete-input" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true">
-        </li>
-    </ul>
-
-There are several other possible configurations and ways to instantiate the widget, including one that uses a single comma-delimited `input` field rather than one per tag, so see the **Options** documentation below as well as the [examples page](http://aehlke.github.com/tag-it/examples.html) which demonstrates most of them.
+This will turn the list into a tag-it widget. There are several other possible configurations and ways to instantiate the widget, including one that uses a single comma-delimited `input` field rather than one per tag, so see the **Options** documentation below as well as the [examples page](http://aehlke.github.com/tag-it/examples.html) (and its source) which demonstrates most of them.
 
 
 ## Theming
