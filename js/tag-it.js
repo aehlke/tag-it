@@ -393,7 +393,7 @@
                 return false;
             }
 
-            if (!this.allowDuplicates && !this._isNew(value)) {
+            if (!this.options.allowDuplicates && !this._isNew(value)) {
                 var existingTag = this._findTagByLabel(value);
                 if (this._trigger('onTagExists', null, {
                     existingTag: existingTag,
