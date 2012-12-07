@@ -6,7 +6,7 @@ Tag-it is a simple and configurable tag editing widget with autocomplete support
 
 ## Demo
 
-![Screenshot](http://aehlke.github.com/tag-it/screenshot.png)
+![Screenshot](http://aehlke.github.com/tag-it/.static/screenshot.png)
 
 Check the [examples.html](http://aehlke.github.com/tag-it/examples.html) for several demos.
 
