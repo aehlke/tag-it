@@ -80,8 +80,8 @@ div#header {
 }
 ul#nav {
     position:absolute;
-    top:.6em;
-    right:0;
+    top:.7em;
+    right:-7px;
     list-style:none;
     margin:0;
     padding:0;
