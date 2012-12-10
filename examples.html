@@ -14,12 +14,16 @@
     <!-- /ignore -->
 
 
-    <!-- These 2 CSS files are required: any 1 jQuery UI theme CSS, plus the Tag-it base CSS. -->
-    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
-    <link rel="stylesheet" type="text/css" href="css/jquery.tagit.css">
+    <!-- INSTRUCTIONS -->
 
-    <!-- This is an optional CSS theme that only applies to this widget. Use it in addition to the jQuery UI theme. -->
+    <!-- 2 CSS files are required: -->
+    <!--   - Tag-it's base CSS (jquery.tagit.css). -->
+    <!--   - Any theme CSS (either a jQuery UI theme such as "flick", or one that's bundled with Tag-it, e.g. tagit.ui-zendesk.css as in this example.) -->
+    <!-- The base CSS and tagit.ui-zendesk.css theme are scoped to the Tag-it widget, so they shouldn't affect anything else in your site, unlike with jQuery UI themes. -->
+    <link href="css/jquery.tagit.css" rel="stylesheet" type="text/css">
     <link href="css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+    <!-- If you want the jQuery UI "flick" theme, you can use this instead, but it's not scoped to just Tag-it like tagit.ui-zendesk is: -->
+    <!--   <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css"> -->
 
     <!-- jQuery and jQuery UI are required dependencies. -->
     <!-- Although we use jQuery 1.4 here, it's tested with the latest too (1.8.3 as of writing this.) -->
@@ -54,7 +58,6 @@
                 availableTags: sampleTags
             });
 
-
             //-------------------------------
             // Preloading data in markup
             //-------------------------------
@@ -73,6 +76,7 @@
             var addEvent = function(text) {
                 $('#events_container').append(text + '<br>');
             };
+
             eventTags.tagit({
                 availableTags: sampleTags,
                 beforeTagAdded: function(evt, ui) {
@@ -99,8 +103,7 @@
                 }
             });
 
-
-             //-------------------------------
+            //-------------------------------
             // Read-only
             //-------------------------------
             $('#readOnlyTags').tagit({
@@ -267,3 +270,4 @@
 </div>
 </body>
 </html>
+
