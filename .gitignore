@@ -1,2 +1,5 @@
+*.swm
+*.swn
+*.swo
 *.swp
 .DS_Store
