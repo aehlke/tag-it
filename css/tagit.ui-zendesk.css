@@ -17,8 +17,10 @@ ul.tagit li.tagit-choice {
     background: none;
     background-color: #DEE7F8;
 
-    color: #555;
     font-weight: normal;
+}
+ul.tagit li.tagit-choice .tagit-label:not(a) {
+    color: #555;
 }
 ul.tagit li.tagit-choice a.tagit-close {
     text-decoration: none;
@@ -48,5 +50,7 @@ ul.tagit input[type="text"] {
     color: #333333;
     background: none;
 }
- 
+.ui-widget {
+    font-size: 1.1em;
+}
 
