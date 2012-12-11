@@ -36,6 +36,7 @@ ul.tagit li.tagit-choice .tagit-close {
     right: .1em;
     top: 50%;
     margin-top: -8px;
+    line-height: 17px;
 }
 
 /* used for some custom themes that don't need image icons */
