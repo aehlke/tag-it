@@ -6,5 +6,5 @@ if [ -a .commit ]; then
     git commit --amend -C HEAD --no-verify -q
 fi
 
-./update_gh_pages.sh
+make gh-pages
 
