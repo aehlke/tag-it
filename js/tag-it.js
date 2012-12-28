@@ -406,7 +406,7 @@
                 return false;
             }
 
-            if (this.options.tagLimit && this.options.tagLimit >= this._tags().length) {
+            if (this.options.tagLimit && this._tags().length >= this.options.tagLimit) {
                 this._trigger('onTagLimitExceeded', null, {duringInitialization: duringInitialization});
                 return false;
             }
