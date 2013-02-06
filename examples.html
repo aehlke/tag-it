@@ -52,7 +52,7 @@
                 singleFieldNode: $('#mySingleField')
             });
 
-            // singleFieldTags2 is an INPUT element, rather than a UL as in the other 
+            // singleFieldTags2 is an INPUT element, rather than a UL as in the other
             // examples, so it automatically defaults to singleField.
             $('#singleFieldTags2').tagit({
                 availableTags: sampleTags
@@ -132,7 +132,69 @@
                 availableTags: sampleTags,
                 removeConfirmation: true
             });
-            
+
+            //-------------------------------
+            // attributed
+            //-------------------------------
+            var activeTag = null,
+                attributedTags = ["content", "style", "illustrations", "typesetting", "fonts", "layout", "pace", "hand feel", "cover art"],
+                self = $("textarea[name=attributed]").tagit({
+                removeConfirmation: true,
+                allowSpaces: true,
+                caseSensitive: false,
+                allowDuplicates: false,
+                animate: false,
+                singleFieldDelimiter: ", ",
+                beforeTagAdded: function(e, o) {
+                    if (! o.duringInitialization) {
+                        if (activeTag != null) {
+                            var t = activeTag;
+                            activeTag = null;
+                            self.tagit("createTag", t);
+                            return false;
+                        } else {
+                            var ltl = self.tagit("assignedTags").pop();
+                            if (ltl != null && ltl.indexOf(":") < 0) {
+                                var s = o.tagLabel;
+                                if (s.indexOf(":") == 0) {
+                                    s = s.substr(1);
+                                }
+                                if (! isNaN(parseFloat(s))) {
+                                    self.tagit("removeTagByLabel", ltl);
+                                    self.tagit("createTag", ltl + ":" + s);
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                },
+                onTagClicked: function(e, o) {
+                    // delete the tag and populate the input with it (for editing)
+                    self.tagit("removeTag", o.tag);
+                    self.tagit("setInput", o.tagLabel);
+                },
+                autocomplete: {
+                    minLength: 1,
+                    delay: 50,
+                    autoFocus: true,
+                    source: function(req, resp) {
+                        var current = $.map(self.tagit("assignedTags"), function(it) {
+                                var i = it.indexOf(":");
+                                return i < 0 ? it : it.substr(0, i);
+                            });
+                        resp($.grep(attributedTags, function(t) {
+                            return t.indexOf(req.term) >= 0 && $.inArray(t, current) < 0;
+                        }));
+
+                    },
+                    focus: function(e, ui) {
+                        activeTag = ui.item.value;
+                    },
+                    close: function(e) {
+                        activeTag = null;
+                    }
+                }
+            });
         });
     </script>
 
@@ -254,6 +316,18 @@
                 <li>backspace me</li>
                 <li>me too</li>
             </ul>
+        </form>
+
+        <hr>
+        <h3>Number-Attributed Tags</h3>
+        <form>
+            <p>This is an advanced example which allows not only tag selection, but also supplying
+                a number attribute to tags for use in a mythical book rating application.  Try
+                typing a number after entering a tag.  It also supports click-to-edit should you
+                make a mistake.
+            </p>
+            <textarea name="attributed" style="width:100%;height:50px">content:4, style:7</textarea>
+            <input type="submit" value="Submit" />
         </form>
 
     </div>
