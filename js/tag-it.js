@@ -113,9 +113,9 @@
 
             // There are 2 kinds of DOM nodes this widget can be instantiated on:
             //     1. UL, OL, or some element containing either of these.
-            //     2. INPUT, in which case 'singleField' is overridden to true,
-            //        a UL is created and the INPUT is hidden.
-            if (this.element.is('input')) {
+            //     2. INPUT or TEXTAREA, in which case 'singleField' is overridden
+            //        to true, a UL is created and the INPUT/TEXTAREA is hidden.
+            if (this.element.is('input') || this.element.is('textarea')) {
                 this.tagList = $('<ul></ul>').insertAfter(this.element);
                 this.options.singleField = true;
                 this.options.singleFieldNode = this.element;
@@ -310,6 +310,11 @@
 
         _tags: function() {
             return this.tagList.find('.tagit-choice:not(.removed)');
+        },
+
+        setInput: function(value) {
+            var self = this;
+            self.tagInput.val(value).focus();
         },
 
         assignedTags: function() {
