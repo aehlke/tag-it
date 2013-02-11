@@ -271,7 +271,8 @@
                 }).blur(function(e){
                     // Create a tag when the element loses focus.
                     // If autocomplete is enabled and suggestion was clicked, don't add it.
-                    if (!that.tagInput.data('autocomplete-open')) {
+                    // Also, if an element is already in the process of being created, ignore it.
+                    if ((!that.tagInput.data('autocomplete-open')) && (!that.tagInput.data('creatingTag'))) {
                         that.createTag(that._cleanedInput());
                     }
                 });
@@ -294,7 +295,7 @@
                 this.tagInput.autocomplete(autocompleteOptions).bind('autocompleteopen', function(event, ui) {
                     that.tagInput.data('autocomplete-open', true);
                 }).bind('autocompleteclose', function(event, ui) {
-                    that.tagInput.data('autocomplete-open', false)
+                    that.tagInput.data('autocomplete-open', false);
                 });
             }
         },
@@ -385,6 +386,13 @@
         },
 
         createTag: function(value, additionalClass, duringInitialization) {
+            this.tagInput.data('creatingTag', true);
+            var status = this._createTag(value, additionalClass, duringInitialization);
+            this.tagInput.data('creatingTag', false);
+            return status;
+        },
+
+        _createTag: function(value, additionalClass, duringInitialization) {
             var that = this;
 
             value = $.trim(value);
