@@ -47,6 +47,20 @@
 
             // Shows autocomplete before the user even types anything.
             showAutocompleteOnFocus: false,
+            
+            // Search for patterns within all the autocomplete tags as opposed
+            // to just the start of the tag.  By default (value set to false)
+            // it will only search the start
+            
+            // By default (value set to false) perform the autocomplete by
+            // matching just the start of each available tag or by matching
+            // within any part of the tag
+            autocompleteMatchAnywhere: false,
+            
+            // When used with availableTags it will only only those tags in the
+            // array to be added via the input.  If availableTags is empty then
+            // this setting is ignored
+            allowOnlyAutocompleteTags: false,
 
             // When enabled, quotes are unneccesary for inputting multi-word tags.
             allowSpaces: false,
@@ -140,9 +154,11 @@
                 this.options.autocomplete.source = function(search, showChoices) {
                     var filter = search.term.toLowerCase();
                     var choices = $.grep(this.options.availableTags, function(element) {
-                        // Only match autocomplete options that begin with the search term.
-                        // (Case insensitive.)
-                        return (element.toLowerCase().indexOf(filter) === 0);
+                        if (that.options.autocompleteMatchAnywhere) {
+                            return (element.toLowerCase().search(filter) !== -1);
+                        } else {
+                            return (element.toLowerCase().indexOf(filter) === 0);
+                        }
                     });
                     showChoices(this._subtractArray(choices, this.assignedTags()));
                 };
@@ -404,6 +420,19 @@
                     }
                 }
                 return false;
+            }
+
+            if (this.options.allowOnlyAutocompleteTags && this.options.availableTags.length) {
+                var found = false;
+                for (var i in this.options.availableTags) {
+                    if (this.options.availableTags[i].toLowerCase() == value.toLowerCase()) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    return false;
+                }
             }
 
             if (this.options.tagLimit && this._tags().length >= this.options.tagLimit) {
