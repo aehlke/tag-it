@@ -28,14 +28,16 @@
 
     $.widget('ui.tagit', {
         options: {
-            allowDuplicates   : false,
-            caseSensitive     : true,
-            fieldName         : 'tags',
-            placeholderText   : null,   // Sets `placeholder` attr on input field.
-            readOnly          : false,  // Disables editing.
-            removeConfirmation: false,  // Require confirmation to remove tags.
-            tagLimit          : null,   // Max number of tags allowed (null for unlimited).
+            allowDuplicates		: false,
+            caseSensitive		: true,
+            fieldName			: 'tags',
+            placeholderText		: null,		// Sets `placeholder` attr on input field.
+            readOnly			: false,	// Disables editing.
+            removeConfirmation	: false,	// Require confirmation to remove tags.
+            tagLimit			: null,		// Max number of tags allowed (null for unlimited).
 
+			onlyAvailable		: false,	// This is a new option to allow only tags in the availableTags list
+			transform			: null,		// This is to use a function to modify input
             // Used for autocomplete, unless you override `autocomplete.source`.
             availableTags     : [],
 
@@ -301,7 +303,30 @@
 
         _cleanedInput: function() {
             // Returns the contents of the tag input, cleaned and ready to be passed to createTag
-            return $.trim(this.tagInput.val().replace(/^"(.*)"$/, '$1'));
+            var out = $.trim(this.tagInput.val().replace(/^"(.*)"$/, '$1'));
+			if(typeof(this.options.transform) != 'null') {
+				//console.log('transform(s) set to '+this.options.transform);
+				if(typeof(this.options.transform) == 'array') {
+					for(var transforms=0; transforms<this.options.transform.length; transforms++) {
+						var tmp='';
+						try {
+							tmp = eval('out.'+this.options.transform+'();');
+						} catch( err ) {
+							tmp = 'error';
+						}
+						out = (tmp == 'error') ? out : tmp;
+					}
+				} else {
+					var tmp='';
+					try {
+						tmp = eval('out.'+this.options.transform+'();');
+					} catch( err ) {
+						tmp = 'error';
+					}
+					out = (tmp == 'error') ? out : tmp;
+				}
+			}
+			return out;
         },
 
         _lastTag: function() {
@@ -389,9 +414,18 @@
 
             value = $.trim(value);
 
-            if (value === '') {
-                return false;
+            if ( value === '' ) {
+                return false; 
             }
+			
+			if (this.options.onlyAvailable == true) {
+				console.log('only available options to be input');
+				var inList = $.inArray(value,this.options.availableTags);
+				if(inList < 0) {
+					//console.log('value '+value+', not in array! '+this.options.availableTags);
+					return false;
+				}
+			}
 
             if (!this.options.allowDuplicates && !this._isNew(value)) {
                 var existingTag = this._findTagByLabel(value);
@@ -469,11 +503,28 @@
                 tagLabel: this.tagLabel(tag),
                 duringInitialization: duringInitialization
             });
+			
+			// enable writeback to singleField, so that this is form compliant
+			this.updateForm();
+			// remove highlight on already inserted after insert
+			this.tagInput.parent().parent().find('li.tagit-choice').attr('style','');
+//			background-image: none; background-color: rgb(255, 255, 153);
 
             if (this.options.showAutocompleteOnFocus && !duringInitialization) {
                 setTimeout(function () { that._showAutocomplete(); }, 0);
             }
         },
+		
+		updateForm: function() {
+			if(this.options.singleField) {
+				var val = [];
+				var listElems = this.tagInput.parent().parent().find('li.tagit-choice > span');
+				for(i=0;i<listElems.length;i++) {
+					val.push( jQuery(listElems[i]).text() );
+				}
+				this.options.singleFieldNode.attr('value',val.join(this.options.singleFieldDelimiter));
+			}
+		},
 
         removeTag: function(tag, animate) {
             animate = typeof animate === 'undefined' ? this.options.animate : animate;
@@ -510,6 +561,10 @@
             }
 
             this._trigger('afterTagRemoved', null, {tag: tag, tagLabel: this.tagLabel(tag)});
+			// enable writeback to singleField, so that this is form compliant
+			this.updateForm();
+			// remove highlight on already inserted after insert
+			this.tagInput.parent().parent().find('li.tagit-choice').attr('style','');
         },
 
         removeTagByLabel: function(tagLabel, animate) {
