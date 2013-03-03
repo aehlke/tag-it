@@ -418,6 +418,7 @@
                 return false; 
             }
 			
+			// allow onlyAvailable option so that tag input can be restricted
 			if (this.options.onlyAvailable == true) {
 				console.log('only available options to be input');
 				var inList = $.inArray(value,this.options.availableTags);
