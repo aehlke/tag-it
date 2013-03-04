@@ -500,16 +500,18 @@
                 tag.addClass('removed'); // Excludes this tag from _tags.
                 var hide_args = this._effectExists('blind') ? ['blind', {direction: 'horizontal'}, 'fast'] : ['fast'];
 
+                var thisTag = this;
                 hide_args.push(function() {
                     tag.remove();
+                    thisTag._trigger('afterTagRemoved', null, {tag: tag, tagLabel: thisTag.tagLabel(tag)});
                 });
 
                 tag.fadeOut('fast').hide.apply(tag, hide_args).dequeue();
             } else {
                 tag.remove();
+                this._trigger('afterTagRemoved', null, {tag: tag, tagLabel: this.tagLabel(tag)});
             }
 
-            this._trigger('afterTagRemoved', null, {tag: tag, tagLabel: this.tagLabel(tag)});
         },
 
         removeTagByLabel: function(tagLabel, animate) {
