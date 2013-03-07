@@ -243,7 +243,7 @@ and an object with the property `duringInitialization`. This can only be called 
 
 ## Prototype
 
-Here is an example with all the default options and events:
+Here is a prototype with all the default options and events:
 
     $("#myTags").tagit({
    
