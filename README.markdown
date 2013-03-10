@@ -8,8 +8,7 @@ Tag-it is a simple and configurable tag editing widget with autocomplete support
 
 ![Screenshot](http://aehlke.github.com/tag-it/_static/screenshot.png)
 
-Check the [examples.html](http://aehlke.github.com/tag-it/examples.html) for several demos.
-
+Check the [examples.html](http://aehlke.github.com/tag-it/examples.html) for several demos and the [prototype.js](http://aehlke.github.com/tag-it/prototype.js) file for a JavaScipt prototype with all options and events.
 
 ## Usage
 
@@ -240,52 +239,6 @@ The function receives the click event and an objecting containing `tag` and `tag
 
 Called when attempting to create a tag while the tag limit has already been reached. Receives a null event,
 and an object with the property `duringInitialization`. This can only be called if **tagLimit** is set.
-
-## Prototype
-
-Here is a prototype with all the default options and events:
-
-    $("#myTags").tagit({
-   
-        // Options
-        fieldName: "skills",
-        availableTags: ["c++", "java", "php", "javascript", "ruby", "python", "c"],
-        autocomplete: {delay: 0, minLength: 2},
-        showAutocompleteOnFocus: false,
-        removeConfirmation: false,
-        caseSensitive: true,
-        allowDuplicates: false,
-        allowSpaces: false,
-        readOnly: false,
-        tagLimit: null,
-        singleField: false,
-        singleFieldDelimiter: ',',
-        singleFieldNode: null,
-        tabIndex: null,
-        placeholderText: null,
-
-        // Events
-        beforeTagAdded: function(event, ui) {
-            console.log(ui.tag);
-        },
-        afterTagAdded: function(event, ui) {
-            console.log(ui.tag);
-        },
-        beforeTagRemoved: function(event, ui) {
-            console.log(ui.tag);
-        },
-        onTagExists: function(event, ui) {
-            console.log(ui.tag);
-        },
-        onTagClicked: function(event, ui) {
-            console.log(ui.tag);
-        },
-        onTagLimitExceeded: function(event, ui) {
-            console.log(ui.tag);
-        }
-
-    });
-
 
 ## Methods
 
