@@ -262,11 +262,11 @@
                             event.preventDefault();
                         }
 
-                        that.createTag(that._cleanedInput());
+                        // Autocomplete will create its own tag from a selection and close automatically.
+                        if (!that.tagInput.data('autocomplete-open')) {
+                            that.createTag(that._cleanedInput());
+                        }
 
-                        // The autocomplete doesn't close automatically when TAB is pressed.
-                        // So let's ensure that it closes.
-                        that.tagInput.autocomplete('close');
                     }
                 }).blur(function(e){
                     // Create a tag when the element loses focus.
