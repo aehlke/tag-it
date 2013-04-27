@@ -144,7 +144,10 @@
                         // (Case insensitive.)
                         return (element.toLowerCase().indexOf(filter) === 0);
                     });
-                    showChoices(this._subtractArray(choices, this.assignedTags()));
+                    if (!this.options.allowDuplicates) {
+                        choices = this._subtractArray(choices, this.assignedTags());
+                    }
+                    showChoices(choices);
                 };
             }
 
