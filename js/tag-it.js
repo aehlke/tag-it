@@ -266,10 +266,6 @@
                         }
 
                         that.createTag(that._cleanedInput());
-
-                        // The autocomplete doesn't close automatically when TAB is pressed.
-                        // So let's ensure that it closes.
-                        that.tagInput.autocomplete('close');
                     }
                 }).blur(function(e){
                     // Create a tag when the element loses focus.

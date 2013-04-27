@@ -8,8 +8,7 @@ Tag-it is a simple and configurable tag editing widget with autocomplete support
 
 ![Screenshot](http://aehlke.github.com/tag-it/_static/screenshot.png)
 
-Check the [examples.html](http://aehlke.github.com/tag-it/examples.html) for several demos.
-
+Check the [examples.html](http://aehlke.github.com/tag-it/examples.html) for several demos and the [prototype.js](http://aehlke.github.com/tag-it/prototype.js) file for a JavaScipt prototype with all options and events.
 
 ## Usage
 
@@ -273,7 +272,6 @@ Finds the tag with the label `tagLabel` and removes it. If no such tag is found,
 Clears the widget of all tags — removes each tag it contains, so the **beforeTagRemoved** / **afterTagRemoved** event callbacks (if set) will be called for each.
 
     $("#myTags").tagit("removeAll");
-
 
 ## Properties
 
