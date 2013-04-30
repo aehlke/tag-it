@@ -150,6 +150,33 @@
                 allowOnlyAutocompleteTags: true,
                 caseSensitive: false
             });
+
+            //-------------------------------
+            // Only allow tags in autocomplete list using autocomplete.source
+            //-------------------------------
+            $('#allowOnlyAutocompleteSource').tagit({
+                autocomplete: {
+					source: sampleTags
+				},
+                autocompleteMatchAnywhere: true,
+                allowOnlyAutocompleteTags: true,
+                caseSensitive: false
+            });
+
+            //-------------------------------
+            // Only allow tags in autocomplete list using autocomplete.source callback
+            //-------------------------------
+            $('#allowOnlyAutocompleteSourceCallback').tagit({
+                autocomplete: {
+					source: function(request, response) {
+						response($.grep(sampleTags, function(element) {
+							return (element.toUpperCase().search(request.term.toUpperCase()) !== -1);
+						}));
+					}
+				},
+                allowOnlyAutocompleteTags: true,
+                caseSensitive: false
+            });
             
         });
     </script>
@@ -281,6 +308,18 @@
         <h3>Only allow tags that are in the autocomplete list</h3>
         <form>
             <ul id="allowOnlyAutocomplete"></ul>
+        </form>
+        
+        <hr>
+        <h3>Only allow tags that are in the autocomplete list - using autocomplete.source</h3>
+        <form>
+            <ul id="allowOnlyAutocompleteSource"></ul>
+        </form>
+        
+        <hr>
+        <h3>Only allow tags that are in the autocomplete list - using autocomplete.source as a callback</h3>
+        <form>
+            <ul id="allowOnlyAutocompleteSourceCallback"></ul>
         </form>
 
     </div>

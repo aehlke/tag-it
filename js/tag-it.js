@@ -422,15 +422,14 @@
                 return false;
             }
 
-            if (this.options.allowOnlyAutocompleteTags && this.options.availableTags.length) {
-                var found = false;
-                for (var i in this.options.availableTags) {
-                    if (this.options.availableTags[i].toLowerCase() == value.toLowerCase()) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
+            if (this.options.allowOnlyAutocompleteTags) {
+                this.tagInput.autocomplete("search", value);
+                $('.ui-autocomplete').css('display', 'none');
+                var availableTags = $("li[role='menuitem'] a", this.tagInput.autocomplete("widget"))
+                    .map(function(i, el) {
+                        return $(el).text().toLowerCase();
+                    });
+                if ($.inArray(value.toLowerCase(), availableTags) == -1) {
                     return false;
                 }
             }
