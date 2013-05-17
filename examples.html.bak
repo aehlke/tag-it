@@ -276,6 +276,7 @@
         </form>
 
         <hr>
+<<<<<<< HEAD
         
         <h3>maxchars, maxcount</h3>
         <form>
@@ -285,6 +286,9 @@
 
         <hr>
         
+
+=======
+>>>>>>> c9b9e55ffe84fef6bea4e3937dcc5f10e6a66ac7
         <h3>Events</h3>
         <form>
             <p>Example of tag events. Try adding or removing a tag, adding a duplicate tag, or clicking on a tag's label.</p>

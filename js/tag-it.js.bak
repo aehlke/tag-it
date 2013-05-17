@@ -349,14 +349,14 @@
 
                     }
 
-                }).blur(function(event){
+                }).blur(function(e){
                     // Create a tag when the element loses focus.
                     // If autocomplete is enabled and suggestion was clicked, don't add it.
                     if (!that.tagInput.data('autocomplete-open')) {
                         that.createTag(that._cleanedInput());
                     }              
                    
-                }).keyup(function(event){
+                }).keyup(function(e){
                         if (event.which == $.ui.keyCode.UP ||event.which == $.ui.keyCode.DOWN){
                             //user select some tag from drop down list of autocomplete control by up or down key
                             //should update input tag width in order to selected text fits to the input element width
