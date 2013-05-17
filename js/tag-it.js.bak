@@ -103,12 +103,9 @@
             // Whether to animate tag removals or not.
             animate: true,
  
-            //acceptable characters that can be typed into a tag
-            acceptableCharsRegex :  "[0-9a-zA-Z]",
-            
             //max number of characters in single tag
             maxChars :  null,
-                        
+ 
             // Max number of tags allowed (null for unlimited).
             maxCount : null, 
            
@@ -126,7 +123,6 @@
             onMaxChars          : null,
             onMaxCount          : null,
             onNotAllowed        : null,
-            onUnacceptableChar  : null,
             
             // DEPRECATED:
             //
@@ -335,36 +331,32 @@
                     } else{ //typing a tag
                         var func;
 
-                        //check restrictions on characters
+                        //check restrictions on maxChars
                         if (event.which != $.ui.keyCode.BACKSPACE && event.which != $.ui.keyCode.TAB){
 
-                            if(that.options.acceptableCharsRegex) {
-                               var _tester = new RegExp(that.options.acceptableCharsRegex);
-                               if (!_tester.test(event.char)){
-                                   event.preventDefault();
-                                   that._trigger("onUnacceptableChar", null, that);
-                               }
-                            }
                             //check if text in the input tag has length less than options.maxChars
+
                             if(that.options.maxChars && $.trim(that.tagInput.val()).length >= that.options.maxChars){
                                 that._trigger("onMaxChars", null, that);
                                 event.preventDefault();
-                            } else {
+                            }
+                            else
+                                {
                                 //length of the text in input tag changed, update input tag width
                                 that._updateInputTagWidth();
-                            }
+                                }
                         }
 
                     }
 
-                }).blur(function(event){
+                }).blur(function(e){
                     // Create a tag when the element loses focus.
                     // If autocomplete is enabled and suggestion was clicked, don't add it.
                     if (!that.tagInput.data('autocomplete-open')) {
                         that.createTag(that._cleanedInput());
                     }              
                    
-                }).keyup(function(event){
+                }).keyup(function(e){
                         if (event.which == $.ui.keyCode.UP ||event.which == $.ui.keyCode.DOWN){
                             //user select some tag from drop down list of autocomplete control by up or down key
                             //should update input tag width in order to selected text fits to the input element width
