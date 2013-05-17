@@ -340,7 +340,7 @@
 
                             if(that.options.acceptableCharsRegex) {
                                var _tester = new RegExp(that.options.acceptableCharsRegex);
-                               if (!_tester.test(event.char)){
+                               if (!_tester.test(String.fromCharCode(event.charCode))){
                                    event.preventDefault();
                                    that._trigger("onUnacceptableChar", null, that);
                                }
