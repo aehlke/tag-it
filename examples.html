@@ -142,6 +142,51 @@
                 availableTags: sampleTags,
                 removeConfirmation: true
             });
+
+            //-------------------------------
+            // Allow autocomplete to match anywhere
+            //-------------------------------
+            $('#allowMatchAnywhere').tagit({
+                availableTags: sampleTags,
+                autocompleteMatchAnywhere: true
+            });
+
+            //-------------------------------
+            // Only allow tags in autocomplete list
+            //-------------------------------
+            $('#allowOnlyAutocomplete').tagit({
+                availableTags: sampleTags,
+                autocompleteMatchAnywhere: true,
+                allowOnlyAutocompleteTags: true,
+                caseSensitive: false
+            });
+
+            //-------------------------------
+            // Only allow tags in autocomplete list using autocomplete.source
+            //-------------------------------
+            $('#allowOnlyAutocompleteSource').tagit({
+                autocomplete: {
+					source: sampleTags
+				},
+                autocompleteMatchAnywhere: true,
+                allowOnlyAutocompleteTags: true,
+                caseSensitive: false
+            });
+
+            //-------------------------------
+            // Only allow tags in autocomplete list using autocomplete.source callback
+            //-------------------------------
+            $('#allowOnlyAutocompleteSourceCallback').tagit({
+                autocomplete: {
+					source: function(request, response) {
+						response($.grep(sampleTags, function(element) {
+							return (element.toUpperCase().search(request.term.toUpperCase()) !== -1);
+						}));
+					}
+				},
+                allowOnlyAutocompleteTags: true,
+                caseSensitive: false
+            });
             
         });
     </script>
@@ -221,7 +266,6 @@
         </form>
 
         <hr>
-
         <h3>Read-only</h3>
         <form>
             <p>Example of read only tags.</p>
@@ -232,7 +276,6 @@
         </form>
 
         <hr>
-        
         <h3>maxchars, maxcount</h3>
         <form>
             <p>Example of maxchars(5) and maxcount(6).</p>
@@ -241,7 +284,6 @@
 
         <hr>
         
-
         <h3>Events</h3>
         <form>
             <p>Example of tag events. Try adding or removing a tag, adding a duplicate tag, or clicking on a tag's label.</p>
@@ -253,7 +295,6 @@
         <div id="events_container"></div>
 
         <hr>
-
         <h3>Methods</h3>
         <form>
             <p>Demos the available widget methods. Click the links below the widget to try them.</p>
@@ -273,6 +314,30 @@
                 <li>backspace me</li>
                 <li>me too</li>
             </ul>
+        </form>
+        
+        <hr>
+        <h3>Allow matching of autocomplete anywhere within the available tags</h3>
+        <form>
+            <ul id="allowMatchAnywhere"></ul>
+        </form>
+        
+        <hr>
+        <h3>Only allow tags that are in the autocomplete list</h3>
+        <form>
+            <ul id="allowOnlyAutocomplete"></ul>
+        </form>
+        
+        <hr>
+        <h3>Only allow tags that are in the autocomplete list - using autocomplete.source</h3>
+        <form>
+            <ul id="allowOnlyAutocompleteSource"></ul>
+        </form>
+        
+        <hr>
+        <h3>Only allow tags that are in the autocomplete list - using autocomplete.source as a callback</h3>
+        <form>
+            <ul id="allowOnlyAutocompleteSourceCallback"></ul>
         </form>
 
     </div>

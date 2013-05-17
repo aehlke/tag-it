@@ -46,6 +46,20 @@
 
             // Shows autocomplete before the user even types anything.
             showAutocompleteOnFocus: false,
+            
+            // Search for patterns within all the autocomplete tags as opposed
+            // to just the start of the tag.  By default (value set to false)
+            // it will only search the start
+            
+            // By default (value set to false) perform the autocomplete by
+            // matching just the start of each available tag or by matching
+            // within any part of the tag
+            autocompleteMatchAnywhere: false,
+            
+            // When used with availableTags it will only only those tags in the
+            // array to be added via the input.  If availableTags is empty then
+            // this setting is ignored
+            allowOnlyAutocompleteTags: false,
 
             // When enabled, quotes are unneccesary for inputting multi-word tags.
             allowSpaces: false,
@@ -90,7 +104,7 @@
             animate: true,
  
             //acceptable characters that can be typed into a tag
-            acceptableCharsRegex :  /^*/,
+            acceptableCharsRegex :  "[0-9a-zA-Z]",
             
             //max number of characters in single tag
             maxChars :  null,
@@ -112,6 +126,7 @@
             onMaxChars          : null,
             onMaxCount          : null,
             onNotAllowed        : null,
+            onUnacceptableChar  : null,
             
             // DEPRECATED:
             //
