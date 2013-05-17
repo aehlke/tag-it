@@ -188,6 +188,13 @@
                 caseSensitive: false
             });
             
+            //-------------------------------
+            // Allow only certain characters.
+            //-------------------------------
+            $('#allowRegExChars').tagit({
+                availableTags: sampleTags,
+                acceptableCharsRegex: "[0-9A-F]"
+            });
         });
     </script>
 
@@ -340,6 +347,12 @@
             <ul id="allowOnlyAutocompleteSourceCallback"></ul>
         </form>
 
+         <hr>
+        <h3>Only allow characters based on a regular expression (example allows [0-9A-F])</h3>
+        <form>
+            <ul id="allowRegExChars"></ul>
+        </form>
+        
     </div>
 
 
