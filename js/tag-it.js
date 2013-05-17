@@ -90,29 +90,24 @@
             animate: true,
  
             //max number of characters in single tag
-            maxChars :  null,// Max characters per tag allowed (null for unlimited, hint: don't leave null).
+            maxChars :  null,
  
-            //max number of tags
-            maxCount : null, // Max number of tags allowed (null for unlimited).
-            
-            
-            
+            // Max number of tags allowed (null for unlimited).
+            maxCount : null, 
+           
             // Optionally set a tabindex attribute on the input that gets
             // created for tag-it.
             tabIndex: null,
 
+
             // Event callbacks.
             beforeTagAdded      : null,
             afterTagAdded       : null,
-
             beforeTagRemoved    : null,
             afterTagRemoved     : null,
-
             onTagClicked        : null,
-            
             onMaxChars          : null,
             onMaxCount          : null,
-            
             onNotAllowed        : null,
             
             // DEPRECATED:
