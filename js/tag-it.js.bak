@@ -90,7 +90,7 @@
             animate: true,
  
             //acceptable characters that can be typed into a tag
-            acceptableCharsRegex :  /^*/,
+            acceptableCharsRegex :  "",
             
             //max number of characters in single tag
             maxChars :  null,
@@ -111,6 +111,7 @@
             onTagClicked        : null,
             onMaxChars          : null,
             onMaxCount          : null,
+            onUnacceptableChars : null,
             onNotAllowed        : null,
             
             // DEPRECATED:
@@ -127,7 +128,7 @@
            
            
             
-        },
+            },
 
         _create: function() {
             // for handling static scoping inside callbacks
@@ -223,12 +224,12 @@
 
             // Position, must be inherited from original html element (position, top, left, width)
             this.tagList.css({
-               position : this.element.css("position"),
-               top : this.element.css("top"),
-               left : this.element.css("left"),
-               width : this.element.css("width"),
-               margin : this.element.css("margin"),
-               display : this.element.css("margin")
+                position : this.element.css("position"),
+                top : this.element.css("top"),
+                left : this.element.css("left"),
+                width : this.element.css("width"),
+                margin : this.element.css("margin"),
+                display : this.element.css("margin")
             });
 
             // Add existing tags from the list, if any.
@@ -284,9 +285,9 @@
                         that._lastTag().removeClass('remove ui-state-highlight');
                     }
                     
-                    // Comma/Space/Enter are all valid delimiters for new tags,
-                    // except when there is an open quote or if setting allowSpaces = true.
-                    // Tab will also create a tag, unless the tag input is empty, in which case it isn't caught.
+                        // Comma/Space/Enter are all valid delimiters for new tags,
+                        // except when there is an open quote or if setting allowSpaces = true.
+                        // Tab will also create a tag, unless the tag input is empty, in which case it isn't caught.
                     else if (
                         event.which == $.ui.keyCode.COMMA ||
                         event.which == $.ui.keyCode.ENTER ||
@@ -312,7 +313,7 @@
                         if (!(event.which === $.ui.keyCode.ENTER && that.tagInput.val() === '')) {
                             event.preventDefault();
                         }
-						that.createTag(that._cleanedInput());
+                        that.createTag(that._cleanedInput());
                         // The autocomplete doesn't close automatically when TAB is pressed.
                         // So let's ensure that it closes.
                         
@@ -320,15 +321,15 @@
                     } else{ //typing a tag
                         var func;
 
-                        //check restrictions on characters
+                        //check restrictions on maxChars
                         if (event.which != $.ui.keyCode.BACKSPACE && event.which != $.ui.keyCode.TAB){
 
                             if(that.options.acceptableCharsRegex) {
-                               var _tester = new RegExp(that.options.acceptableCharsRegex);
-                               if (!_tester.test(event.char)){
-                                   event.preventDefault();
-                                   that._trigger("onUnacceptableChar", null, that);
-                               }
+                                var _tester = new RegExp(that.options.acceptableCharsRegex);
+                                if (!_tester.test(event.char)){
+                                    event.preventDefault();
+                                    that._trigger("onUnacceptableChar", null, that);
+                                }
                             }
                             //check if text in the input tag has length less than options.maxChars
                             if(that.options.maxChars && $.trim(that.tagInput.val()).length >= that.options.maxChars){
@@ -350,12 +351,12 @@
                     }              
                    
                 }).keyup(function(e){
-                        if (event.which == $.ui.keyCode.UP ||event.which == $.ui.keyCode.DOWN){
-                            //user select some tag from drop down list of autocomplete control by up or down key
-                            //should update input tag width in order to selected text fits to the input element width
-                            that._updateInputTagWidth();
-                        }
-                    });
+                    if (event.which == $.ui.keyCode.UP ||event.which == $.ui.keyCode.DOWN){
+                        //user select some tag from drop down list of autocomplete control by up or down key
+                        //should update input tag width in order to selected text fits to the input element width
+                        that._updateInputTagWidth();
+                    }
+                });
                 
 
             // Autocomplete.
@@ -532,7 +533,7 @@
                 return false;
             }
 
-			if (this.options.allowOnlyAutocompleteTags) {
+            if (this.options.allowOnlyAutocompleteTags) {
                 this.tagInput.autocomplete("search", value);
                 $('.ui-autocomplete').css('display', 'none');
                 var availableTags = $("li>a", this.tagInput.autocomplete("widget"))
