@@ -34,6 +34,7 @@
             placeholderText   : null,   // Sets `placeholder` attr on input field.
             readOnly          : false,  // Disables editing.
             removeConfirmation: false,  // Require confirmation to remove tags.
+            removeOnBackspace : true,   // Whether to remove tags when backspace is pressed
             tagLimit          : null,   // Max number of tags allowed (null for unlimited).
 
             // Used for autocomplete, unless you override `autocomplete.source`.
@@ -225,12 +226,14 @@
                 .keydown(function(event) {
                     // Backspace is not detected within a keypress, so it must use keydown.
                     if (event.which == $.ui.keyCode.BACKSPACE && that.tagInput.val() === '') {
-                        var tag = that._lastTag();
-                        if (!that.options.removeConfirmation || tag.hasClass('remove')) {
-                            // When backspace is pressed, the last tag is deleted.
-                            that.removeTag(tag);
-                        } else if (that.options.removeConfirmation) {
-                            tag.addClass('remove ui-state-highlight');
+                        if (that.options.removeOnBackspace) {
+                            var tag = that._lastTag();
+                            if (!that.options.removeConfirmation || tag.hasClass('remove')) {
+                                // When backspace is pressed, the last tag is deleted.
+                                that.removeTag(tag);
+                            } else if (that.options.removeConfirmation) {
+                                tag.addClass('remove ui-state-highlight');
+                            }
                         }
                     } else if (that.options.removeConfirmation) {
                         that._lastTag().removeClass('remove ui-state-highlight');
