@@ -104,7 +104,7 @@
             animate: true,
  
             //acceptable characters that can be typed into a tag
-            acceptableCharsRegex :  "[0-9a-zA-Z]",
+            acceptableCharsRegex :  null,
             
             //max number of characters in single tag
             maxChars :  null,
