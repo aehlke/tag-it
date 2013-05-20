@@ -69,11 +69,6 @@
             // within any part of the tag
             autocompleteMatchAnywhere: false,
             
-            // When used with availableTags it will only only those tags in the
-            // array to be added via the input.  If availableTags is empty then
-            // this setting is ignored
-            allowOnlyAutocompleteTags: false,
-
             // The below options are for using a single field instead of several
             // for our form values.
             //
@@ -246,14 +241,7 @@
                display : this.element.css("margin")
             });
 
-            // Add existing tags from the list, if any.
-            this.tagList.children('li').each(function() {
-                if (!$(this).hasClass('tagit-new')) {
-                    that.createTag($(this).html(), $(this).attr('class'));
-                    $(this).remove();
-                }
-            });
-
+         
             // Single field support.
             var addedExistingFromSingleFieldNode = false;
             if (this.options.singleField) {
@@ -282,6 +270,7 @@
                     }
                 });
             }
+            
 
             // Events.
             this.tagInput
