@@ -447,7 +447,7 @@
         createTag: function(value, additionalClass, duringInitialization) {
             var that = this;
 
-            value = $.trim(value);
+            value = $.trim(value.replace(/\s+/, ' '));
 
             if(this.options.preprocessTag) {
                 value = this.options.preprocessTag(value);
