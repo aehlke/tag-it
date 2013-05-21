@@ -327,13 +327,6 @@
                         //check restrictions on characters
                         if (event.which != $.ui.keyCode.BACKSPACE && event.which != $.ui.keyCode.TAB){
 
-                            if(that.options.acceptableCharsRegex) {
-                               var _tester = new RegExp(that.options.acceptableCharsRegex);
-                               if (!_tester.test(String.fromCharCode(event.which))){
-                                   event.preventDefault();
-                                   that._trigger("onUnacceptableChar", null, that);
-                               }
-                            }
                             //check if text in the input tag has length less than options.maxChars
                             if(that.options.maxChars && $.trim(that.tagInput.val()).length >= that.options.maxChars){
                                 that._trigger("onMaxChars", null, that);
@@ -359,7 +352,18 @@
                             //should update input tag width in order to selected text fits to the input element width
                             that._updateInputTagWidth();
                         }
-                    });
+                }).keypress(function(event){
+                    //must do this on keypress event to handle shiftKey
+                    if (event.which != $.ui.keyCode.BACKSPACE && event.which != $.ui.keyCode.TAB){
+                        if(that.options.acceptableCharsRegex) {
+                            var _tester = new RegExp(that.options.acceptableCharsRegex);
+                            if (!_tester.test(String.fromCharCode(event.which))){
+                                event.preventDefault();
+                                that._trigger("onUnacceptableChar", null, that);
+                            }
+                        }
+                    }   
+                });
                 
 
             // Autocomplete.
