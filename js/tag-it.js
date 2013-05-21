@@ -200,6 +200,10 @@
                     var tags = node.val().split(this.options.singleFieldDelimiter);
                     node.val('');
                     $.each(tags, function(index, tag) {
+                        tag = $.trim(tag);
+                        if (tag == '') {
+                            return;//continue
+                        }
                         that.createTag(tag, null, true);
                         addedExistingFromSingleFieldNode = true;
                     });
