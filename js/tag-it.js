@@ -259,7 +259,7 @@
                         )
                     ) {
                         // Enter submits the form if there's no text in the input.
-                        if (!(event.which === $.ui.keyCode.ENTER && that.tagInput.val() === '')) {
+                        if (event.which != $.ui.keyCode.ENTER || trimmedVal != '') {
                             event.preventDefault();
                         }
 
