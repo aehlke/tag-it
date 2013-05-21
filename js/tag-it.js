@@ -346,6 +346,15 @@
                     that.tagInput.data('autocomplete-open', true);
                 }).bind('autocompleteclose', function(event, ui) {
                     that.tagInput.data('autocomplete-open', false)
+                }).bind('autocompletesearch', function(event, ui) {
+                    //Ignore open quote when searching
+                    var searchVal = event.target.value.replace(/^\s+/, '');
+                    if (that._hasUnclosedQuote(searchVal)) {
+                        event.preventDefault();
+                        that.tagInput.unbind(event.type, arguments.callee);//prevent infinite recursion
+                        that.tagInput.autocomplete('search', searchVal.slice(1));
+                        that.tagInput.bind(event.type, arguments.callee);
+                    }
                 });
             }
         },
