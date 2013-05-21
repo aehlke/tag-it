@@ -200,6 +200,10 @@
                     var tags = node.val().split(this.options.singleFieldDelimiter);
                     node.val('');
                     $.each(tags, function(index, tag) {
+                        tag = $.trim(tag);
+                        if (tag == '') {
+                            return;//continue
+                        }
                         that.createTag(tag, null, true);
                         addedExistingFromSingleFieldNode = true;
                     });
@@ -236,45 +240,90 @@
                         that._lastTag().removeClass('remove ui-state-highlight');
                     }
 
-                    // Comma/Space/Enter are all valid delimiters for new tags,
+                    // singleFieldDelimiter/Space/Enter are all valid delimiters for new tags,
                     // except when there is an open quote or if setting allowSpaces = true.
                     // Tab will also create a tag, unless the tag input is empty,
                     // in which case it isn't caught.
+                    var trimmedVal = $.trim(that.tagInput.val()),
+                        openQuote = that._hasUnclosedQuote(trimmedVal);
                     if (
-                        event.which === $.ui.keyCode.COMMA ||
                         event.which === $.ui.keyCode.ENTER ||
                         (
                             event.which == $.ui.keyCode.TAB &&
-                            that.tagInput.val() !== ''
+                            trimmedVal != ''
                         ) ||
                         (
                             event.which == $.ui.keyCode.SPACE &&
-                            that.options.allowSpaces !== true &&
-                            (
-                                $.trim(that.tagInput.val()).replace( /^s*/, '' ).charAt(0) != '"' ||
-                                (
-                                    $.trim(that.tagInput.val()).charAt(0) == '"' &&
-                                    $.trim(that.tagInput.val()).charAt($.trim(that.tagInput.val()).length - 1) == '"' &&
-                                    $.trim(that.tagInput.val()).length - 1 !== 0
-                                )
-                            )
+                            !that.options.allowSpaces &&
+                            !openQuote
                         )
                     ) {
                         // Enter submits the form if there's no text in the input.
-                        if (!(event.which === $.ui.keyCode.ENTER && that.tagInput.val() === '')) {
+                        if (event.which != $.ui.keyCode.ENTER || trimmedVal != '') {
                             event.preventDefault();
                         }
 
-                        // Autocomplete will create its own tag from a selection and close automatically.
-                        if (!that.tagInput.data('autocomplete-open')) {
-                            that.createTag(that._cleanedInput());
+                        // Use highlighted autocomplete option if available.
+                        if (!openQuote) {
+                            var val;
+                            if (that.tagInput.data('autocomplete-open')) {
+                                var autocompleteData = that.tagInput.data('uiAutocomplete');
+                                if (autocompleteData.menu.active) {
+                                    val = autocompleteData.menu.active.data('uiAutocompleteItem').value;
+                                }
+                                that.tagInput.autocomplete('close');
+                            }
+                            that.createTag(val || that._cleanedInput());
                         }
+                    }
+                }).keyup(function(e) {
+                    //Handle custom delimeters because may not be a single character, and event.which in keydown cannot match all characters
+                    var val = that.tagInput.val(),
+                        trimmedVal = $.trim(val),
+                        openQuote = that._hasUnclosedQuote(trimmedVal),
+                        create = false;
+                    if (openQuote) {
+                        //don't create
+                    }
+                    else if (val.slice(-that.options.singleFieldDelimiter.length) == that.options.singleFieldDelimiter) {
+                        that.tagInput.val(val.slice(0, -that.options.singleFieldDelimiter.length));
+                        create = true;
+                    }
+                    //Add quoted tags as soon as the close quote is entered
+                    else if (
+                        trimmedVal.length > 1 &&
+                        trimmedVal.charAt(0) == '"' &&
+                        trimmedVal.charAt(trimmedVal.length - 1) == '"'
+                    ) {
+                        create = true;
+                    }
+                    if (create) {
+                        if (that.tagInput.data('autocomplete-open')) {
+                            that.tagInput.autocomplete('close')
+                        }
+                        that.createTag(that._cleanedInput());
                     }
                 }).blur(function(e){
                     // Create a tag when the element loses focus.
                     // If autocomplete is enabled and suggestion was clicked, don't add it.
-                    if (!that.tagInput.data('autocomplete-open')) {
-                        that.createTag(that._cleanedInput());
+                    var openQuote = that._hasUnclosedQuote($.trim(that.tagInput.val()));
+                    if (!openQuote) {
+                        if (that.tagInput.data('autocomplete-open')) {
+                            var addIfNothingChosen,
+                                cancelAdding;
+                            addIfNothingChosen = function() {
+                                that.tagInput.unbind('autocompleteselect', cancelAdding);
+                                that.createTag(that._cleanedInput());
+                            };
+                            cancelAdding = function() {
+                                that.tagInput.unbind('autocompleteclose', addIfNothingChosen);
+                            };
+                            that.tagInput.one('autocompleteclose', addIfNothingChosen);
+                            that.tagInput.one('autocompleteselect', cancelAdding);
+                        }
+                        else {
+                            that.createTag(that._cleanedInput());
+                        }
                     }
                 });
 
@@ -284,7 +333,7 @@
                     select: function(event, ui) {
                         that.createTag(ui.item.value);
                         // Preventing the tag input to be updated with the chosen value.
-                        return false;
+                        event.preventDefault();
                     }
                 };
                 $.extend(autocompleteOptions, this.options.autocomplete);
@@ -297,13 +346,31 @@
                     that.tagInput.data('autocomplete-open', true);
                 }).bind('autocompleteclose', function(event, ui) {
                     that.tagInput.data('autocomplete-open', false)
+                }).bind('autocompletesearch', function(event, ui) {
+                    //Ignore open quote when searching
+                    var searchVal = event.target.value.replace(/^\s+/, '');
+                    if (that._hasUnclosedQuote(searchVal)) {
+                        event.preventDefault();
+                        that.tagInput.unbind(event.type, arguments.callee);//prevent infinite recursion
+                        that.tagInput.autocomplete('search', searchVal.slice(1));
+                        that.tagInput.bind(event.type, arguments.callee);
+                    }
                 });
             }
         },
 
+        _hasUnclosedQuote: function(text) {
+            return text.length &&
+                text.charAt(0) == '"' &&
+                (
+                    text.length == 1 ||
+                    text.charAt(text.length - 1) != '"'
+                );
+        },
+
         _cleanedInput: function() {
             // Returns the contents of the tag input, cleaned and ready to be passed to createTag
-            return $.trim(this.tagInput.val().replace(/^"(.*)"$/, '$1'));
+            return $.trim($.trim(this.tagInput.val()).replace(/^"(.*)"$/, '$1'));
         },
 
         _lastTag: function() {
@@ -389,13 +456,19 @@
         createTag: function(value, additionalClass, duringInitialization) {
             var that = this;
 
-            value = $.trim(value);
+            value = $.trim(value.replace(/\s+/, ' '));
 
             if(this.options.preprocessTag) {
                 value = this.options.preprocessTag(value);
             }
 
-            if (value === '') {
+            if (
+                value == '' ||
+                (
+                    this.options.singleField &&
+                    value.indexOf(this.options.singleFieldDelimiter) >= 0
+                )
+            ) {
                 return false;
             }
 
