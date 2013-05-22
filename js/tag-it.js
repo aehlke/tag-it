@@ -363,6 +363,9 @@
                             }
                         }
                     }   
+                }).bind("paste", function(event) {
+                    setTimeout(function (event) {
+                        that._updateInputTagWidth();
                 });
                 
 
@@ -522,6 +525,14 @@
                 return false;
             }
 
+            if(that.options.acceptableCharsRegex){ //last minute check for bad characters to check pasted values
+                var _tester = new RegExp(that.options.acceptableCharsRegex);
+                if (!_tester.test(value)) {
+                    this._trigger("onUnacceptableChar", null, that);
+                    return false;
+                }
+            }
+            
             if (!this.options.allowDuplicates && !this._isNew(value)) {
                 var existingTag = this._findTagByLabel(value);
                 if (this._trigger('onTagExists', null, {
