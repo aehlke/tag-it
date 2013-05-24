@@ -365,7 +365,18 @@
                     }   
                 }).bind("paste", function(event) {
                     setTimeout(function (event) {
+                        if(that.options.acceptableCharsRegex){
+                            var _tester = new RegExp(that.options.acceptableCharsRegex);
+                            var _arr = that.tagInput.val().split(_tester);
+                            var _currentvalue = that.tagInput.val();
+                            for (var x = 0;x < _arr.length; x++) {
+                                _currentvalue = _currentvalue.replace(_arr[x], ""); //remove characters not in the acceptableCharsRegex
+                            }
+                            _currentvalue = _currentvalue.replace(/( ){2,}/, " "); // eliminate multiple consecutive spaces.
+                            that.tagInput.val(_currentvalue);
+                        }
                         that._updateInputTagWidth();
+                    });
                 });
                 
 
@@ -515,7 +526,7 @@
         createTag: function(value, additionalClass, duringInitialization) {
             var that = this;
 
-            value = $.trim(value);
+            value = $.trim(value.replace(/( ){2,}/, " ")); //leading, trailing and consecutive spaces removal.
 
             if(this.options.preprocessTag) {
                 value = this.options.preprocessTag(value);
@@ -525,14 +536,6 @@
                 return false;
             }
 
-            if(that.options.acceptableCharsRegex){ //last minute check for bad characters to check pasted values
-                var _tester = new RegExp(that.options.acceptableCharsRegex);
-                if (!_tester.test(value)) {
-                    this._trigger("onUnacceptableChar", null, that);
-                    return false;
-                }
-            }
-            
             if (!this.options.allowDuplicates && !this._isNew(value)) {
                 var existingTag = this._findTagByLabel(value);
                 if (this._trigger('onTagExists', null, {
