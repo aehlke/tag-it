@@ -8,8 +8,7 @@ Tag-it is a simple and configurable tag editing widget with autocomplete support
 
 ![Screenshot](http://aehlke.github.com/tag-it/_static/screenshot.png)
 
-Check the [examples.html](http://aehlke.github.com/tag-it/examples.html) for several demos.
-
+Check the [examples.html](http://aehlke.github.com/tag-it/examples.html) for several demos and the [prototype.js](http://aehlke.github.com/tag-it/prototype.js) file for a JavaScipt prototype with all options and events.
 
 ## Usage
 
@@ -78,7 +77,7 @@ Defaults to an empty array *[]*.
 ### autocomplete (Object)
 
 Allows overriding the `source` and `select` options that are set by default,
-as well as adding any other options you want to pass to the jQuery UI Autocomplete widget, such as `minLength` or `delay`. 
+as well as adding any other options you want to pass to the jQuery UI Autocomplete widget, such as `minLength` or `delay`.
 
 The `autocomplete.source` should be overridden if you want to use custom autocompletion sources, like an Ajax / XHR response.
 
@@ -134,7 +133,7 @@ Defaults to *false*.
 ### tagLimit (integer)
 
 Limits the total number of tags that can be entered at once. Note that if you use this option with preloaded data,
-it may truncate the number of preloaded tags. Set to `null` for unlimited tags. See the **onTagLimitExceeded** 
+it may truncate the number of preloaded tags. Set to `null` for unlimited tags. See the **onTagLimitExceeded**
 callback for customizing this behavior.
 
 Defaults to *null*.
@@ -253,6 +252,17 @@ Adds new tag to the list. The `additionalClass` parameter is an optional way to 
 
     $("#myTags").tagit("createTag", "brand-new-tag");
 
+### preprocessTag(function, Callback)
+Set a function to be called before tag is created. Callback receives the
+value of the tag created.
+
+    // ensure all tags are capitalized
+    $(#tag-it").tagit("preprocessTag", function(val) {
+      if (!val) { return ''; }
+      return val[0].toUpperCase() + val.slice(1, val.length);
+    });
+    // foo -> Foo
+
 ### removeTagByLabel(tagLabel, animate)
 Finds the tag with the label `tagLabel` and removes it. If no such tag is found, it'll throw an exception.
 
@@ -262,7 +272,6 @@ Finds the tag with the label `tagLabel` and removes it. If no such tag is found,
 Clears the widget of all tags — removes each tag it contains, so the **beforeTagRemoved** / **afterTagRemoved** event callbacks (if set) will be called for each.
 
     $("#myTags").tagit("removeAll");
-
 
 ## Properties
 
