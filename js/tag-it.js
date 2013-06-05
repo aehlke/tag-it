@@ -301,6 +301,13 @@
             }
         },
 
+       destroy: function() {
+            $.Widget.prototype.destroy.apply(this, arguments);
+            // default destroy now do other stuff particular to this widget
+            $(".tagit-new").remove()
+            $(".tagit:not(ul)").remove()
+        },
+        
         _cleanedInput: function() {
             // Returns the contents of the tag input, cleaned and ready to be passed to createTag
             return $.trim(this.tagInput.val().replace(/^"(.*)"$/, '$1'));
