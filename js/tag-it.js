@@ -61,6 +61,13 @@
             // array to be added via the input.  If availableTags is empty then
             // this setting is ignored
             allowOnlyAutocompleteTags: false,
+            
+            // By default (value set to false) all tags will have the same
+            // colour, but if it's set to tru and the tag is not in the auto
+            // complete list, the tag will additionall get the class
+            // tagit-not-autocomplete.  This setting is superseded by the
+            // allowOnlyAutocompleteTags which takes precendence
+            highlightTagsNotInAutocomplete: false,
 
             // When enabled, quotes are unneccesary for inputting multi-word tags.
             allowSpaces: false,
@@ -312,7 +319,7 @@
                 this.tagInput.autocomplete(autocompleteOptions).bind('autocompleteopen', function(event, ui) {
                     that.tagInput.data('autocomplete-open', true);
                 }).bind('autocompleteclose', function(event, ui) {
-                    that.tagInput.data('autocomplete-open', false)
+                    that.tagInput.data('autocomplete-open', false);
                 });
             }
         },
@@ -404,7 +411,6 @@
 
         createTag: function(value, additionalClass, duringInitialization) {
             var that = this;
-
             value = $.trim(value);
 
             if(this.options.preprocessTag) {
@@ -428,15 +434,21 @@
                 return false;
             }
 
-            if (this.options.allowOnlyAutocompleteTags) {
-                this.tagInput.autocomplete("search", value);
+            var addHighlightClass = false;
+            if (this.options.allowOnlyAutocompleteTags || this.options.highlightTagsNotInAutocomplete) {
+                that.tagInput.autocomplete('search', value);
+                that.tagInput.autocomplete('close');
                 $('.ui-autocomplete').css('display', 'none');
                 var availableTags = $("li[role='menuitem'] a", this.tagInput.autocomplete("widget"))
                     .map(function(i, el) {
                         return $(el).text().toLowerCase();
                     });
                 if ($.inArray(value.toLowerCase(), availableTags) == -1) {
-                    return false;
+                    if (this.options.allowOnlyAutocompleteTags) {
+                        return false;
+                    } else {
+                        addHighlightClass = true;
+                    }
                 }
             }
 
@@ -452,6 +464,9 @@
                 .addClass('tagit-choice ui-widget-content ui-state-default ui-corner-all')
                 .addClass(additionalClass)
                 .append(label);
+            if (this.options.highlightTagsNotInAutocomplete && addHighlightClass) {
+                tag.addClass('tagit-not-autocomplete');
+            }
 
             if (this.options.readOnly){
                 tag.addClass('tagit-choice-read-only');

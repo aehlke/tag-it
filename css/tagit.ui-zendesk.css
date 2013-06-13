@@ -53,4 +53,12 @@ ul.tagit input[type="text"] {
 .ui-widget {
     font-size: 1.1em;
 }
-
+ul.tagit li.tagit-choice.tagit-not-autocomplete {
+    border: 1px dotted #f3caca;
+    background-color: #f8dede;
+}
+ul.tagit li.tagit-choice.tagit-not-autocomplete:hover,
+ul.tagit li.tagit-choice.remove.tagit-not-autocomplete {
+    background-color: #f1bbbb;
+    border-color: #e06d6d;
+}
