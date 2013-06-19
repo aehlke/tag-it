@@ -189,6 +189,28 @@
                 this.options.autocomplete.source = $.proxy(this.options.autocomplete.source, this);
             }
 
+            // Autocomplete.
+            if (this.options.availableTags || this.options.tagSource || this.options.autocomplete.source) {
+                var autocompleteOptions = {
+                    select: function(event, ui) {
+                        that.createTag(ui.item.value);
+                        // Preventing the tag input to be updated with the chosen value.
+                        return false;
+                    }
+                };
+                $.extend(autocompleteOptions, this.options.autocomplete);
+
+                // tagSource is deprecated, but takes precedence here since autocomplete.source is set by default,
+                // while tagSource is left null by default.
+                autocompleteOptions.source = this.options.tagSource || autocompleteOptions.source;
+
+                this.tagInput.autocomplete(autocompleteOptions).bind('autocompleteopen', function(event, ui) {
+                    that.tagInput.data('autocomplete-open', true);
+                }).bind('autocompleteclose', function(event, ui) {
+                    that.tagInput.data('autocomplete-open', false);
+                });
+            }
+
             // DEPRECATED.
             if ($.isFunction(this.options.tagSource)) {
                 this.options.tagSource = $.proxy(this.options.tagSource, this);
@@ -300,28 +322,6 @@
                         that.createTag(that._cleanedInput());
                     }
                 });
-
-            // Autocomplete.
-            if (this.options.availableTags || this.options.tagSource || this.options.autocomplete.source) {
-                var autocompleteOptions = {
-                    select: function(event, ui) {
-                        that.createTag(ui.item.value);
-                        // Preventing the tag input to be updated with the chosen value.
-                        return false;
-                    }
-                };
-                $.extend(autocompleteOptions, this.options.autocomplete);
-
-                // tagSource is deprecated, but takes precedence here since autocomplete.source is set by default,
-                // while tagSource is left null by default.
-                autocompleteOptions.source = this.options.tagSource || autocompleteOptions.source;
-
-                this.tagInput.autocomplete(autocompleteOptions).bind('autocompleteopen', function(event, ui) {
-                    that.tagInput.data('autocomplete-open', true);
-                }).bind('autocompleteclose', function(event, ui) {
-                    that.tagInput.data('autocomplete-open', false);
-                });
-            }
         },
 
         _cleanedInput: function() {
@@ -438,7 +438,6 @@
             if (this.options.allowOnlyAutocompleteTags || this.options.highlightTagsNotInAutocomplete) {
                 that.tagInput.autocomplete('search', value);
                 that.tagInput.autocomplete('close');
-                $('.ui-autocomplete').css('display', 'none');
                 var availableTags = $("li[role='menuitem'] a", this.tagInput.autocomplete("widget"))
                     .map(function(i, el) {
                         return $(el).text().toLowerCase();
