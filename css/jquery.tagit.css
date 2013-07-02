@@ -3,6 +3,7 @@ ul.tagit {
     overflow: auto;
     margin-left: inherit; /* usually we don't want the regular ul margins. */
     margin-right: inherit;
+    width: 500px;
 }
 ul.tagit li {
     display: block;
@@ -64,4 +65,11 @@ ul.tagit input[type="text"] {
     width: inherit;
     background-color: inherit;
     outline: none;
+}
+.highlight-sorteable { 
+    background-color: rgb(255, 250, 224);
+    border: 1px dashed rgb(255, 122, 0);
+    height: 1.5em;
+    line-height: 1.2em;
+    width: 20px;
 }

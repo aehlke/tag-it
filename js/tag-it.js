@@ -77,6 +77,9 @@
             // with the name given in settings.fieldName.
             singleFieldNode: null,
 
+            //Whether the tags are sorteable
+            sorteable: false,
+
             // Whether to animate tag removals or not.
             animate: true,
 
@@ -91,9 +94,10 @@
             beforeTagRemoved    : null,
             afterTagRemoved     : null,
 
+            onSortChange        : null,
+
             onTagClicked        : null,
             onTagLimitExceeded  : null,
-
 
             // DEPRECATED:
             //
@@ -149,6 +153,16 @@
                     }
                     showChoices(choices);
                 };
+            }
+
+            if (this.options.sorteable){
+                var sortable_options = {
+                    items: "li.tagit-choice",
+                    delay: 150,
+                    placeholder: "highlight-sorteable",
+                    deactivate: function(){ that.onChangeOrder(); }
+                };
+                this.tagList.sortable(sortable_options);
             }
 
             if (this.options.showAutocompleteOnFocus) {
@@ -480,7 +494,15 @@
                 setTimeout(function () { that._showAutocomplete(); }, 0);
             }
         },
-
+        onChangeOrder: function() {
+            var tags = [];
+            var that = this;
+            this._tags().each(function() {
+                tags.push(that.tagLabel(this));
+            });
+            this._updateSingleTagsField(tags);
+            this._trigger('onSortChange', null);
+        },
         removeTag: function(tag, animate) {
             animate = typeof animate === 'undefined' ? this.options.animate : animate;
 
