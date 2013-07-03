@@ -162,7 +162,7 @@
                     var filter = search.term.toLowerCase();
                     var choices = $.grep(this.options.availableTags, function(element) {
                         if (that.options.autocompleteMatchAnywhere) {
-                            return (element.toLowerCase().search(filter) !== -1);
+                            return (element.toLowerCase().search(filter.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')) !== -1);
                         } else {
                             return (element.toLowerCase().indexOf(filter) === 0);
                         }
