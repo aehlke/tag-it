@@ -190,6 +190,7 @@
 
             if (this.options.showAutocompleteOnFocus) {
                 this.tagInput.focus(function(event, ui) {
+                    that.tagList.scrollTop(9999);
                     that._showAutocomplete();
                 });
 
@@ -224,6 +225,7 @@
                         // Sets the focus() to the input field, if the user
                         // clicks anywhere inside the UL. This is needed
                         // because the input field needs to be of a small size.
+                        that.tagList.scrollTop(9999);
                         that.tagInput.focus();
                     }
                 });
@@ -242,6 +244,29 @@
             });
 
          
+            // Autocomplete.
+            if (this.options.availableTags || this.options.tagSource || this.options.autocomplete.source) {
+                var autocompleteOptions = {
+                    select: function(event, ui) {
+                        that.createTag(ui.item.value);
+                        // Preventing the tag input to be updated with the chosen value.
+                        return false;
+                    }
+                };
+                $.extend(autocompleteOptions, this.options.autocomplete);
+
+                // tagSource is deprecated, but takes precedence here since autocomplete.source is set by default,
+                // while tagSource is left null by default.
+                autocompleteOptions.source = this.options.tagSource || autocompleteOptions.source;
+
+                this.tagInput.autocomplete(autocompleteOptions).bind('autocompleteopen', function(event, ui) {
+                    that.tagInput.data('autocomplete-open', true);
+                }).bind('autocompleteclose', function(event, ui) {
+                    that.tagInput.data('autocomplete-open', false)
+                }).data("tagit", this);
+                
+            }
+            
             // Single field support.
             var addedExistingFromSingleFieldNode = false;
             if (this.options.singleField) {
@@ -380,28 +405,6 @@
                 });
                 
 
-            // Autocomplete.
-            if (this.options.availableTags || this.options.tagSource || this.options.autocomplete.source) {
-                var autocompleteOptions = {
-                    select: function(event, ui) {
-                        that.createTag(ui.item.value);
-                        // Preventing the tag input to be updated with the chosen value.
-                        return false;
-                    }
-                };
-                $.extend(autocompleteOptions, this.options.autocomplete);
-
-                // tagSource is deprecated, but takes precedence here since autocomplete.source is set by default,
-                // while tagSource is left null by default.
-                autocompleteOptions.source = this.options.tagSource || autocompleteOptions.source;
-
-                this.tagInput.autocomplete(autocompleteOptions).bind('autocompleteopen', function(event, ui) {
-                    that.tagInput.data('autocomplete-open', true);
-                }).bind('autocompleteclose', function(event, ui) {
-                    that.tagInput.data('autocomplete-open', false)
-                }).data("tagit", this);
-                
-            }
         },
 
         destroy : function(){
