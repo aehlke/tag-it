@@ -16,6 +16,7 @@
 *   Tobias Schmidt
 *   Skylar Challand
 *   Alex Ehlke
+*   Lewis Cowles
 *
 * Maintainer:
 *   Alex Ehlke - Twitter: @aehlke
@@ -95,8 +96,7 @@
 
             onTagClicked        : null,
             onTagLimitExceeded  : null,
-
-
+	    
             // DEPRECATED:
             //
             // /!\ These event callbacks are deprecated and WILL BE REMOVED at some
