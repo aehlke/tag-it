@@ -451,7 +451,7 @@
                         that.removeTag(tag);
 
                         // Don't propagate this even, unless configured to
-			if (!that.options.propagateRemoveClicks) {
+                        if (!that.options.propagateRemoveClicks) {
                           e.stopPropagation()
                         }
                     });
