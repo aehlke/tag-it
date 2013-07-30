@@ -186,7 +186,7 @@
                     var target = $(e.target);
                     if (target.hasClass('tagit-label')) {
                         // Don't propagate this even, unless configured to
-			if (!that.options.propagateTagClicks) {
+                        if (!that.options.propagateTagClicks) {
                           e.stopPropagation()
                         }
                         
