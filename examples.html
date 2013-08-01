@@ -21,9 +21,9 @@
     <!--   - Any theme CSS (either a jQuery UI theme such as "flick", or one that's bundled with Tag-it, e.g. tagit.ui-zendesk.css as in this example.) -->
     <!-- The base CSS and tagit.ui-zendesk.css theme are scoped to the Tag-it widget, so they shouldn't affect anything else in your site, unlike with jQuery UI themes. -->
     <link href="css/jquery.tagit.css" rel="stylesheet" type="text/css">
-    <link href="css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+    <!-- <link href="css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css"> -->
     <!-- If you want the jQuery UI "flick" theme, you can use this instead, but it's not scoped to just Tag-it like tagit.ui-zendesk is: -->
-    <!--   <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css"> -->
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
 
     <!-- jQuery and jQuery UI are required dependencies. -->
     <!-- Although we use jQuery 1.4 here, it's tested with the latest too (1.8.3 as of writing this.) -->
@@ -109,6 +109,15 @@
             $('#readOnlyTags').tagit({
                 readOnly: true
             });
+            
+            //-------------------------------
+            // Maximums
+            //-------------------------------
+            $('#MaxTags').tagit({
+            		maxChars:5,
+                maxCount:6
+            });
+            
 
             //-------------------------------
             // Tag-it methods
@@ -132,7 +141,59 @@
                 availableTags: sampleTags,
                 removeConfirmation: true
             });
+
+            //-------------------------------
+            // Allow autocomplete to match anywhere
+            //-------------------------------
+            $('#allowMatchAnywhere').tagit({
+                availableTags: sampleTags,
+                autocompleteMatchAnywhere: true
+            });
+
+            //-------------------------------
+            // Only allow tags in autocomplete list
+            //-------------------------------
+            $('#allowOnlyAutocomplete').tagit({
+                availableTags: sampleTags,
+                autocompleteMatchAnywhere: true,
+                allowOnlyAutocompleteTags: true,
+                caseSensitive: false
+            });
+
+            //-------------------------------
+            // Only allow tags in autocomplete list using autocomplete.source
+            //-------------------------------
+            $('#allowOnlyAutocompleteSource').tagit({
+                autocomplete: {
+					source: sampleTags
+				},
+                autocompleteMatchAnywhere: true,
+                allowOnlyAutocompleteTags: true,
+                caseSensitive: false
+            });
+
+            //-------------------------------
+            // Only allow tags in autocomplete list using autocomplete.source callback
+            //-------------------------------
+            $('#allowOnlyAutocompleteSourceCallback').tagit({
+                autocomplete: {
+					source: function(request, response) {
+						response($.grep(sampleTags, function(element) {
+							return (element.toUpperCase().search(request.term.toUpperCase()) !== -1);
+						}));
+					}
+				},
+                allowOnlyAutocompleteTags: true,
+                caseSensitive: false
+            });
             
+            //-------------------------------
+            // Allow only certain characters.
+            //-------------------------------
+            $('#allowRegExChars').tagit({
+                availableTags: sampleTags,
+                acceptableCharsRegex: "[0-9A-F]"
+            });
         });
     </script>
 
@@ -211,7 +272,6 @@
         </form>
 
         <hr>
-
         <h3>Read-only</h3>
         <form>
             <p>Example of read only tags.</p>
@@ -222,7 +282,14 @@
         </form>
 
         <hr>
+        <h3>maxchars, maxcount</h3>
+        <form>
+            <p>Example of maxchars(5) and maxcount(6).</p>
+            <input id="MaxTags">
+        </form>
 
+        <hr>
+        
         <h3>Events</h3>
         <form>
             <p>Example of tag events. Try adding or removing a tag, adding a duplicate tag, or clicking on a tag's label.</p>
@@ -234,7 +301,6 @@
         <div id="events_container"></div>
 
         <hr>
-
         <h3>Methods</h3>
         <form>
             <p>Demos the available widget methods. Click the links below the widget to try them.</p>
@@ -255,7 +321,37 @@
                 <li>me too</li>
             </ul>
         </form>
+        
+        <hr>
+        <h3>Allow matching of autocomplete anywhere within the available tags</h3>
+        <form>
+            <ul id="allowMatchAnywhere"></ul>
+        </form>
+        
+        <hr>
+        <h3>Only allow tags that are in the autocomplete list</h3>
+        <form>
+            <ul id="allowOnlyAutocomplete"></ul>
+        </form>
+        
+        <hr>
+        <h3>Only allow tags that are in the autocomplete list - using autocomplete.source</h3>
+        <form>
+            <ul id="allowOnlyAutocompleteSource"></ul>
+        </form>
+        
+        <hr>
+        <h3>Only allow tags that are in the autocomplete list - using autocomplete.source as a callback</h3>
+        <form>
+            <ul id="allowOnlyAutocompleteSourceCallback"></ul>
+        </form>
 
+         <hr>
+        <h3>Only allow characters based on a regular expression (example allows [0-9A-F])</h3>
+        <form>
+            <ul id="allowRegExChars"></ul>
+        </form>
+        
     </div>
 
 

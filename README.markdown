@@ -1,5 +1,5 @@
 # Tag-it: a jQuery UI plugin
-
+Latest Release: 7/1/2013
 Tag-it is a simple and configurable tag editing widget with autocomplete support.
 
 [Homepage](http://aehlke.github.com/tag-it/)
@@ -97,10 +97,30 @@ If enabled, this will also make **autocomplete.minLength** default to `0` unless
 
 Defaults to *false*.
 
+### autocompleteMatchAnywhere (boolean)
+
+Perform the autocomplete by matching within any part of the tag.
+
+Defaults to *false*.
+
+### allowOnlyAutocompleteTags (boolean)
+
+When used with availableTags it will only only those tags in the array to be added via the input.  
+If availableTags is empty then this setting is ignored
+
+Defaults to *false*.
+
 ### removeConfirmation (boolean)
 
 When removeConfirmation is enabled the user has to press the backspace key twice to remove the last tag.
 After the first keypress the last tag receives a *remove* css class which can be used to visually highlight the tag.
+
+Defaults to *false*.
+
+### allowDuplicates (boolean)
+
+Allows duplicate tags to be created.
+One implication of this is that `removeTagByLabel` will remove all tags which match the given label.
 
 Defaults to *false*.
 
@@ -110,13 +130,6 @@ whether the duplication check should do a case sensitive check or not.
 
 Defaults to *true*.
 
-### allowDuplicates (boolean)
-
-Allows duplicate tags to be created.
-One implication of this is that `removeTagByLabel` will remove all tags which match the given label.
-
-Defaults to *false*.
-
 ### allowSpaces (boolean)
 
 When allowSpaces is enabled the user is not required to wrap multi-word tags in quotation marks.
@@ -124,17 +137,39 @@ For example, the user can enter `John Smith` instead of `"John Smith"`.
 
 Defaults to *false*.
 
+### acceptableCharsRegex (string)
+
+When acceptableCharsRegex is used, the user is only able to type characters that satisfy the regularExpression
+defined by the option.  
+
+	$("#myTags").tagit({
+	        acceptableCharsRegex: "[0-9A-Z]"
+	    });
+    
+in the above example, the user can enter only alpha numeric characters and nothing else. Note: not even space is
+allowed here.  If you want to enable spaces to appear you must combine this setting with "allowSpaces" and include
+a space in the regular expression.
+
+Defaults to *null*.
+
 ### readOnly (boolean)
 
 When enabled, tag-it just render tags. It disables the ability to edit tags.
 
 Defaults to *false*.
 
-### tagLimit (integer)
+### maxCount (integer)
 
 Limits the total number of tags that can be entered at once. Note that if you use this option with preloaded data,
-it may truncate the number of preloaded tags. Set to `null` for unlimited tags. See the **onTagLimitExceeded**
+it may truncate the number of preloaded tags. Set to `null` for unlimited tags. See the **onMaxCount**
 callback for customizing this behavior.
+
+Defaults to *null*.
+
+### maxChars (integer)
+
+Limits the total number characters a single tag can contain when typed. Note that existing tags will not be
+truncated if they exceed this number
 
 Defaults to *null*.
 

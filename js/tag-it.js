@@ -34,8 +34,7 @@
             placeholderText   : null,   // Sets `placeholder` attr on input field.
             readOnly          : false,  // Disables editing.
             removeConfirmation: false,  // Require confirmation to remove tags.
-            tagLimit          : null,   // Max number of tags allowed (null for unlimited).
-
+            
             // Used for autocomplete, unless you override `autocomplete.source`.
             availableTags     : [],
 
@@ -47,10 +46,29 @@
 
             // Shows autocomplete before the user even types anything.
             showAutocompleteOnFocus: false,
+            
+            // Search for patterns within all the autocomplete tags as opposed
+            // to just the start of the tag.  By default (value set to false)
+            // it will only search the start
+            
+            // By default (value set to false) perform the autocomplete by
+            // matching just the start of each available tag or by matching
+            // within any part of the tag
+            autocompleteMatchAnywhere: false,
+            
+            // When used with availableTags it will only only those tags in the
+            // array to be added via the input.  If availableTags is empty then
+            // this setting is ignored
+            allowOnlyAutocompleteTags: false,
 
             // When enabled, quotes are unneccesary for inputting multi-word tags.
             allowSpaces: false,
-
+            
+            // By default (value set to false) perform the autocomplete by
+            // matching just the start of each available tag or by matching
+            // within any part of the tag
+            autocompleteMatchAnywhere: false,
+            
             // The below options are for using a single field instead of several
             // for our form values.
             //
@@ -79,22 +97,32 @@
 
             // Whether to animate tag removals or not.
             animate: true,
-
+ 
+            //acceptable characters that can be typed into a tag
+            acceptableCharsRegex :  null,
+            
+            //max number of characters in single tag
+            maxChars :  null,
+                        
+            // Max number of tags allowed (null for unlimited).
+            maxCount : null, 
+           
             // Optionally set a tabindex attribute on the input that gets
             // created for tag-it.
             tabIndex: null,
 
+
             // Event callbacks.
             beforeTagAdded      : null,
             afterTagAdded       : null,
-
             beforeTagRemoved    : null,
             afterTagRemoved     : null,
-
             onTagClicked        : null,
-            onTagLimitExceeded  : null,
-
-
+            onMaxChars          : null,
+            onMaxCount          : null,
+            onNotAllowed        : null,
+            onUnacceptableChar  : null,
+            
             // DEPRECATED:
             //
             // /!\ These event callbacks are deprecated and WILL BE REMOVED at some
@@ -103,8 +131,12 @@
             onTagAdded  : null,
             onTagRemoved: null,
             // `autocomplete.source` is the replacement for tagSource.
-            tagSource: null
+            tagSource: null,
             // Do not use the above deprecated options.
+
+           
+           
+            
         },
 
         _create: function() {
@@ -140,9 +172,14 @@
                 this.options.autocomplete.source = function(search, showChoices) {
                     var filter = search.term.toLowerCase();
                     var choices = $.grep(this.options.availableTags, function(element) {
-                        // Only match autocomplete options that begin with the search term.
                         // (Case insensitive.)
-                        return (element.toLowerCase().indexOf(filter) === 0);
+                        if (that.options.autocompleteMatchAnywhere) {
+                            // match autocomplete options that contain the search term anywhere.
+                            return (element.toLowerCase().search(filter) !== -1);
+                        } else {
+                            // Only match autocomplete options that begin with the search term.
+                            return (element.toLowerCase().indexOf(filter) === 0);
+                        }
                     });
                     if (!this.options.allowDuplicates) {
                         choices = this._subtractArray(choices, this.assignedTags());
@@ -153,6 +190,7 @@
 
             if (this.options.showAutocompleteOnFocus) {
                 this.tagInput.focus(function(event, ui) {
+                    that.tagList.scrollTop(9999);
                     that._showAutocomplete();
                 });
 
@@ -187,10 +225,48 @@
                         // Sets the focus() to the input field, if the user
                         // clicks anywhere inside the UL. This is needed
                         // because the input field needs to be of a small size.
+                        that.tagList.scrollTop(9999);
                         that.tagInput.focus();
                     }
                 });
 
+            //Set input tag default width
+            this._updateInputTagWidth();
+
+            // Position, must be inherited from original html element (position, top, left, width)
+            this.tagList.css({
+               position : this.element.css("position"),
+               top : this.element.css("top"),
+               left : this.element.css("left"),
+               width : this.element.css("width"),
+               margin : this.element.css("margin"),
+               display : this.element.css("margin")
+            });
+
+         
+            // Autocomplete.
+            if (this.options.availableTags || this.options.tagSource || this.options.autocomplete.source) {
+                var autocompleteOptions = {
+                    select: function(event, ui) {
+                        that.createTag(ui.item.value);
+                        // Preventing the tag input to be updated with the chosen value.
+                        return false;
+                    }
+                };
+                $.extend(autocompleteOptions, this.options.autocomplete);
+
+                // tagSource is deprecated, but takes precedence here since autocomplete.source is set by default,
+                // while tagSource is left null by default.
+                autocompleteOptions.source = this.options.tagSource || autocompleteOptions.source;
+
+                this.tagInput.autocomplete(autocompleteOptions).bind('autocompleteopen', function(event, ui) {
+                    that.tagInput.data('autocomplete-open', true);
+                }).bind('autocompleteclose', function(event, ui) {
+                    that.tagInput.data('autocomplete-open', false)
+                }).data("tagit", this);
+                
+            }
+            
             // Single field support.
             var addedExistingFromSingleFieldNode = false;
             if (this.options.singleField) {
@@ -219,6 +295,7 @@
                     }
                 });
             }
+            
 
             // Events.
             this.tagInput
@@ -235,14 +312,13 @@
                     } else if (that.options.removeConfirmation) {
                         that._lastTag().removeClass('remove ui-state-highlight');
                     }
-
+                    
                     // Comma/Space/Enter are all valid delimiters for new tags,
                     // except when there is an open quote or if setting allowSpaces = true.
-                    // Tab will also create a tag, unless the tag input is empty,
-                    // in which case it isn't caught.
-                    if (
-                        event.which === $.ui.keyCode.COMMA ||
-                        event.which === $.ui.keyCode.ENTER ||
+                    // Tab will also create a tag, unless the tag input is empty, in which case it isn't caught.
+                    else if (
+                        event.which == $.ui.keyCode.COMMA ||
+                        event.which == $.ui.keyCode.ENTER ||
                         (
                             event.which == $.ui.keyCode.TAB &&
                             that.tagInput.val() !== ''
@@ -259,46 +335,110 @@
                                 )
                             )
                         )
-                    ) {
+                    ) { //attempting to add the tag.
+                    	
                         // Enter submits the form if there's no text in the input.
                         if (!(event.which === $.ui.keyCode.ENTER && that.tagInput.val() === '')) {
                             event.preventDefault();
                         }
+						that.createTag(that._cleanedInput());
+                        // The autocomplete doesn't close automatically when TAB is pressed.
+                        // So let's ensure that it closes.
+                        
+                        that.tagInput.autocomplete('close');
+                    } else{ //typing a tag
+                        var func;
 
-                        // Autocomplete will create its own tag from a selection and close automatically.
-                        if (!that.tagInput.data('autocomplete-open')) {
-                            that.createTag(that._cleanedInput());
+                        //check restrictions on characters
+                        if (event.which != $.ui.keyCode.BACKSPACE && event.which != $.ui.keyCode.TAB){
+
+                            //check if text in the input tag has length less than options.maxChars
+                            if(that.options.maxChars && $.trim(that.tagInput.val()).length >= that.options.maxChars){
+                                that._trigger("onMaxChars", null, that);
+                                event.preventDefault();
+                            } else {
+                                //length of the text in input tag changed, update input tag width
+                                that._updateInputTagWidth();
+                            }
                         }
+
                     }
-                }).blur(function(e){
+
+                }).blur(function(event){
                     // Create a tag when the element loses focus.
                     // If autocomplete is enabled and suggestion was clicked, don't add it.
                     if (!that.tagInput.data('autocomplete-open')) {
                         that.createTag(that._cleanedInput());
-                    }
+                    }              
+                   
+                }).keyup(function(event){
+                        if (event.which == $.ui.keyCode.UP ||event.which == $.ui.keyCode.DOWN){
+                            //user select some tag from drop down list of autocomplete control by up or down key
+                            //should update input tag width in order to selected text fits to the input element width
+                            that._updateInputTagWidth();
+                        }
+                }).keypress(function(event){
+                    //must do this on keypress event to handle shiftKey
+                    if (event.which != $.ui.keyCode.BACKSPACE && event.which != $.ui.keyCode.TAB){
+                        if(that.options.acceptableCharsRegex) {
+                            var _tester = new RegExp(that.options.acceptableCharsRegex);
+                            if (!_tester.test(String.fromCharCode(event.which))){
+                                event.preventDefault();
+                                that._trigger("onUnacceptableChar", null, that);
+                            }
+                        }
+                    }   
+                }).bind("paste", function(event) {
+                    setTimeout(function (event) {
+                        if(that.options.acceptableCharsRegex){
+                            var _tester = new RegExp(that.options.acceptableCharsRegex);
+                            var _arr = that.tagInput.val().split(_tester);
+                            var _currentvalue = that.tagInput.val();
+                            for (var x = 0;x < _arr.length; x++) {
+                                _currentvalue = _currentvalue.replace(_arr[x], ""); //remove characters not in the acceptableCharsRegex
+                            }
+                            _currentvalue = _currentvalue.replace(/( ){2,}/, " "); // eliminate multiple consecutive spaces.
+                            that.tagInput.val(_currentvalue);
+                        }
+                        that._updateInputTagWidth();
+                    });
                 });
+                
 
-            // Autocomplete.
-            if (this.options.availableTags || this.options.tagSource || this.options.autocomplete.source) {
-                var autocompleteOptions = {
-                    select: function(event, ui) {
-                        that.createTag(ui.item.value);
-                        // Preventing the tag input to be updated with the chosen value.
-                        return false;
-                    }
-                };
-                $.extend(autocompleteOptions, this.options.autocomplete);
+        },
 
-                // tagSource is deprecated, but takes precedence here since autocomplete.source is set by default,
-                // while tagSource is left null by default.
-                autocompleteOptions.source = this.options.tagSource || autocompleteOptions.source;
+        destroy : function(){
+            //destroy widget
 
-                this.tagInput.autocomplete(autocompleteOptions).bind('autocompleteopen', function(event, ui) {
-                    that.tagInput.data('autocomplete-open', true);
-                }).bind('autocompleteclose', function(event, ui) {
-                    that.tagInput.data('autocomplete-open', false)
-                });
+            if (this.element)
+            {
+                this.element.css('display', this.display_orig);
             }
+
+            $(this.tagList).remove();
+
+            $.Widget.prototype.destroy.apply(this, arguments);
+        },
+
+        _updateInputTagWidth : function(){
+            //function update width of the input tag on the base of the width of text inside.
+            
+            //calculate text width
+            var sensor = $('<span></span>').css({
+                "font-family" : this.tagInput.css("font-family"),
+                "font-size" : this.tagInput.css("font-size"),
+                "font-style" : this.tagInput.css("font-style"),
+                "font-variant" : this.tagInput.css("font-variant"),
+                "font-spacing" : this.tagInput.css("font-spacing"),
+                margin: this.tagInput.css("margin"),
+                padding: this.tagInput.css("padding")});
+            sensor.text(this.tagInput.val() + "WWW");
+            $("body").append(sensor);
+            var w  = sensor.width();
+            sensor.remove();
+
+            //update input tag width
+            this.tagInput.css("width", w);
         },
 
         _cleanedInput: function() {
@@ -389,7 +529,7 @@
         createTag: function(value, additionalClass, duringInitialization) {
             var that = this;
 
-            value = $.trim(value);
+            value = $.trim(value.replace(/( ){2,}/, " ")); //leading, trailing and consecutive spaces removal.
 
             if(this.options.preprocessTag) {
                 value = this.options.preprocessTag(value);
@@ -412,11 +552,23 @@
                 return false;
             }
 
-            if (this.options.tagLimit && this._tags().length >= this.options.tagLimit) {
-                this._trigger('onTagLimitExceeded', null, {duringInitialization: duringInitialization});
+            if (this.options.maxCount && this._tags().length >= this.options.maxCount) {
+                this._trigger('onMaxCount', null, {duringInitialization: duringInitialization});
                 return false;
             }
 
+            if (this.options.allowOnlyAutocompleteTags) {
+                this.tagInput.autocomplete("search", value);
+                $('.ui-autocomplete').css('display', 'none');
+                var availableTags = $("li[role='menuitem'] a", this.tagInput.autocomplete("widget"))
+                    .map(function(i, el) {
+                        return $(el).text().toLowerCase();
+                    });
+                if ($.inArray(value.toLowerCase(), availableTags) == -1) {
+                    return false;
+                }
+            }
+            
             var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
 
             // Create tag.
@@ -461,12 +613,15 @@
                 tags.push(value);
                 this._updateSingleTagsField(tags);
             }
+           	
+            tag.data("tagit", this);
 
             // DEPRECATED.
             this._trigger('onTagAdded', null, tag);
 
+            // Cleaning the input.
             this.tagInput.val('');
-
+            that._updateInputTagWidth();
             // Insert tag.
             this.tagInput.parent().before(tag);
 
@@ -475,6 +630,7 @@
                 tagLabel: this.tagLabel(tag),
                 duringInitialization: duringInitialization
             });
+
 
             if (this.options.showAutocompleteOnFocus && !duringInitialization) {
                 setTimeout(function () { that._showAutocomplete(); }, 0);
