@@ -1,5 +1,5 @@
 # Tag-it: a jQuery UI plugin
-
+Latest Release: 7/1/2013
 Tag-it is a simple and configurable tag editing widget with autocomplete support.
 
 [Homepage](http://aehlke.github.com/tag-it/)
