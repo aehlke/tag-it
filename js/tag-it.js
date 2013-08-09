@@ -80,6 +80,9 @@
             //Whether the tags are sorteable
             sorteable: false,
 
+            //Whether the tags are sorteable
+            editable: false,
+
             // Whether to animate tag removals or not.
             animate: true,
 
@@ -98,6 +101,8 @@
 
             onTagClicked        : null,
             onTagLimitExceeded  : null,
+
+            onEditTag: null,
 
             // DEPRECATED:
             //
@@ -197,7 +202,9 @@
                         if (!tag.hasClass('removed')) {
                             that._trigger('onTagClicked', e, {tag: tag, tagLabel: that.tagLabel(tag)});
                         }
-                    } else {
+
+                    } else if(!target.hasClass('edit-input') && !target.hasClass('tagit-edit') 
+                        && !target.hasClass('ui-icon')){
                         // Sets the focus() to the input field, if the user
                         // clicks anywhere inside the UL. This is needed
                         // because the input field needs to be of a small size.
@@ -439,6 +446,51 @@
                 .addClass(additionalClass)
                 .append(label);
 
+            if (!this.options.readOnly && this.options.editable){
+                var editinput = $('<input></input>')
+                    .addClass('edit-input')
+                    .attr('type','text')
+                    .hide();
+
+                tag.append(editinput);
+                var editTagIcon = $('<span></span>')
+                    .addClass('ui-icon ui-icon-pencil');
+                var editTag = $('<a><span class="text-icon">Edit</span></a>')
+                    .addClass('tagit-edit')
+                    .append(editTagIcon)
+                    .click(function(e) {
+                        var text = tag.children(":first").text();
+                        tag.children(":first").hide();
+                        tag.children(".edit-input").show().val(text).focus();
+                        tag.children(".tagit-save").show();
+                        $(this).hide()
+                    });
+                tag.append(editTag);
+                var saveTagIcon = $('<span></span>')
+                    .addClass('ui-icon ui-icon-check');
+                var saveTag = $('<a><span class="text-icon">Save</span></a>')
+                    .addClass('tagit-edit')
+                    .addClass('tagit-save')
+                    .append(saveTagIcon)
+                    .hide()
+                    .click(function(e) {
+                        var old_text = tag.children(":first").text();
+                        var new_text = tag.children(".edit-input").show().val();
+                        tag.children(".edit-input").hide();
+                        tag.children(":first").text(new_text);
+                        tag.children(":first").show();
+                        tag.children(".tagit-edit").show();
+                        $(this).hide()
+                        that._tagUpdate();
+                        that._trigger('onEditTag', null, {
+                            old_tag: old_text,
+                            new_tag: new_text
+                        });
+                    });
+                    tag.append(saveTag);
+            }
+
+
             if (this.options.readOnly){
                 tag.addClass('tagit-choice-read-only');
             } else {
@@ -495,13 +547,16 @@
             }
         },
         onChangeOrder: function() {
+            this._tagUpdate();
+            this._trigger('onSortChange', null);
+        },
+        _tagUpdate: function(){
             var tags = [];
             var that = this;
             this._tags().each(function() {
                 tags.push(that.tagLabel(this));
             });
             this._updateSingleTagsField(tags);
-            this._trigger('onSortChange', null);
         },
         removeTag: function(tag, animate) {
             animate = typeof animate === 'undefined' ? this.options.animate : animate;
