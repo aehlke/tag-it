@@ -406,20 +406,10 @@
         _effectExists: function(name) {
             return Boolean($.effects && ($.effects[name] || ($.effects.effect && $.effects.effect[name])));
         },
-
-        createTag: function(value, additionalClass, duringInitialization) {
-            var that = this;
-
-            value = $.trim(value);
-
-            if(this.options.preprocessTag) {
-                value = this.options.preprocessTag(value);
-            }
-
+        _validateDuplicates: function(value, duringInitialization){
             if (value === '') {
                 return false;
             }
-
             if (!this.options.allowDuplicates && !this._isNew(value)) {
                 var existingTag = this._findTagByLabel(value);
                 if (this._trigger('onTagExists', null, {
@@ -430,6 +420,25 @@
                         existingTag.effect('highlight');
                     }
                 }
+                return false;
+            }
+            return true;
+        },
+        _preprocessValue: function(value){
+            value = $.trim(value);
+
+            if(this.options.preprocessTag) {
+                value = this.options.preprocessTag(value);
+            }
+
+            return value;
+        },
+        createTag: function(value, additionalClass, duringInitialization) {
+            var that = this;
+
+            value = this._preprocessValue(value)
+
+            if(!this._validateDuplicates(value,duringInitialization)){
                 return false;
             }
 
@@ -476,16 +485,19 @@
                     .click(function(e) {
                         var old_text = tag.children(":first").text();
                         var new_text = tag.children(".edit-input").show().val();
-                        tag.children(".edit-input").hide();
-                        tag.children(":first").text(new_text);
-                        tag.children(":first").show();
-                        tag.children(".tagit-edit").show();
-                        $(this).hide()
-                        that._tagUpdate();
-                        that._trigger('onEditTag', null, {
-                            old_tag: old_text,
-                            new_tag: new_text
-                        });
+                        new_text = that._preprocessValue(new_text);
+                        if(that._validateDuplicates(new_text,true) || old_text== new_text){
+                            tag.children(".edit-input").hide();
+                            tag.children(":first").text(new_text);
+                            tag.children(":first").show();
+                            tag.children(".tagit-edit").show();
+                            $(this).hide()
+                            that._tagUpdate();
+                            that._trigger('onEditTag', null, {
+                                old_tag: old_text,
+                                new_tag: new_text
+                            });    
+                        }
                     });
                     tag.append(saveTag);
             }
