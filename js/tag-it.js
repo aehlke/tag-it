@@ -28,13 +28,14 @@
 
     $.widget('ui.tagit', {
         options: {
-            allowDuplicates   : false,
-            caseSensitive     : true,
-            fieldName         : 'tags',
-            placeholderText   : null,   // Sets `placeholder` attr on input field.
-            readOnly          : false,  // Disables editing.
-            removeConfirmation: false,  // Require confirmation to remove tags.
-            tagLimit          : null,   // Max number of tags allowed (null for unlimited).
+            allowDuplicates    : false,
+            caseSensitive      : true,
+            fieldName          : 'tags',
+            placeholderText    : null,   // Sets `placeholder` attr on input field.
+            readOnly           : false,  // Disables editing.
+            removeConfirmation : false,  // Require confirmation to remove tags.
+            tagLimit           : null,   // Max number of tags allowed (null for unlimited).
+            enforceAutocomplete: true,   // Do not allow creation of tags when autocomplete is up
 
             // Used for autocomplete, unless you override `autocomplete.source`.
             availableTags     : [],
@@ -266,7 +267,8 @@
                         }
 
                         // Autocomplete will create its own tag from a selection and close automatically.
-                        if (!that.tagInput.data('autocomplete-open')) {
+                        // Prevent creation of new tags with autocomplete up via enforceAutocomplete option
+                        if (!(that.options.enforceAutocomplete && that.tagInput.data('autocomplete-open'))) {
                             that.createTag(that._cleanedInput());
                         }
                     }
