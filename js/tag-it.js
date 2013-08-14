@@ -372,7 +372,7 @@
             if (this.options.singleField) {
                 return $(tag).find('.tagit-label:first').text();
             } else {
-                return $(tag).find('input:first').val();
+                return $(tag).find('input.singleField-input:first').val();
             }
         },
 
@@ -523,7 +523,7 @@
             // Unless options.singleField is set, each tag has a hidden input field inline.
             if (!this.options.singleField) {
                 var escapedValue = label.html();
-                tag.append('<input type="hidden" style="display:none;" value="' + escapedValue + '" name="' + this.options.fieldName + '" />');
+                tag.append('<input type="hidden" class="singleField-input" style="display:none;" value="' + escapedValue + '" name="' + this.options.fieldName + '" />');
             }
 
             if (this._trigger('beforeTagAdded', null, {
