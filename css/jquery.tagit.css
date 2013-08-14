@@ -3,6 +3,7 @@ ul.tagit {
     overflow: auto;
     margin-left: inherit; /* usually we don't want the regular ul margins. */
     margin-right: inherit;
+    width: 500px;
 }
 ul.tagit li {
     display: block;
@@ -19,7 +20,7 @@ ul.tagit li.tagit-choice-read-only {
 } 
 
 ul.tagit li.tagit-choice-editable { 
-    padding: .2em 18px .2em .5em; 
+    padding: .2em 45px .2em .5em; 
 } 
 
 ul.tagit li.tagit-new {
@@ -39,8 +40,24 @@ ul.tagit li.tagit-choice .tagit-close {
     line-height: 17px;
 }
 
+ul.tagit li.tagit-choice .tagit-edit{
+    cursor: pointer;
+    position: absolute;
+    right: 1.3em;
+    top: 50%;
+    margin-top: -8px;
+    line-height: 17px;
+}
+
+ul.tagit li.tagit-choice input.edit-input{
+    border: 1px;
+    width: 100px;
+    background-color: #FFF;
+}
+
 /* used for some custom themes that don't need image icons */
-ul.tagit li.tagit-choice .tagit-close .text-icon {
+ul.tagit li.tagit-choice .tagit-close .text-icon,
+ul.tagit li.tagit-choice .tagit-edit .text-icon {
     display: none;
 }
 
@@ -64,4 +81,11 @@ ul.tagit input[type="text"] {
     width: inherit;
     background-color: inherit;
     outline: none;
+}
+.highlight-sorteable { 
+    background-color: rgb(255, 250, 224);
+    border: 1px dashed rgb(255, 122, 0);
+    height: 1.5em;
+    line-height: 1.2em;
+    width: 20px;
 }

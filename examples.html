@@ -79,6 +79,8 @@
 
             eventTags.tagit({
                 availableTags: sampleTags,
+                sorteable: true,
+                editable: true,
                 beforeTagAdded: function(evt, ui) {
                     if (!ui.duringInitialization) {
                         addEvent('beforeTagAdded: ' + eventTags.tagit('tagLabel', ui.tag));
@@ -100,6 +102,12 @@
                 },
                 onTagExists: function(evt, ui) {
                     addEvent('onTagExists: ' + eventTags.tagit('tagLabel', ui.existingTag));
+                },
+                onEditTag: function(evt, obj){
+                    addEvent('onEditTag: old_tag -> ' + obj.old_tag + ', new_tag ->'+ obj.new_tag);
+                },
+                onSortChange: function(evt){
+                    addEvent('onSortChange');
                 }
             });
 
@@ -225,10 +233,12 @@
 
         <h3>Events</h3>
         <form>
-            <p>Example of tag events. Try adding or removing a tag, adding a duplicate tag, or clicking on a tag's label.</p>
+            <p>Example of tag events. Try adding or removing a tag, adding a duplicate tag, clicking on a tag's label, reorder tag or edit tag's label</p>
             <ul id="eventTags">
                 <li>Click my label</li>
                 <li>Remove me</li>
+                <li>move me</li>
+                <li>edit me</li>
             </ul>
         </form>
         <div id="events_container"></div>

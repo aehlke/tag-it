@@ -22,12 +22,18 @@ ul.tagit li.tagit-choice {
 ul.tagit li.tagit-choice .tagit-label:not(a) {
     color: #555;
 }
-ul.tagit li.tagit-choice a.tagit-close {
+ul.tagit li.tagit-choice a.tagit-close,
+ul.tagit li.tagit-choice a.tagit-edit {
     text-decoration: none;
 }
-ul.tagit li.tagit-choice .tagit-close {
-    right: .4em;
+ul.tagit li.tagit-choice .tagit-close{
+    right: .2em;
 }
+ul.tagit li.tagit-choice .tagit-edit{
+    right: 1.1em;
+    margin-top: -9px;
+}
+
 ul.tagit li.tagit-choice .ui-icon {
     display: none;
 }
@@ -38,12 +44,18 @@ ul.tagit li.tagit-choice .tagit-close .text-icon {
     line-height: 16px;
     color: #777;
 }
+ul.tagit li.tagit-choice .tagit-edit .text-icon {
+    display: inline;
+    font-size: .9em;
+    font-style: italic;
+}
 ul.tagit li.tagit-choice:hover, ul.tagit li.tagit-choice.remove {
     background-color: #bbcef1;
     border-color: #6d95e0;
 }
 ul.tagit li.tagit-choice a.tagLabel:hover,
-ul.tagit li.tagit-choice a.tagit-close .text-icon:hover {
+ul.tagit li.tagit-choice a.tagit-close .text-icon:hover,
+ul.tagit li.tagit-choice a.tagit-edit .text-icon:hover{
     color: #222;
 }
 ul.tagit input[type="text"] {
