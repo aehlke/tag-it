@@ -35,6 +35,7 @@
             readOnly          : false,  // Disables editing.
             removeConfirmation: false,  // Require confirmation to remove tags.
             tagLimit          : null,   // Max number of tags allowed (null for unlimited).
+            maxLimit          : 0,      // Max number of choices showed by the list
 
             // Used for autocomplete, unless you override `autocomplete.source`.
             availableTags     : [],
@@ -147,6 +148,7 @@
                     if (!this.options.allowDuplicates) {
                         choices = this._subtractArray(choices, this.assignedTags());
                     }
+                    if (this.options.maxLength > 0) choices = choices.slice(0, this.options.maxLength);
                     showChoices(choices);
                 };
             }
