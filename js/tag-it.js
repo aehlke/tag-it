@@ -93,7 +93,9 @@
 
             onTagClicked        : null,
             onTagLimitExceeded  : null,
-
+			
+			//callback to be called once the tagit is applied
+			afterCreated		: null,
 
             // DEPRECATED:
             //
@@ -299,6 +301,10 @@
                     that.tagInput.data('autocomplete-open', false)
                 });
             }
+            
+            //callback to be fired when the tagit is finished being applied
+            if( this.options.afterCreated && (typeof this.options.afterCreated == "function") )
+            	this.options.afterCreated();
         },
 
         _cleanedInput: function() {
