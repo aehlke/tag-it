@@ -299,6 +299,8 @@
                 }).bind('autocompleteclose.tagit', function(event, ui) {
                     that.tagInput.data('autocomplete-open', false)
                 });
+
+                this.tagInput.autocomplete('widget').addClass('tagit-autocomplete');
             }
         },
 
