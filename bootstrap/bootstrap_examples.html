@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Tag-it! Bootstrap Example</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <!-- Bootstrap. -->
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+
+    <link href="../css/jquery.tagit.css" rel="stylesheet" type="text/css">
+    <link href="jquery.tagit.bootstrap.css" rel="stylesheet" type="text/css">
+    <script src="../js/tag-it.js" type="text/javascript" charset="utf-8"></script>
+
+    <script>
+        $(function(){
+            var sampleTags = ['c++', 'java', 'php', 'coldfusion', 'javascript', 'asp', 'ruby', 'python', 'c', 'scala', 'groovy', 'haskell', 'perl', 'erlang', 'apl', 'cobol', 'go', 'lua'];
+
+            $('#singleFieldTags2').tagit({
+                availableTags: sampleTags
+            });
+        });
+    </script>
+
+</head>
+<body>
+
+<a href="http://github.com/aehlke/tag-it"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub" /></a>
+
+<div id="wrapper"> 
+    <div id="header"> 
+        <h2>Tag-it! Bootstrap Examples</h2> 
+        
+        <ul id="nav">
+            <li><a href="http://aehlke.github.com/tag-it">&laquo; back to widget home</a></li>
+        </ul>
+    </div>
+    
+    <div id="content">
+        <p>
+        This demonstrates how Tag-it looks and works with <a href="http://twitter.github.com/bootstrap/">Bootstrap</a>.
+        </p>
+
+        <hr>
+        <form>
+            <input name="tags" id="singleFieldTags2" value="Apple, Orange">
+        </form>
+    </div>
+
+
+    <div id="footer"> 
+        <div class="left">
+            <p>Built with <a href="http://jquery.com/" target="_blank">jQuery</a> and <a href="http://jqueryui.com/" target="_blank">jQuery UI</a>.</p>
+            <p>Originally created by <a href="http://levycarneiro.com/">Levy Carneiro Jr</a>. Currently maintained by <a href="http://github.com/aehlke">Alex Ehlke</a>.</p>
+        </div>
+        <p class="right weak">Template adopted from <a href="http://orderedlist.com/demos/fancy-zoom-jquery/">orderedlist.com</a></p>
+        <br class="clear"/>
+    </div> 
+</div>
+</body>
+</html>
+
