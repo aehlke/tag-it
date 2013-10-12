@@ -294,9 +294,9 @@
                 // while tagSource is left null by default.
                 autocompleteOptions.source = this.options.tagSource || autocompleteOptions.source;
 
-                this.tagInput.autocomplete(autocompleteOptions).bind('autocompleteopen', function(event, ui) {
+                this.tagInput.autocomplete(autocompleteOptions).bind('autocompleteopen.tagit', function(event, ui) {
                     that.tagInput.data('autocomplete-open', true);
-                }).bind('autocompleteclose', function(event, ui) {
+                }).bind('autocompleteclose.tagit', function(event, ui) {
                     that.tagInput.data('autocomplete-open', false)
                 });
             }
@@ -304,6 +304,11 @@
 
         destroy: function() {
             $.Widget.prototype.destroy.call(this);
+
+            this.element.unbind('.tagit');
+            this.tagList.unbind('.tagit');
+
+            this.tagInput.removeData('autocomplete-open');
 
             this.tagList.removeClass([
                 'tagit',
