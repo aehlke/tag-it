@@ -1,0 +1,70 @@
+// Use this in addition to the base CSS, jquery.tagit.css.
+//
+// Adapted from Bootstrap's btn class.
+
+ul.tagit {
+    li.tagit-choice {
+        display: inline-block;
+        .ie7-inline-block();
+        font-size: @baseFontSize;
+        line-height: @baseLineHeight;
+        text-align: center;
+        vertical-align: middle;
+        .buttonBackground(@btnBackground, @btnBackgroundHighlight, @grayDark, 0 1px 1px rgba(255,255,255,.75));
+        border: 1px solid @btnBorder;
+        *border: 0; // Remove the border to prevent IE7's black border on input:focus
+        border-bottom-color: darken(@btnBorder, 10%);
+        .border-radius(@baseBorderRadius);
+        .ie7-restore-left-whitespace(); // Give IE7 some love
+        .box-shadow(~"inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05)");
+
+        // Hover state
+        &:hover {
+            color: @grayDark;
+            text-decoration: none;
+            background-position: 0 -15px;
+
+            // transition is only when going to hover, otherwise the background
+            // behind the gradient (there for IE<=9 fallback) gets mismatched
+            .transition(background-position .1s linear);
+        }
+
+        // Focus state for keyboard and accessibility
+        &:focus {
+            .tab-focus();
+        }
+
+        // Active state
+        &.active,
+        &:active {
+            background-image: none;
+            outline: 0;
+            .box-shadow(~"inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05)");
+        }
+
+        // Disabled state
+        &.disabled,
+        &[disabled] {
+            cursor: default;
+            background-image: none;
+            .opacity(65);
+            .box-shadow(none);
+        }
+    }
+
+    .tagit-close {
+        .icon-remove;
+
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        .ie7-restore-right-whitespace();
+        line-height: 14px;
+        vertical-align: text-top;
+        background-image: url("@{iconSpritePath}");
+        background-position: 14px 14px;
+        background-repeat: no-repeat;
+        margin-top: 1px;
+    }
+}
+
