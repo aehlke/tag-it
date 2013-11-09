@@ -35,6 +35,7 @@
             readOnly          : false,  // Disables editing.
             removeConfirmation: false,  // Require confirmation to remove tags.
             tagLimit          : null,   // Max number of tags allowed (null for unlimited).
+            createTagOnBlur   : true,   // Create a tag when the element loses focus.
 
             // Used for autocomplete, unless you override `autocomplete.source`.
             availableTags     : [],
@@ -272,9 +273,9 @@
                         }
                     }
                 }).blur(function(e){
-                    // Create a tag when the element loses focus.
+                    // Create a tag when the element loses focus. Only if option createTagOnBlur is true.
                     // If autocomplete is enabled and suggestion was clicked, don't add it.
-                    if (!that.tagInput.data('autocomplete-open')) {
+                    if (this.options.createTagOnBlur && !that.tagInput.data('autocomplete-open')) {
                         that.createTag(that._cleanedInput());
                     }
                 });
