@@ -368,16 +368,9 @@
             // Returns an array of tag string values
             var that = this;
             var tags = [];
-            if (this.options.singleField) {
-                tags = $(this.options.singleFieldNode).val().split(this.options.singleFieldDelimiter);
-                if (tags[0] === '') {
-                    tags = [];
-                }
-            } else {
-                this._tags().each(function() {
-                    tags.push(that.tagLabel(this));
-                });
-            }
+            this._tags().each(function() {
+                tags.push(that.tagLabel(this));
+            });
             return tags;
         },
 
