@@ -1,6 +1,7 @@
 $(document).ready(function() {
 
-	//The term 'user' is used as a generic example of possible uses of this plugin
+	//In this example, we will be getting data on various users' names and IDs
+	//Then, we will create tags with the user's name on them, and store their IDs in hidden input fields
 	
 	var returned_names = []; //Keep track of names of every user (String)
 	var current_user_id = 0; //Keep track of ID of user being currently added as a tag (Integer)
