@@ -2,8 +2,14 @@
 
 Tag-it is a simple and configurable tag editing widget with autocomplete support.
 
-[Homepage](http://aehlke.github.com/tag-it/)
+[Homepage](http://miking98.github.com/tag-it/)
 
+
+## New Options
+
+###itemName
+
+Name of 
 ## Demo
 
 ![Screenshot](http://aehlke.github.com/tag-it/_static/screenshot.png)
