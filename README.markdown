@@ -7,9 +7,23 @@ Tag-it is a simple and configurable tag editing widget with autocomplete support
 
 ## New Options
 
-###itemName
+Ability to have values be separate from the string displayed on tags. For example, you can display a user's name, like "John Doe," while storing his user ID in a hidden input field. Both values will be POSTed on form submission in different arrays. 
 
-Name of 
+Additionally...
+	
+	Fixed autocomplete bugs and cleaned up the jQuery implementation.
+	
+	Tags with strings longer than 20 characters will be shortened- this can be modified on line 401.
+
+### itemName (String)
+
+Name of hidden input field whose values won't be shown (i.e. a user's ID)
+
+### fieldName (String)
+
+Name of hidden input field whose value is shown on tag (i.e. a user's name)
+
+## Old Documentation (still useful for other features)
 ## Demo
 
 ![Screenshot](http://aehlke.github.com/tag-it/_static/screenshot.png)
