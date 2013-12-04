@@ -21,7 +21,7 @@ Name of hidden input field whose values won't be shown (i.e. a user's ID)
 
 ### fieldName (String)
 
-Name of hidden input field whose value is shown on tag (i.e. a user's name)
+Name of hidden input field whose value is shown on tag (i.e. a user's name). Defaults to *tags*
 
 
 ## How to implement autocomplete in jQuery
@@ -31,13 +31,15 @@ See the "autocompleteexample.js" file under the ".js" folder
 
 
 ## Old Documentation (still useful for other features)
-## Demo
+
+
+## Demo (note: doesn't show autocomplete options)
 
 ![Screenshot](http://aehlke.github.com/tag-it/_static/screenshot.png)
 
 Check the [examples.html](http://aehlke.github.com/tag-it/examples.html) for several demos and the [prototype.js](http://aehlke.github.com/tag-it/prototype.js) file for a JavaScript prototype with all options and events.
 
-## Usage
+## Usage (important! Make sure you do this!)
 
 First, load [jQuery](http://jquery.com/) (v1.4 or greater), [jQuery UI](http://jqueryui.com/) (v1.8 or greater), and the plugin:
 
@@ -74,55 +76,11 @@ This will turn the list into a tag-it widget. There are several other possible c
 Tag-it is as easily themeable as any jQuery UI widget, using your own theme made with [Themeroller](http://jqueryui.com/themeroller/), or one of the jQuery UI [premade themes](http://jqueryui.com/themeroller/#themeGallery). The old ZenDesk-like theme is included as an optional CSS file ([tagit.ui-zendesk.css](http://github.com/aehlke/tag-it/raw/master/css/tagit.ui-zendesk.css)).
 
 
-## Options
+## Options 
 
-Tag-it accepts several options to customize its behaviour:
+### Note: All this stuff is optional- If you just copy and use the autocompleteexample.js file in the 'js' folder, you should be good to go
 
-### fieldName (String)
-
-Each tag's hidden input field will have this name.
-If you're using PHP, you may want to use something like `itemName[fieldName][]` for this option's value.
-
-    $("#myTags").tagit({
-        fieldName: "skills"
-    });
-
-Defaults to *tags*.
-
-### availableTags (Array)
-
-Used as source for the autocompletion, unless **autocomplete.source** is overridden.
-
-    $("#myTags").tagit({
-        availableTags: ["c++", "java", "php", "javascript", "ruby", "python", "c"]
-    });
-
-If you define your own **autocomplete.source**, this option is unused (unless you choose to reference it yourself from your custom **autocomplete.source** of course.)
-
-Defaults to an empty array *[]*.
-
-### autocomplete (Object)
-
-Allows overriding the `source` and `select` options that are set by default,
-as well as adding any other options you want to pass to the jQuery UI Autocomplete widget, such as `minLength` or `delay`.
-
-The `autocomplete.source` should be overridden if you want to use custom autocompletion sources, like an Ajax / XHR response.
-
-For example:
-
-    $("#myTags").tagit({
-        autocomplete: {delay: 0, minLength: 2}
-    });
-
-The default `autocomplete.source` function filters the strings in **availableTags** and subtracts the already assigned tags. It also positions autocomplete underneath tag input. See the full list of available options [here](http://jqueryui.com/demos/autocomplete/).
-
-### showAutocompleteOnFocus (boolean)
-
-Shows autocomplete when the tag input first receives focus, before the user even types anything.
-
-If enabled, this will also make **autocomplete.minLength** default to `0` unless you override that, so that autocomplete can show up with a blank search.
-
-Defaults to *false*.
+Still, this version of Tag-it will accept all these options to customize its behaviour:
 
 ### removeConfirmation (boolean)
 
