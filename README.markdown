@@ -23,6 +23,13 @@ Name of hidden input field whose values won't be shown (i.e. a user's ID)
 
 Name of hidden input field whose value is shown on tag (i.e. a user's name)
 
+
+## How to implement autocomplete in jQuery
+
+See the "autocompleteexample.js" file under the ".js" folder
+
+
+
 ## Old Documentation (still useful for other features)
 ## Demo
 
