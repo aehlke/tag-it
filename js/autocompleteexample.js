@@ -8,13 +8,13 @@ $(document).ready(function() {
 	$("#tagit_ul").tagit({
 		placeholderText: "Type a topic", //Placeholder text to show user before they type
 		//For every tag created, two hidden input fields will also be created
-    	fieldName: "usernames", //This field is for the actual String displayed on the tag- to access it in PHP, call $_POST['usernames']
-    	itemName: "userids", //This is for the user ID that we don't want displayed- to access it in PHP, call $_POST['userids']
-        singleField: false, //Don't store every value in a single hidden input field
-        allowSpaces: true, //Allow tags to have spaces
-        minLength: 2, //Minimum length of tag- anything less and an AJAX request will not be sent
-        removeConfirmation: true, //Requires two Backspaces before deleting a tag
-        allowDuplicates: false, //Prevent duplicate tags- the Array [] returned_names comes in handy here
+    		fieldName: "usernames", //This field is for the actual String displayed on the tag- to access it in PHP, call $_POST['usernames']
+    		itemName: "userids", //This is for the user ID that we don't want displayed- to access it in PHP, call $_POST['userids']
+		singleField: false, //Don't store every value in a single hidden input field
+        	allowSpaces: true, //Allow tags to have spaces
+		minLength: 2, //Minimum length of tag- anything less and an AJAX request will not be sent
+		removeConfirmation: true, //Requires two Backspaces before deleting a tag
+		allowDuplicates: false, //Prevent duplicate tags- the Array [] returned_names comes in handy here
 		autocomplete: { 
 			source: function( request, response ) { //Get autocomplete options
 				$.ajax({
