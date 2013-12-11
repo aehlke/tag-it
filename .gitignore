@@ -3,3 +3,6 @@
 *.swo
 *.swp
 .DS_Store
+/.project
+/.settings
+/.buildpath
