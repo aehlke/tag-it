@@ -47,6 +47,27 @@
 
             // Shows autocomplete before the user even types anything.
             showAutocompleteOnFocus: false,
+            
+            // Search for patterns within all the autocomplete tags as opposed
+            // to just the start of the tag.  By default (value set to false)
+            // it will only search the start
+            
+            // By default (value set to false) perform the autocomplete by
+            // matching just the start of each available tag or by matching
+            // within any part of the tag
+            autocompleteMatchAnywhere: false,
+            
+            // When used with availableTags it will only only those tags in the
+            // array to be added via the input.  If availableTags is empty then
+            // this setting is ignored
+            allowOnlyAutocompleteTags: false,
+            
+            // By default (value set to false) all tags will have the same
+            // colour, but if it's set to tru and the tag is not in the auto
+            // complete list, the tag will additionall get the class
+            // tagit-not-autocomplete.  This setting is superseded by the
+            // allowOnlyAutocompleteTags which takes precendence
+            highlightTagsNotInAutocomplete: false,
 
             // When enabled, quotes are unneccesary for inputting multi-word tags.
             allowSpaces: false,
@@ -140,9 +161,11 @@
                 this.options.autocomplete.source = function(search, showChoices) {
                     var filter = search.term.toLowerCase();
                     var choices = $.grep(this.options.availableTags, function(element) {
-                        // Only match autocomplete options that begin with the search term.
-                        // (Case insensitive.)
-                        return (element.toLowerCase().indexOf(filter) === 0);
+                        if (that.options.autocompleteMatchAnywhere) {
+                            return (element.toLowerCase().search(filter.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')) !== -1);
+                        } else {
+                            return (element.toLowerCase().indexOf(filter) === 0);
+                        }
                     });
                     if (!this.options.allowDuplicates) {
                         choices = this._subtractArray(choices, this.assignedTags());
@@ -164,6 +187,30 @@
             // Bind autocomplete.source callback functions to this context.
             if ($.isFunction(this.options.autocomplete.source)) {
                 this.options.autocomplete.source = $.proxy(this.options.autocomplete.source, this);
+            }
+
+            // Autocomplete.
+            if (this.options.availableTags || this.options.tagSource || this.options.autocomplete.source) {
+                var autocompleteOptions = {
+                    select: function(event, ui) {
+                        that.createTag(ui.item.value);
+                        // Preventing the tag input to be updated with the chosen value.
+                        return false;
+                    }
+                };
+                $.extend(autocompleteOptions, this.options.autocomplete);
+
+                // tagSource is deprecated, but takes precedence here since autocomplete.source is set by default,
+                // while tagSource is left null by default.
+                autocompleteOptions.source = this.options.tagSource || autocompleteOptions.source;
+
+                this.tagInput.autocomplete(autocompleteOptions).bind('autocompleteopen.tagit', function(event, ui) {
+                    that.tagInput.data('autocomplete-open', true);
+                }).bind('autocompleteclose.tagit', function(event, ui) {
+                    that.tagInput.data('autocomplete-open', false)
+                });
+
+                this.tagInput.autocomplete('widget').addClass('tagit-autocomplete');
             }
 
             // DEPRECATED.
@@ -278,30 +325,6 @@
                         that.createTag(that._cleanedInput());
                     }
                 });
-
-            // Autocomplete.
-            if (this.options.availableTags || this.options.tagSource || this.options.autocomplete.source) {
-                var autocompleteOptions = {
-                    select: function(event, ui) {
-                        that.createTag(ui.item.value);
-                        // Preventing the tag input to be updated with the chosen value.
-                        return false;
-                    }
-                };
-                $.extend(autocompleteOptions, this.options.autocomplete);
-
-                // tagSource is deprecated, but takes precedence here since autocomplete.source is set by default,
-                // while tagSource is left null by default.
-                autocompleteOptions.source = this.options.tagSource || autocompleteOptions.source;
-
-                this.tagInput.autocomplete(autocompleteOptions).bind('autocompleteopen.tagit', function(event, ui) {
-                    that.tagInput.data('autocomplete-open', true);
-                }).bind('autocompleteclose.tagit', function(event, ui) {
-                    that.tagInput.data('autocomplete-open', false)
-                });
-
-                this.tagInput.autocomplete('widget').addClass('tagit-autocomplete');
-            }
         },
 
         destroy: function() {
@@ -438,7 +461,6 @@
 
         createTag: function(value, additionalClass, duringInitialization) {
             var that = this;
-
             value = $.trim(value);
 
             if(this.options.preprocessTag) {
@@ -462,6 +484,23 @@
                 return false;
             }
 
+            var addHighlightClass = false;
+            if (this.options.allowOnlyAutocompleteTags || this.options.highlightTagsNotInAutocomplete) {
+                that.tagInput.autocomplete('search', value);
+                that.tagInput.autocomplete('close');
+                var availableTags = $("li.ui-menu-item a", this.tagInput.autocomplete("widget"))
+                    .map(function(i, el) {
+                        return $(el).text().toLowerCase();
+                    });
+                if ($.inArray(value.toLowerCase(), availableTags) == -1) {
+                    if (this.options.allowOnlyAutocompleteTags) {
+                        return false;
+                    } else {
+                        addHighlightClass = true;
+                    }
+                }
+            }
+
             if (this.options.tagLimit && this._tags().length >= this.options.tagLimit) {
                 this._trigger('onTagLimitExceeded', null, {duringInitialization: duringInitialization});
                 return false;
@@ -474,6 +513,9 @@
                 .addClass('tagit-choice ui-widget-content ui-state-default ui-corner-all')
                 .addClass(additionalClass)
                 .append(label);
+            if (this.options.highlightTagsNotInAutocomplete && addHighlightClass) {
+                tag.addClass('tagit-not-autocomplete');
+            }
 
             if (this.options.readOnly){
                 tag.addClass('tagit-choice-read-only');

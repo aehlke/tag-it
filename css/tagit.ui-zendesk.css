@@ -96,3 +96,12 @@ ul.tagit input[type="text"] {
 .tagit .ui-helper-hidden-accessible { position: absolute !important; clip: rect(1px,1px,1px,1px); }
 
 
+ul.tagit li.tagit-choice.tagit-not-autocomplete {
+    border: 1px dotted #f3caca;
+    background-color: #f8dede;
+}
+ul.tagit li.tagit-choice.tagit-not-autocomplete:hover,
+ul.tagit li.tagit-choice.remove.tagit-not-autocomplete {
+    background-color: #f1bbbb;
+    border-color: #e06d6d;
+}

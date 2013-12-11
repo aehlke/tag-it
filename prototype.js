@@ -16,6 +16,8 @@ $("#myTags").tagit({
     singleFieldNode: null,
     tabIndex: null,
     placeholderText: null,
+    autocompleteMatchAnywhere: false,
+    allowOnlyAutocompleteTags: false,
 
     // Events
     beforeTagAdded: function(event, ui) {
