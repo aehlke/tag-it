@@ -438,7 +438,7 @@
             if (this.options.allowOnlyAutocompleteTags || this.options.highlightTagsNotInAutocomplete) {
                 that.tagInput.autocomplete('search', value);
                 that.tagInput.autocomplete('close');
-                var availableTags = $("li[role='menuitem'] a", this.tagInput.autocomplete("widget"))
+                var availableTags = $("li.ui-menu-item a", this.tagInput.autocomplete("widget"))
                     .map(function(i, el) {
                         return $(el).text().toLowerCase();
                     });
