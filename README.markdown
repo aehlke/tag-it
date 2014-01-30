@@ -8,7 +8,7 @@ Tag-it is a simple and configurable tag editing widget with autocomplete support
 
 ![Screenshot](http://aehlke.github.com/tag-it/_static/screenshot.png)
 
-Check the [examples.html](http://aehlke.github.com/tag-it/examples.html) for several demos and the [prototype.js](http://aehlke.github.com/tag-it/prototype.js) file for a JavaScipt prototype with all options and events.
+Check the [examples.html](http://aehlke.github.com/tag-it/examples.html) for several demos and the [prototype.js](http://aehlke.github.com/tag-it/prototype.js) file for a JavaScript prototype with all options and events.
 
 ## Usage
 
