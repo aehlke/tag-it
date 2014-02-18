@@ -237,10 +237,19 @@
                         that._lastTag().removeClass('remove ui-state-highlight');
                     }
 
-                    var text = that._cleanedInput() + String.fromCharCode(event.keyCode);
-                    
-                    if (that.options.pattern && !that.options.test(text)) {
-                        return false;
+                    // Validate input pattern
+                    var ignorableKeyCodes = [
+                        $.ui.keyCode.BACKSPACE,
+                        $.ui.keyCode.COMMA,
+                        $.ui.keyCode.ENTER,
+                        $.ui.keyCode.TAB,
+                    ];
+
+                    if ($.inArray(event.which, ignorableKeyCodes) == -1) {
+                        var text = that._cleanedInput() + String.fromCharCode(event.keyCode);
+                        if (that.options.pattern && !that.options.pattern.test(text)) {
+                            return false;
+                        }
                     }
 
                     // Comma/Space/Enter are all valid delimiters for new tags,

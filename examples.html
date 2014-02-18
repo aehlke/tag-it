@@ -59,6 +59,14 @@
             });
 
             //-------------------------------
+            // Single field with validation
+            //-------------------------------
+            // validateRegexp only allows a given pattern (only numbers)
+            $('#validateRegexp').tagit({
+                pattern: /^\d+$/
+            });
+
+            //-------------------------------
             // Preloading data in markup
             //-------------------------------
             $('#myULTags').tagit({
@@ -186,6 +194,15 @@
                 If you instantiate Tag-it on an INPUT element, it will default to being singleField, with that INPUT element as the singleFieldNode. This is the simplest way to have a gracefully-degrading tag widget.
             </p>
             <input name="tags" id="singleFieldTags2" value="Apple, Orange">
+        </form>
+
+        <hr>
+        <h3><a name="graceful-degredation"></a>RegExp validation</h3>
+        <form>
+            <p>
+                You can restrict acceptable inputs using a regular expression.
+            </p>
+            <input name="tags" id="validateRegexp" value="123, 456">
         </form>
 
         <hr>
