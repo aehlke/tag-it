@@ -215,8 +215,15 @@
             if (!addedExistingFromSingleFieldNode) {
                 this.tagList.children('li').each(function() {
                     if (!$(this).hasClass('tagit-new')) {
-                        that.createTag($(this).text(), $(this).attr('class'), true);
-                        $(this).remove();
+ 						if(typeof $(this).data('value') !== 'undefined'
+							&& that.options.separateValueLabel
+						){
+							that.createTag({ value: $(this).data('value'), label: $(this).text() }, $(this).attr('class'), true);
+						}
+						else{
+							that.createTag($(this).text(), $(this).attr('class'), true);
+						}
+						$(this).remove();
                     }
                 });
             }
