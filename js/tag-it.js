@@ -268,14 +268,14 @@
                         // Autocomplete will create its own tag from a selection and close automatically.
                         if (!(that.options.autocomplete.autoFocus && that.tagInput.data('autocomplete-open'))) {
                             that.tagInput.autocomplete('close');
-                            that.createTag(that._cleanedInput());
+                            that._createTagsFromInput();
                         }
                     }
                 }).blur(function(e){
                     // Create a tag when the element loses focus.
                     // If autocomplete is enabled and suggestion was clicked, don't add it.
                     if (!that.tagInput.data('autocomplete-open')) {
-                        that.createTag(that._cleanedInput());
+                        that._createTagsFromInput();
                     }
                 });
 
@@ -349,11 +349,6 @@
             }
 
             return this;
-        },
-
-        _cleanedInput: function() {
-            // Returns the contents of the tag input, cleaned and ready to be passed to createTag
-            return $.trim(this.tagInput.val().replace(/^"(.*)"$/, '$1'));
         },
 
         _lastTag: function() {
@@ -529,6 +524,18 @@
             if (this.options.showAutocompleteOnFocus && !duringInitialization) {
                 setTimeout(function () { that._showAutocomplete(); }, 0);
             }
+        },
+
+        _createTagsFromInput: function() {
+            var that = this;
+
+            $.each(this.tagInput.val().split(this.options.singleFieldDelimiter), function() {
+                var tag = $.trim(this.replace(/^"(.*)"$/, '$1'));
+
+                if (tag) {
+                    that.createTag(tag);
+                }
+            });
         },
 
         removeTag: function(tag, animate) {
