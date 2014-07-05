@@ -132,6 +132,16 @@
                 availableTags: sampleTags,
                 removeConfirmation: true
             });
+
+            //-------------------------------
+            // Label/value pairs
+            //-------------------------------
+            var sampleTags2 = [{label:'c++', value:0}, {label:'java', value:1}, {label:'php', value:2}, {label:'coldfusion', value:3}, {label:'javascript', value:4}, {label:'asp', value:5}, {label:'ruby', value:6}, {label:'python', value:7}, {label:'c', value:8}, {label:'scala', value:9}, {label:'groovy', value:10}, {label:'haskell', value:11}, {label:'perl', value:12}, {label:'erlang', value:13}, {label:'apl', value:14}, {label:'cobol', value:15}, {label:'go', value:16}, {label:'lua', value:17}];
+
+            $('#labelValuePairs').tagit({
+                availableTags: sampleTags2,
+                autocomplete: {}
+            });
             
         });
     </script>
@@ -245,6 +255,7 @@
         </form>
 
         <hr>
+
         <h3>Remove Confirmation</h3>
         <form>
             <p>
@@ -253,6 +264,29 @@
             <ul id="removeConfirmationTags">
                 <li>backspace me</li>
                 <li>me too</li>
+            </ul>
+        </form>
+
+        <hr>
+
+        <h3>Label/value pairs</h3>
+        <form>
+            <p>
+                When you want label/value pairs you can set your data in the form of:<br />
+                [{label: "php", value: 2}, {label: "go", value:16}]
+            </p>
+            <p>
+                This will display the "label" to users but send the "value" to the hidden form field.
+            </p>
+            <p>
+                <strong>CAVEATS:</strong>
+            </p>
+            <ul>
+                <li>You cannot currently pre-fill label-value pairs</li>
+                <li>Label-value pairs only work with autocomplete</li>
+                <li>You cannot use label-value pairs with a single input field</li>
+            </ul>
+            <ul id="labelValuePairs">
             </ul>
         </form>
 
