@@ -283,15 +283,12 @@
             if (this.options.availableTags || this.options.tagSource || this.options.autocomplete.source) {
                 var autocompleteOptions = {
                     select: function(event, ui) {
-                        that.createTag(ui.item.value2, ui.item.label);
+                        if (ui.item.tag_id === undefined) {
+                            ui.item.tag_id = ui.item.label;
+                        }
+                        that.createTag(ui.item.tag_id, ui.item.label);
                         // Preventing the tag input to be updated with the chosen value.
                         return false;
-                    },
-                    focus: function(event, ui) {
-                        // By default Autocomplete returns 'value' if present
-                        // we can change the name of value to avoid this behavior
-                        ui.item.value2 = ui.item.value;
-                        ui.item.value = ui.item.label;
                     }
                 };
                 $.extend(autocompleteOptions, this.options.autocomplete);
