@@ -174,17 +174,18 @@ Defaults to *null*
 
 Can be used to add custom behaviour before the tag is added to the DOM.
 
-The function receives a null event, and an object containing the properties `tag`, `tagLabel`, and `duringInitialization`.
+The function receives a null event, and an object containing the properties `tag`, `tagLabel`, and `bFireEvents`.
 
-`duringInitialization` is a boolean indicating whether the tag was added during the initial construction of this widget,
-e.g. when initializing tag-it on an input with preloaded data. You can use this to tell whether the event was initiated by
-the user or by the widget's initialization.
+`bFireEvents` is a boolean indicating whether to fire events or not. You can use this to tell whether the event was initiated by
 
 To cancel a tag from being added, simply return `false` in your event callback to bail out from adding the tag and stop propagation of the event.
 
     $("#myTags").tagit({
         beforeTagAdded: function(event, ui) {
             // do something special
+            if (ui.bFireEvents === false) {
+            	return false
+            	}
             console.log(ui.tag);
         }
     });
@@ -192,7 +193,7 @@ To cancel a tag from being added, simply return `false` in your event callback t
 ### afterTagAdded (function, Callback)
 
 Behaves the same as **beforeTagAdded** except that it fires after the tag has been added to the DOM.
-It too receives the `duringInitialization` parameter — see **beforeTagAdded** for details.
+It too receives the `bFireEvents` parameter — see **beforeTagAdded** for details.
 
 ### beforeTagRemoved (function, Callback)
 
@@ -216,7 +217,7 @@ Behaves the same as **beforeTagRemoved** except that it fires after the tag has 
 ### onTagExists (function, Callback)
 
 Triggered when attempting to add a tag that has already been added in the widget. The callback receives a null event,
-and an object containing the properties `existingTag` and `duringInitialization`, since technically you could try to preload
+and an object containing the properties `existingTag` and `bFireEvents`, since technically you could try to preload
 duplicate tags during the widget initialization.
 
 If the **allowDuplicates** option is enabled, this will not be triggered.
@@ -238,7 +239,7 @@ The function receives the click event and an objecting containing `tag` and `tag
 ### onTagLimitExceeded (function, Callback)
 
 Called when attempting to create a tag while the tag limit has already been reached. Receives a null event,
-and an object with the property `duringInitialization`. This can only be called if **tagLimit** is set.
+and an object with the property `bFireEvents`. This can only be called if **tagLimit** is set.
 
 ## Methods
 
@@ -247,10 +248,11 @@ Returns an array of the text values of all the tags currently in the widget.
 
     $("#myTags").tagit("assignedTags");
 
-### createTag(tagLabel, additionalClass)
-Adds new tag to the list. The `additionalClass` parameter is an optional way to add classes to the tag element.
+### createTag(tagLabel, additionalClass, bFireEvents)
+Adds new tag to the list. The `additionalClass` parameter is a way to add classes to the tag element, whereas `bFireEvents` default to `true` but can be used to prevent firing of events.
 
     $("#myTags").tagit("createTag", "brand-new-tag");
+    $("#myTags").tagit("createTag", "", false);
 
 ### preprocessTag(function, Callback)
 Set a function to be called before tag is created. Callback receives the
@@ -263,15 +265,17 @@ value of the tag created.
     });
     // foo -> Foo
 
-### removeTagByLabel(tagLabel, animate)
-Finds the tag with the label `tagLabel` and removes it. If no such tag is found, it'll throw an exception.
+### removeTagByLabel(tagLabel, animate, bFireEvents)
+Finds the tag with the label `tagLabel` and removes it. If no such tag is found, it'll throw an exception, specifing `bFireEvents` as `false` will not fire off `beforeTagRemoved` and `afterTagRemoved`.
 
     $("#myTags").tagit("removeTagByLabel", "my-tag");
+    $("#myTags").tagit("removeTagByLabel", "my-tag", false);
 
-### removeAll()
+### removeAll(bFireEvents)
 Clears the widget of all tags — removes each tag it contains, so the **beforeTagRemoved** / **afterTagRemoved** event callbacks (if set) will be called for each.
 
     $("#myTags").tagit("removeAll");
+    $("#myTags").tagit("removeAll", false);
 
 ## Properties
 

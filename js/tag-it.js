@@ -1,4 +1,9 @@
-/*
+// ==ClosureCompiler==
+// @output_file_name tag-it.min.js
+// @compilation_level SIMPLE_OPTIMIZATIONS
+// ==/ClosureCompiler==
+
+/**
 * jQuery UI Tag-it!
 *
 * @version v2.0 (06/2011)
@@ -16,6 +21,7 @@
 *   Tobias Schmidt
 *   Skylar Challand
 *   Alex Ehlke
+*   Daniel Sokolowski <moc.buhtig@danols.com>
 *
 * Maintainer:
 *   Alex Ehlke - Twitter: @aehlke
@@ -436,7 +442,7 @@
             return Boolean($.effects && ($.effects[name] || ($.effects.effect && $.effects.effect[name])));
         },
 
-        createTag: function(value, additionalClass, duringInitialization) {
+        createTag: function(value, additionalClass, bFireEvents) {
             var that = this;
 
             value = $.trim(value);
@@ -453,7 +459,7 @@
                 var existingTag = this._findTagByLabel(value);
                 if (this._trigger('onTagExists', null, {
                     existingTag: existingTag,
-                    duringInitialization: duringInitialization
+                    bFireEvents: bFireEvents
                 }) !== false) {
                     if (this._effectExists('highlight')) {
                         existingTag.effect('highlight');
@@ -463,7 +469,7 @@
             }
 
             if (this.options.tagLimit && this._tags().length >= this.options.tagLimit) {
-                this._trigger('onTagLimitExceeded', null, {duringInitialization: duringInitialization});
+                this._trigger('onTagLimitExceeded', null, {bFireEvents: bFireEvents});
                 return false;
             }
 
@@ -501,7 +507,7 @@
             if (this._trigger('beforeTagAdded', null, {
                 tag: tag,
                 tagLabel: this.tagLabel(tag),
-                duringInitialization: duringInitialization
+                bFireEvents: bFireEvents
             }) === false) {
                 return;
             }
@@ -523,17 +529,17 @@
             this._trigger('afterTagAdded', null, {
                 tag: tag,
                 tagLabel: this.tagLabel(tag),
-                duringInitialization: duringInitialization
+                bFireEvents: bFireEvents
             });
 
-            if (this.options.showAutocompleteOnFocus && !duringInitialization) {
+            if (this.options.showAutocompleteOnFocus && bFireEvents) {
                 setTimeout(function () { that._showAutocomplete(); }, 0);
             }
         },
 
-        removeTag: function(tag, animate) {
+        removeTag: function(tag, animate, bFireEvents) {
             animate = typeof animate === 'undefined' ? this.options.animate : animate;
-
+            bFireEvents = typeof bFireEvents === 'undefined' ? true : bFireEvents;
             tag = $(tag);
 
             // DEPRECATED.
@@ -565,7 +571,9 @@
                 tag.fadeOut('fast').hide.apply(tag, hide_args).dequeue();
             } else {
                 tag.remove();
-                this._trigger('afterTagRemoved', null, {tag: tag, tagLabel: this.tagLabel(tag)});
+                if (bFireEvents === true) {
+                        this._trigger('afterTagRemoved', null, {tag: tag, tagLabel: this.tagLabel(tag)});
+                }
             }
 
         },
@@ -578,11 +586,11 @@
             this.removeTag(toRemove, animate);
         },
 
-        removeAll: function() {
+        removeAll: function(bFireEvents) {
             // Removes all tags.
             var that = this;
             this._tags().each(function(index, tag) {
-                that.removeTag(tag, false);
+                that.removeTag(tag, false, bFireEvents);
             });
         }
 
