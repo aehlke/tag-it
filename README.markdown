@@ -106,9 +106,15 @@ Defaults to *false*.
 
 ### caseSensitive (boolean)
 
-whether the duplication check should do a case sensitive check or not.
+This sets whether a case sensitive check should also be performed during the duplication check.
 
 Defaults to *true*.
+
+### stringCase (string)
+
+This forces a case on tag labels. This option accepts `upper` or `lower`.
+
+Defaults to *false*.
 
 ### allowDuplicates (boolean)
 
@@ -145,7 +151,7 @@ It will delimit tags in the field with **singleFieldDelimiter**.
 
 Defaults to *false*, unless Tag-it was created on an `input` element, in which case **singleField** will be overridden as true.
 
-### singleFieldDelimiter (String)
+### singleFieldDelimiter (string)
 
 Defaults to *","*
 
@@ -162,7 +168,7 @@ Optionally set a *tabindex* attribute on the `input` that gets created for tag-i
 
 Defaults to *null*
 
-### placeholderText (String)
+### placeholderText (string)
 Optionally set a *placeholder* attribute on the `input` that gets created for tag-it user input.
 
 Defaults to *null*

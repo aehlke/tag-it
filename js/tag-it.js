@@ -34,6 +34,7 @@
             placeholderText   : null,   // Sets `placeholder` attr on input field.
             readOnly          : false,  // Disables editing.
             removeConfirmation: false,  // Require confirmation to remove tags.
+			stringCase        : false,  // Set to 'lower' or 'upper' to force the proper case.
             tagLimit          : null,   // Max number of tags allowed (null for unlimited).
 
             // Used for autocomplete, unless you override `autocomplete.source`.
@@ -439,7 +440,15 @@
         createTag: function(value, additionalClass, duringInitialization) {
             var that = this;
 
-            value = $.trim(value);
+			if (this.options.stringCase && this.options.stringCase.toLowerCase() == 'lower') {
+				value = $.trim(value).toLowerCase();
+			}
+			else if (this.options.stringCase && this.options.stringCase.toLowerCase() == 'upper') {
+				value = $.trim(value).toUpperCase();
+			}
+			else {
+				value = $.trim(value);
+			}
 
             if(this.options.preprocessTag) {
                 value = this.options.preprocessTag(value);
