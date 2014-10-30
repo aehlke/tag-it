@@ -278,7 +278,7 @@ Clears the widget of all tags — removes each tag it contains, so the **beforeT
 ### tagInput
 The `<input>` field which is used for entering new tags. It's a jQuery object, so you may use it to add a class or anything to it, e.g.:
 
-    $("#myTags").tagit("tagInput").addClass("fancy");
+    $("#myTags").data("ui-tagit").tagInput.addClass("fancy");
 
 
 ## Authors
