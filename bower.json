@@ -9,8 +9,8 @@
     "**/*.txt"
   ],
   "dependencies": {
-    "jquery": ">1.0.0",
-    "jquery-ui": ">1.0.0"
+    "jquery": ">1.4",
+    "jquery-ui": ">1.8"
   },
   "devDependencies": {
   }
