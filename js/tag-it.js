@@ -35,6 +35,7 @@
             readOnly          : false,  // Disables editing.
             removeConfirmation: false,  // Require confirmation to remove tags.
             tagLimit          : null,   // Max number of tags allowed (null for unlimited).
+            pattern           : null,   // Validation pattern
 
             // Used for autocomplete, unless you override `autocomplete.source`.
             availableTags     : [],
@@ -234,6 +235,21 @@
                         }
                     } else if (that.options.removeConfirmation) {
                         that._lastTag().removeClass('remove ui-state-highlight');
+                    }
+
+                    // Validate input pattern
+                    var ignorableKeyCodes = [
+                        $.ui.keyCode.BACKSPACE,
+                        $.ui.keyCode.COMMA,
+                        $.ui.keyCode.ENTER,
+                        $.ui.keyCode.TAB,
+                    ];
+
+                    if ($.inArray(event.which, ignorableKeyCodes) == -1) {
+                        var text = that._cleanedInput() + String.fromCharCode(event.keyCode);
+                        if (that.options.pattern && !that.options.pattern.test(text)) {
+                            return false;
+                        }
                     }
 
                     // Comma/Space/Enter are all valid delimiters for new tags,
