@@ -280,6 +280,9 @@ The `<input>` field which is used for entering new tags. It's a jQuery object, s
 
     $("#myTags").data("ui-tagit").tagInput.addClass("fancy");
 
+Due to an update to JQuery/JQueryUI, this may fail with a "no such method 'tagInput'" error. In that case, try:
+
+    $("#myTags").data('uiTagit').tagInput.addClass("fancy");
 
 ## Authors
 
