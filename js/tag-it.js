@@ -35,6 +35,10 @@
             readOnly          : false,  // Disables editing.
             removeConfirmation: false,  // Require confirmation to remove tags.
             tagLimit          : null,   // Max number of tags allowed (null for unlimited).
+            
+            //Stop writing when tag limit is reached
+            stopWritingOnTagLimit: false,            
+
 
             // Used for autocomplete, unless you override `autocomplete.source`.
             availableTags     : [],
@@ -223,6 +227,12 @@
             // Events.
             this.tagInput
                 .keydown(function(event) {
+                    if (that.options.tagLimit && that._tags().length >= that.options.tagLimit) {
+                        if (that.options.stopWritingOnTagLimit) {
+                            //Do not allow typing here.
+                            return false;
+                        }
+                    }
                     // Backspace is not detected within a keypress, so it must use keydown.
                     if (event.which == $.ui.keyCode.BACKSPACE && that.tagInput.val() === '') {
                         var tag = that._lastTag();
