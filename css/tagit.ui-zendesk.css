@@ -1,4 +1,3 @@
-
 /* Optional scoped theme for tag-it which mimics the zendesk widget. */
 
 
@@ -79,6 +78,7 @@ ul.tagit input[type="text"] {
     text-decoration:none;
     display:block;
     padding:.2em .4em;
+	border: 1px solid white;
     line-height:1.5;
     zoom:1;
 }
