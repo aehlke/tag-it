@@ -151,7 +151,19 @@
     </div>
     
     <div id="content">
-        <p>These demo various features of Tag-it. View the source to see how each works.</p>
+        <p>These demo various features of Tag-it.</p>
+        <p>The code shown is wrapped in a jQuery function, e.g.
+        <pre><code>
+$(function(){
+  CODE HERE
+}
+        </code></pre>
+        <p>and the sample tags used for some of the examples are these:</p>
+
+        <pre><code>     
+var sampleTags = ['c++', 'java', 'php', 'coldfusion', 'javascript', 'asp', 'ruby', 'python', 'c', 'scala', 'groovy', 'haskell', 'perl', 'erlang', 'apl', 'cobol', 'go', 'lua'];
+        </code></pre>
+        <p>Of course, when using the library you can provide you own using a number of methods (see the docs).</p>
 
         <hr>
         <h3>Minimal</h3>
@@ -162,7 +174,10 @@
             <ul id="myTags"></ul>
             <input type="submit" value="Submit">
         </form>
-
+        <h4>The code:</h4>
+          <pre><code>
+$('#myTags').tagit();
+          </code></pre>
         <hr>
         <h3>Single Input Field</h3>
         <form>
@@ -178,6 +193,16 @@
             <ul id="singleFieldTags"></ul>
             <input type="submit" value="Submit">
         </form>
+        <h4>The code:</h4>
+        <pre><code>
+$('#singleFieldTags').tagit({
+    availableTags: sampleTags,
+    // This will make Tag-it submit a single form value
+    // as a comma-delimited field.
+    singleField: true,
+    singleFieldNode: $('#mySingleField')
+});
+        </code></pre>
 
         <hr>
         <h3><a name="graceful-degredation"></a>Single Input Field (2)</h3>
@@ -187,7 +212,12 @@
             </p>
             <input name="tags" id="singleFieldTags2" value="Apple, Orange">
         </form>
-
+        <h4>The code:</h4>
+        <pre><code>
+$('#singleFieldTags2').tagit({
+    availableTags: sampleTags
+});
+        </code></pre>
         <hr>
         <h3>Spaces Allowed Without Quotes</h3>
         <p>You can already do multiword tags with spaces in them by default, but those must be wrapped in quotes. This option lets you use spaces without requiring the user to quote the input.</p>
@@ -196,7 +226,13 @@
             <p></p>
             <ul id="allowSpacesTags"></ul>
         </form>
-
+        <h4>The code:</h4>
+        <pre><code>
+$('#allowSpacesTags').tagit({
+    availableTags: sampleTags,
+    allowSpaces: true
+});       
+        </code></pre>
         <hr>
         <h3>Preloading Data in Markup</h3>
         <form>
@@ -209,6 +245,19 @@
                 <li>Tag2</li>
             </ul>
         </form>
+        <h4>The code:</h4>
+        <pre><code>
+$('#myULTags').tagit({
+    // this param is of course optional. it's for autocomplete.
+    availableTags: sampleTags,
+
+    // configure the name of the input field 
+    // (will be submitted with form), 
+    // default: item[tags]
+    itemName: 'item',
+    fieldName: 'tags'
+});        
+        </code></pre>
 
         <hr>
 
@@ -220,6 +269,12 @@
                 <li>Tag2</li>
             </ul>
         </form>
+        <h4>The code:</h4>
+        <pre><code>
+$('#readOnlyTags').tagit({
+    readOnly: true
+});   
+        </code></pre>
 
         <hr>
 
@@ -233,6 +288,40 @@
         </form>
         <div id="events_container"></div>
 
+        <h4>The code:</h4>
+        <pre><code>
+var eventTags = $('#eventTags');
+
+var addEvent = function(text) {
+    $('#events_container').append(text + '<br>');
+};
+
+eventTags.tagit({
+    availableTags: sampleTags,
+    beforeTagAdded: function(evt, ui) {
+        if (!ui.duringInitialization) {
+            addEvent('beforeTagAdded: ' + eventTags.tagit('tagLabel', ui.tag));
+        }
+    },
+    afterTagAdded: function(evt, ui) {
+        if (!ui.duringInitialization) {
+            addEvent('afterTagAdded: ' + eventTags.tagit('tagLabel', ui.tag));
+        }
+    },
+    beforeTagRemoved: function(evt, ui) {
+        addEvent('beforeTagRemoved: ' + eventTags.tagit('tagLabel', ui.tag));
+    },
+    afterTagRemoved: function(evt, ui) {
+        addEvent('afterTagRemoved: ' + eventTags.tagit('tagLabel', ui.tag));
+    },
+    onTagClicked: function(evt, ui) {
+        addEvent('onTagClicked: ' + eventTags.tagit('tagLabel', ui.tag));
+    },
+    onTagExists: function(evt, ui) {
+        addEvent('onTagExists: ' + eventTags.tagit('tagLabel', ui.existingTag));
+    }
+});
+        </code></pre>
         <hr>
 
         <h3>Methods</h3>
@@ -240,10 +329,22 @@
             <p>Demos the available widget methods. Click the links below the widget to try them.</p>
             <ul id="methodTags"></ul>
             <p><a href="#" onclick="var inp=prompt('Enter a tag value to test the createTag method.');$('#methodTags').tagit('createTag', inp);return false;">Create tag</a></p>
-            <p><a href="#" onclick="var inp=prompt('Enter a tag value to test the removeTagByName method.');$('#methodTags').tagit('removeTagByName', inp);return false;">Remove tag by name</a></p>
+            <p><a href="#" onclick="var inp=prompt('Enter a tag value to test the removeTagByLabel method.');$('#methodTags').tagit('removeTagByLabel', inp);return false;">Remove tag by name</a></p>
             <p><a href="#" onclick="$('#methodTags').tagit('removeAll');return false;">Clear tags</a></p>
         </form>
+        <h4>The code:</h4>
+        <pre><code>
+$('#methodTags').tagit({
+    availableTags: sampleTags
+});
+        </code></pre>
 
+        <p>and for the links:</p>
+        <pre><code>
+&lt;a href=&quot;#&quot; onclick=&quot;var inp=prompt('Enter a tag value to test the createTag method.');$('#methodTags').tagit('createTag', inp);return false;&quot;&gt;Create tag&lt;/a&gt;
+&lt;a href=&quot;#&quot; onclick=&quot;var inp=prompt('Enter a tag value to test the removeTagByLabel method.');$('#methodTags').tagit('removeTagByLabel', inp);return false;&quot;&gt;Remove tag by name&lt;/a&gt;
+&lt;a href=&quot;#&quot; onclick=&quot;$('#methodTags').tagit('removeAll');return false;&quot;&gt;Clear tags&lt;/a&gt;
+        </code></pre>
         <hr>
         <h3>Remove Confirmation</h3>
         <form>
@@ -255,6 +356,13 @@
                 <li>me too</li>
             </ul>
         </form>
+        <h4>The code:</h4>
+        <pre><code>
+$('#removeConfirmationTags').tagit({
+    availableTags: sampleTags,
+    removeConfirmation: true
+});       
+        </code></pre>
 
     </div>
 
