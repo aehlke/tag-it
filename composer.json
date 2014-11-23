@@ -1,0 +1,7 @@
+{
+    "name": "aehlke/tag-it", 
+    "license": "MIT",
+    "homepage": "http://aehlke.github.io/tag-it", 
+    "minimum-stability": "dev",
+    "description": "Simple and configurable tag editing widget with autocomplete support."
+}
