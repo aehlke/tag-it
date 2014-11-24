@@ -236,12 +236,11 @@
                         that._lastTag().removeClass('remove ui-state-highlight');
                     }
 
-                    // Comma/Space/Enter are all valid delimiters for new tags,
+                    // singleFieldDelimiter/Space/Enter are all valid delimiters for new tags,
                     // except when there is an open quote or if setting allowSpaces = true.
                     // Tab will also create a tag, unless the tag input is empty,
                     // in which case it isn't caught.
                     if (
-                        (event.which === $.ui.keyCode.COMMA && event.shiftKey === false) ||
                         event.which === $.ui.keyCode.ENTER ||
                         (
                             event.which == $.ui.keyCode.TAB &&
@@ -265,6 +264,15 @@
                             event.preventDefault();
                         }
 
+                        // Autocomplete will create its own tag from a selection and close automatically.
+                        if (!(that.options.autocomplete.autoFocus && that.tagInput.data('autocomplete-open'))) {
+                            that.tagInput.autocomplete('close');
+                            that.createTag(that._cleanedInput());
+                        }
+                    }
+                }).keypress(function(event){
+                    if (String.fromCharCode(event.which) === that.options.singleFieldDelimiter) {
+                        event.preventDefault();
                         // Autocomplete will create its own tag from a selection and close automatically.
                         if (!(that.options.autocomplete.autoFocus && that.tagInput.data('autocomplete-open'))) {
                             that.tagInput.autocomplete('close');
