@@ -24,7 +24,18 @@
 *   jQuery v1.4+
 *   jQuery UI v1.8+
 */
-(function($) {
+
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define([ "jquery" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery );
+	}
+}(function($) {
 
     $.widget('ui.tagit', {
         options: {
@@ -587,5 +598,5 @@
         }
 
     });
-})(jQuery);
+}));
 

@@ -1,0 +1,17 @@
+{
+  "name": "aehlke/tag-it",
+  "version": "1.0.0",
+  "main": "js/tag-it.js",
+  "description": "A jQuery UI plugin to handle multi-tag fields as well as tag suggestions/autocomplete.",
+  "license": "MIT License",
+  "ignore": [
+    ".jshintrc",
+    "**/*.txt"
+  ],
+  "dependencies": {
+    "jquery": ">1.4",
+    "jquery-ui": ">1.8"
+  },
+  "devDependencies": {
+  }
+}
