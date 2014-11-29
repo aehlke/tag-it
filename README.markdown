@@ -167,6 +167,11 @@ Optionally set a *placeholder* attribute on the `input` that gets created for ta
 
 Defaults to *null*
 
+### matchFromStart (bool)
+Sets tag matching from either the first character of the tag being matched, or from anywhere in the middle. By default is set to *true* which makes it match words only from the beginning.
+
+Defaults to *true*
+
 
 ## Events
 
