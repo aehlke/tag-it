@@ -80,12 +80,12 @@
             eventTags.tagit({
                 availableTags: sampleTags,
                 beforeTagAdded: function(evt, ui) {
-                    if (!ui.duringInitialization) {
+                    if (!ui.bFireEvents) {
                         addEvent('beforeTagAdded: ' + eventTags.tagit('tagLabel', ui.tag));
                     }
                 },
                 afterTagAdded: function(evt, ui) {
-                    if (!ui.duringInitialization) {
+                    if (!ui.bFireEvents) {
                         addEvent('afterTagAdded: ' + eventTags.tagit('tagLabel', ui.tag));
                     }
                 },
