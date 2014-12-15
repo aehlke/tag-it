@@ -51,6 +51,9 @@
             // When enabled, quotes are unneccesary for inputting multi-word tags.
             allowSpaces: false,
 
+            // This text is associated with each tag's close button used in off-screen text read by assistive technologies.
+            removeText: 'remove',
+
             // The below options are for using a single field instead of several
             // for our form values.
             //
@@ -489,6 +492,12 @@
                         // Removes a tag when the little 'x' is clicked.
                         that.removeTag(tag);
                     });
+                removeTag.append('<span class="ui-helper-hidden-accessible">' + this.options.removeText + '</span>');
+                removeTag.on('keydown', function(event) {
+                    if (event.which === 13 || event.which === 32) {
+                        removeTag.click(removeTag);
+                    }
+                });
                 tag.append(removeTag);
             }
 
