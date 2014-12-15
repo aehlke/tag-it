@@ -51,7 +51,7 @@
             // When enabled, quotes are unneccesary for inputting multi-word tags.
             allowSpaces: false,
 
-            // associated with each tag's close button used in off-screen text read by assistive technologies.
+            // This text is associated with each tag's close button used in off-screen text read by assistive technologies.
             removeText: 'remove',
 
             // The below options are for using a single field instead of several
