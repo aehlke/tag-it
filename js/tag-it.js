@@ -492,8 +492,7 @@
                         // Removes a tag when the little 'x' is clicked.
                         that.removeTag(tag);
                     });
-                var removeText = this.options.removeText || 'remove';
-                removeTag.append('<span class="ui-helper-hidden-accessible">' + removeText + '</span>');
+                removeTag.append('<span class="ui-helper-hidden-accessible">' + this.options.removeText + '</span>');
                 removeTag.on('keydown', function(event) {
                     if (event.which === 13 || event.which === 32) {
                         removeTag.click(removeTag);
