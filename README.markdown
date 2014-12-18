@@ -167,6 +167,12 @@ Optionally set a *placeholder* attribute on the `input` that gets created for ta
 
 Defaults to *null*
 
+### disableInputFocus (boolean)
+When this option is enabled, the focus will not return to the input field when the user clicks on a tag.
+By default, clicking the tag list will set the focus back on the input field. For long tag lists that
+scroll off screen, this can be a problem that is solved by setting this option to true.
+
+Defaults to *false*
 
 ## Events
 
