@@ -50,6 +50,10 @@
 
             // When enabled, quotes are unneccesary for inputting multi-word tags.
             allowSpaces: false,
+            
+            // When this is true, clicking in the tag list
+            // will no longer set focus on the input box.
+            disableInputFocus : false,
 
             // The below options are for using a single field instead of several
             // for our form values.
@@ -187,7 +191,9 @@
                         // Sets the focus() to the input field, if the user
                         // clicks anywhere inside the UL. This is needed
                         // because the input field needs to be of a small size.
-                        that.tagInput.focus();
+                        if (!that.options.disableInputFocus) {
+                            that.tagInput.focus();
+                        }
                     }
                 });
 
