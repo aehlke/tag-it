@@ -87,12 +87,13 @@ ul.tagit input[type="text"] {
     font-weight: normal;
     margin: -1px;
 }
-.tagit-autocomplete.ui-widget-content { border: 1px solid #aaaaaa; background: #ffffff 50% 50% repeat-x; color: #222222; }
+.tagit-autocomplete.ui-widget-content { border: 1px solid #aaaaaa; background: #ffffff 50% 50% repeat-x; color: #222222; z-index: 12;}
 .tagit-autocomplete.ui-corner-all, .tagit-autocomplete .ui-corner-all { -moz-border-radius: 4px; -webkit-border-radius: 4px; -khtml-border-radius: 4px; border-radius: 4px; }
 .tagit-autocomplete .ui-state-hover, .tagit-autocomplete .ui-state-focus { border: 1px solid #999999; background: #dadada; font-weight: normal; color: #212121; }
 .tagit-autocomplete .ui-state-active  { border: 1px solid #aaaaaa; }
 
 .tagit-autocomplete .ui-widget-content { border: 1px solid #aaaaaa; }
+.ui-helper-hidden-accessible {display: none;}
 .tagit .ui-helper-hidden-accessible { position: absolute !important; clip: rect(1px,1px,1px,1px); }
 
 
