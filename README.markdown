@@ -23,7 +23,7 @@ If you're using a custom jQuery UI build, it must contain the Core, Widget, Posi
 The plugin requires either a jQuery UI theme or a Tag-it theme to be present, as well as its own included base CSS file ([jquery.tagit.css](http://github.com/aehlke/tag-it/raw/master/css/jquery.tagit.css)). Here we use the Flick theme as an example:
 
     <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
-	<link href="css/jquery.tagit.css" rel="stylesheet" type="text/css">
+    <link href="css/jquery.tagit.css" rel="stylesheet" type="text/css">
 
 Now, let's attach it to an existing `<ul>` box:
 
@@ -61,6 +61,12 @@ If you're using PHP, you may want to use something like `itemName[fieldName][]` 
     });
 
 Defaults to *tags*.
+
+### inputType (String)
+
+Type attribute value for input field, useful for mobile interfaces if specific type of data is required.
+
+Defaults to *text*.
 
 ### availableTags (Array)
 
