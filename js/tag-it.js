@@ -31,6 +31,7 @@
             allowDuplicates   : false,
             caseSensitive     : true,
             fieldName         : 'tags',
+            inputType         : 'text', // Sets `type` attr on input field.
             placeholderText   : null,   // Sets `placeholder` attr on input field.
             readOnly          : false,  // Disables editing.
             removeConfirmation: false,  // Require confirmation to remove tags.
@@ -124,7 +125,7 @@
                 this.tagList = this.element.find('ul, ol').andSelf().last();
             }
 
-            this.tagInput = $('<input type="text" />').addClass('ui-widget-content');
+            this.tagInput = $('<input type="' + this.options.inputType + '" />').addClass('ui-widget-content');
 
             if (this.options.readOnly) this.tagInput.attr('disabled', 'disabled');
 
@@ -588,4 +589,3 @@
 
     });
 })(jQuery);
-
