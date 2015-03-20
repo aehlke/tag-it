@@ -94,6 +94,8 @@
             onTagClicked        : null,
             onTagLimitExceeded  : null,
 
+            beforeTagUpdate  : null,
+            afterTagUpdate  : null,
 
             // DEPRECATED:
             //
@@ -584,6 +586,27 @@
             this._tags().each(function(index, tag) {
                 that.removeTag(tag, false);
             });
+        },
+        
+        updateTags: function(tagLabels, update) {
+            if (this._trigger('beforeTagUpdate', null, {tagLabels: tagLabels, availableTags: this.options.availableTags}) === false) {
+                return;
+            }
+
+            // Check if our new tags are a list of strings
+            if (typeof tagLabels === 'string') {
+                // remove all whitespaces before and after commas
+                tagLabels = tagLabels.replace(/\s*,\s*/g, ',').split(',');
+            }
+
+            // Add the new tags to the availableTags as new list or update the old
+            if(!update) {
+                this.options.availableTags = tagLabels;
+            } else {
+                this.options.availableTags.concat(tagLabels);
+            }
+
+            this._trigger('afterTagUpdate', null, {tagLabels: tagLabels, availableTags: this.options.availableTags})
         }
 
     });
