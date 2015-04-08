@@ -277,7 +277,16 @@
                     if (!that.tagInput.data('autocomplete-open')) {
                         that.createTag(that._cleanedInput());
                     }
-                });
+                }).keyup(function(e) {
+					var delimiter = ['，', '、'],
+						val = $.trim(that.tagInput.val()),
+						lastChar = val ? val.substr(-1, 1) : '';
+
+					if (delimiter.join().indexOf(lastChar) !== -1) {
+						that.tagInput.val(val.replace(new RegExp('(' + delimiter.join('|') + ')$', 'g'), ''));
+						that.tagInput.trigger($.Event('keydown', {which: $.ui.keyCode.COMMA, shiftKey: false}));
+					}
+				});
 
             // Autocomplete.
             if (this.options.availableTags || this.options.tagSource || this.options.autocomplete.source) {
