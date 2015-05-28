@@ -74,6 +74,20 @@ If you define your own **autocomplete.source**, this option is unused (unless yo
 
 Defaults to an empty array *[]*.
 
+### initialTags (Array)
+
+Prepoulate field with initial tags. Appends **availableTags** to **initialTags** by default. Set **appendAvailableToInitial** option to **false** to prevent concatenation.
+
+    $("#myTags").tagit({
+        initialTags: ["c++", "java", "php", "javascript", "ruby", "python", "c"]
+    });
+
+Defaults to an empty array *[]*.
+
+### appendAvailableToInitial (boolean)
+
+Set to **false** to prevent concatenation of **initialTags** with **availableTags**. Defaults to **true**.
+
 ### autocomplete (Object)
 
 Allows overriding the `source` and `select` options that are set by default,
@@ -88,6 +102,10 @@ For example:
     });
 
 The default `autocomplete.source` function filters the strings in **availableTags** and subtracts the already assigned tags. It also positions autocomplete underneath tag input. See the full list of available options [here](http://jqueryui.com/demos/autocomplete/).
+
+### allowNewTags (boolean)
+
+Controls whether user can add new tags. Set to **true** by default. Setting **allowNewTags** to **false** automatically enables **showAutocompleteOnFocus** to assist user input.
 
 ### showAutocompleteOnFocus (boolean)
 
@@ -267,6 +285,9 @@ value of the tag created.
 Finds the tag with the label `tagLabel` and removes it. If no such tag is found, it'll throw an exception.
 
     $("#myTags").tagit("removeTagByLabel", "my-tag");
+
+### populate(Array)
+Populate input field with an array of tags. If **allowNewTags** is set to **false**, only tags in **availableTags** can be added.
 
 ### removeAll()
 Clears the widget of all tags — removes each tag it contains, so the **beforeTagRemoved** / **afterTagRemoved** event callbacks (if set) will be called for each.
