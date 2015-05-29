@@ -39,6 +39,12 @@
             // Used for autocomplete, unless you override `autocomplete.source`.
             availableTags     : [],
 
+            // Prepopulate field with tags, automatically add fields to availableTags.
+            initialTags     : [],
+
+            // Appends availableTags to initialTags
+            appendAvailableToInitial : true,
+
             // Use to override or add any options to the autocomplete widget.
             //
             // By default, autocomplete.source will map to availableTags,
@@ -63,6 +69,10 @@
             // set to true, and singleFieldNode is set to that element. This
             // way, you don't need to fiddle with these options.
             singleField: false,
+
+            // When disabled, users can only input tag as specified in availableTags.
+            // Automatically enables showAutocompleteOnFocus to asssist with user input.
+            allowNewTags: true,
 
             // This is just used when preloading data from the field, and for
             // populating the field with delimited tags as the user adds them.
@@ -149,6 +159,22 @@
                     }
                     showChoices(choices);
                 };
+            }
+
+            if(this.options.initialTags.length > 0 && this.options.appendAvailableToInitial) {
+
+                $.each(this.options.initialTags, function(index,elem) {
+                    if(that.options.availableTags.indexOf(elem) == -1) {
+                        that.options.availableTags.push(elem);
+                    }
+                });
+
+                // this.options.availableTags = this.options.initialTags.concat(this.options.availableTags);
+            }
+
+            if(!this.options.allowNewTags) {
+                this.options.showAutocompleteOnFocus = true;
+
             }
 
             if (this.options.showAutocompleteOnFocus) {
@@ -302,6 +328,14 @@
 
                 this.tagInput.autocomplete('widget').addClass('tagit-autocomplete');
             }
+
+            // Add tags from initialTags, if any.
+            if(this.options.initialTags.length > 0) {
+                $.each(this.options.initialTags, function(index, elem){
+                    that.createTag(elem, null, true);
+                });
+            }
+
         },
 
         destroy: function() {
@@ -441,6 +475,14 @@
 
             value = $.trim(value);
 
+            if(!this.options.allowNewTags) {
+
+                if(this.options.availableTags.indexOf(value) === -1) {
+                    return false;
+                }
+
+            }
+
             if(this.options.preprocessTag) {
                 value = this.options.preprocessTag(value);
             }
@@ -529,6 +571,16 @@
             if (this.options.showAutocompleteOnFocus && !duringInitialization) {
                 setTimeout(function () { that._showAutocomplete(); }, 0);
             }
+        },
+
+        // Populate field with tag(s)
+        populate: function(tags) {
+
+            var that = this;
+            $.each(tags, function(index, elem){
+                that.createTag(elem, null, true);
+            });
+
         },
 
         removeTag: function(tag, animate) {
