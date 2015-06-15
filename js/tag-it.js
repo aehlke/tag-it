@@ -48,7 +48,10 @@
             // Shows autocomplete before the user even types anything.
             showAutocompleteOnFocus: false,
 
-            // When enabled, quotes are unneccesary for inputting multi-word tags.
+            // When enabled, forces users to create new tags through autocomplete
+            autocompleteOnly: false,
+
+            // When enabled, quotes are unnecessary for inputting multi-word tags.
             allowSpaces: false,
 
             // The below options are for using a single field instead of several
@@ -266,7 +269,7 @@
                         }
 
                         // Autocomplete will create its own tag from a selection and close automatically.
-                        if (!(that.options.autocomplete.autoFocus && that.tagInput.data('autocomplete-open'))) {
+                        if (!(that.options.autocomplete.autoFocus && that.tagInput.data('autocomplete-open')) && !that.options.autocompleteOnly) {
                             that.tagInput.autocomplete('close');
                             that.createTag(that._cleanedInput());
                         }
@@ -274,7 +277,7 @@
                 }).blur(function(e){
                     // Create a tag when the element loses focus.
                     // If autocomplete is enabled and suggestion was clicked, don't add it.
-                    if (!that.tagInput.data('autocomplete-open')) {
+                    if (!that.tagInput.data('autocomplete-open') && !that.options.autocompleteOnly) {
                         that.createTag(that._cleanedInput());
                     }
                 });
