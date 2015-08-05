@@ -62,6 +62,16 @@ If you're using PHP, you may want to use something like `itemName[fieldName][]` 
 
 Defaults to *tags*.
 
+### animate (boolean)
+
+Enables/Disables animation
+
+    $("#myTags").tagit({
+        animate: false
+    });
+
+Defaults to *true*.
+
 ### availableTags (Array)
 
 Used as source for the autocompletion, unless **autocomplete.source** is overridden.
