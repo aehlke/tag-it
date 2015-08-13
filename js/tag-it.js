@@ -124,7 +124,7 @@
                 this.tagList = this.element.find('ul, ol').andSelf().last();
             }
 
-            this.tagInput = $('<input type="text" />').addClass('ui-widget-content');
+            this.tagInput = $('<input type="text" data-item_value=""/>').addClass('ui-widget-content');
 
             if (this.options.readOnly) this.tagInput.attr('disabled', 'disabled');
 
@@ -200,7 +200,9 @@
                     var tags = node.val().split(this.options.singleFieldDelimiter);
                     node.val('');
                     $.each(tags, function(index, tag) {
-                        that.createTag(tag, null, true);
+			var val = tag.split(':')[0],
+			lbl = tag.split(':')[1];
+                        that.createTag(val, lbl, null, true);
                         addedExistingFromSingleFieldNode = true;
                     });
                 } else {
@@ -214,8 +216,9 @@
             if (!addedExistingFromSingleFieldNode) {
                 this.tagList.children('li').each(function() {
                     if (!$(this).hasClass('tagit-new')) {
-                        that.createTag($(this).text(), $(this).attr('class'), true);
-                        $(this).remove();
+			var val = $(this).children('input:hidden').val().split(':')[0],
+			val = $(this).children('input:hidden').val().split(':')[1];
+                        that.createTag(val, lbl, $(this).attr('class'), true);
                     }
                 });
             }
@@ -268,25 +271,27 @@
                         // Autocomplete will create its own tag from a selection and close automatically.
                         if (!(that.options.autocomplete.autoFocus && that.tagInput.data('autocomplete-open'))) {
                             that.tagInput.autocomplete('close');
-                            that.createTag(that._cleanedInput());
-                        }
+                            that.createTag(that._cleanedItemValue(), that._cleanedInput());
+			}
                     }
                 }).blur(function(e){
-                    // Create a tag when the element loses focus.
-                    // If autocomplete is enabled and suggestion was clicked, don't add it.
-                    if (!that.tagInput.data('autocomplete-open')) {
-                        that.createTag(that._cleanedInput());
-                    }
+			that.tagInput.autocomplete('close');
+			$(this).val('');						
                 });
 
             // Autocomplete.
             if (this.options.availableTags || this.options.tagSource || this.options.autocomplete.source) {
                 var autocompleteOptions = {
-                    select: function(event, ui) {
-                        that.createTag(ui.item.value);
-                        // Preventing the tag input to be updated with the chosen value.
-                        return false;
-                    }
+	                select: function( event, ui ) {
+        	                that.createTag(ui.item.value, ui.item.label);
+                	        // Preventing the tag input to be updated with the chosen value.
+                        	return false;
+                    	},
+			focus: function ( event, ui ) {
+				$(this).val(ui.item.label);
+				$(this).data("item_value", ui.item.value);
+				return false;
+			}
                 };
                 $.extend(autocompleteOptions, this.options.autocomplete);
 
@@ -351,9 +356,15 @@
             return this;
         },
 
-        _cleanedInput: function() {
-            // Returns the contents of the tag input, cleaned and ready to be passed to createTag
-            return $.trim(this.tagInput.val().replace(/^"(.*)"$/, '$1'));
+        
+	_cleanedInput: function() {
+            	// Returns the contents of the tag label, cleaned and ready to be passed to createTag
+            	return $.trim(this.tagInput.val().replace(/^"(.*)"$/, '$1'));
+        },
+
+	_cleanedItemValue: function() {
+            	// Returns the contents of the tag value, cleaned and ready to be passed to createTag
+		return this.tagInput.data("item_value");
         },
 
         _lastTag: function() {
@@ -398,22 +409,37 @@
 
         tagLabel: function(tag) {
             // Returns the tag's string label.
-            if (this.options.singleField) {
                 return $(tag).find('.tagit-label:first').text();
-            } else {
-                return $(tag).find('input:first').val();
-            }
+        },
+
+        tagValue: function(tag) {
+		var that = this;
+		var lbl = that._formatStr(that.tagLabel(tag));
+		var val = null;
+		if (this.options.singleField) {
+			values = $(this.options.singleFieldNode).val().split(this.options.singleFieldDelimiter);
+			$(values).each(function(i) {
+				var this_label = $.trim(this.split(':')[1]);
+				if (this_label == lbl){
+					val = $.trim(this.split(':')[0]);
+					return false;
+				}				
+			});
+		} else {
+		val = $(tag).find('input:first').val().split(':')[0];
+		}
+		return val;
         },
 
         _showAutocomplete: function() {
             this.tagInput.autocomplete('search', '');
         },
 
-        _findTagByLabel: function(name) {
+        _findTagByValue: function(name) {
             var that = this;
             var tag = null;
             this._tags().each(function(i) {
-                if (that._formatStr(name) == that._formatStr(that.tagLabel(this))) {
+                if (that._formatStr(name) == that._formatStr(that.tagValue(this))) {
                     tag = $(this);
                     return false;
                 }
@@ -422,7 +448,7 @@
         },
 
         _isNew: function(name) {
-            return !this._findTagByLabel(name);
+            return !this._findTagByValue(name);
         },
 
         _formatStr: function(str) {
@@ -436,7 +462,7 @@
             return Boolean($.effects && ($.effects[name] || ($.effects.effect && $.effects.effect[name])));
         },
 
-        createTag: function(value, additionalClass, duringInitialization) {
+        createTag: function(value, tagLabel, additionalClass, duringInitialization) {
             var that = this;
 
             value = $.trim(value);
@@ -450,7 +476,7 @@
             }
 
             if (!this.options.allowDuplicates && !this._isNew(value)) {
-                var existingTag = this._findTagByLabel(value);
+                var existingTag = this._findTagByValue(value);
                 if (this._trigger('onTagExists', null, {
                     existingTag: existingTag,
                     duringInitialization: duringInitialization
@@ -467,7 +493,7 @@
                 return false;
             }
 
-            var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
+            var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(tagLabel);
 
             // Create tag.
             var tag = $('<li></li>')
@@ -495,7 +521,8 @@
             // Unless options.singleField is set, each tag has a hidden input field inline.
             if (!this.options.singleField) {
                 var escapedValue = label.html();
-                tag.append('<input type="hidden" value="' + escapedValue + '" name="' + this.options.fieldName + '" class="tagit-hidden-field" />');
+				var val_lbl = $.trim(value) + ':' + tagLabel;
+                tag.append('<input type="hidden" value="' + val_lbl + '" name="' + this.options.fieldName + '" class="tagit-hidden-field" />');
             }
 
             if (this._trigger('beforeTagAdded', null, {
@@ -508,7 +535,8 @@
 
             if (this.options.singleField) {
                 var tags = this.assignedTags();
-                tags.push(value);
+				var val_lbl = $.trim(value) + ':' + tagLabel;
+                tags.push(val_lbl);
                 this._updateSingleTagsField(tags);
             }
 
@@ -544,12 +572,13 @@
             }
 
             if (this.options.singleField) {
-                var tags = this.assignedTags();
-                var removedTagLabel = this.tagLabel(tag);
-                tags = $.grep(tags, function(el){
-                    return el != removedTagLabel;
-                });
-                this._updateSingleTagsField(tags);
+		var tags = this.assignedTags();
+		var removedTagLabel = this.tagLabel(tag);
+		tags = $.grep(tags, function(elem){
+		    var el = elem.split(':')[1];
+	            return el != removedTagLabel;
+		});
+		this._updateSingleTagsField(tags);
             }
 
             if (animate) {
