@@ -200,8 +200,8 @@
                     var tags = node.val().split(this.options.singleFieldDelimiter);
                     node.val('');
                     $.each(tags, function(index, tag) {
-						var val = tag.split(':')[0],
-							lbl = tag.split(':')[1];
+			var val = tag.split(':')[0],
+			lbl = tag.split(':')[1];
                         that.createTag(val, lbl, null, true);
                         addedExistingFromSingleFieldNode = true;
                     });
@@ -216,10 +216,9 @@
             if (!addedExistingFromSingleFieldNode) {
                 this.tagList.children('li').each(function() {
                     if (!$(this).hasClass('tagit-new')) {
-						var val = $(this).children('input:hidden').val().split(':')[0],
-							val = $(this).children('input:hidden').val().split(':')[1];
+			var val = $(this).children('input:hidden').val().split(':')[0],
+			val = $(this).children('input:hidden').val().split(':')[1];
                         that.createTag(val, lbl, $(this).attr('class'), true);
-//                        $(this).remove();
                     }
                 });
             }
@@ -273,26 +272,26 @@
                         if (!(that.options.autocomplete.autoFocus && that.tagInput.data('autocomplete-open'))) {
                             that.tagInput.autocomplete('close');
                             that.createTag(that._cleanedItemValue(), that._cleanedInput());
-						}
+			}
                     }
                 }).blur(function(e){
-					that.tagInput.autocomplete('close');
-					$(this).val('');						
+			that.tagInput.autocomplete('close');
+			$(this).val('');						
                 });
 
             // Autocomplete.
             if (this.options.availableTags || this.options.tagSource || this.options.autocomplete.source) {
                 var autocompleteOptions = {
-                    select: function( event, ui ) {
-                        that.createTag(ui.item.value, ui.item.label);
-                        // Preventing the tag input to be updated with the chosen value.
-                        return false;
-                    },
-					focus: function ( event, ui ) {
-						$(this).val(ui.item.label);
-						$(this).data("item_value", ui.item.value);
-						return false;
-					}
+	                select: function( event, ui ) {
+        	                that.createTag(ui.item.value, ui.item.label);
+                	        // Preventing the tag input to be updated with the chosen value.
+                        	return false;
+                    	},
+			focus: function ( event, ui ) {
+				$(this).val(ui.item.label);
+				$(this).data("item_value", ui.item.value);
+				return false;
+			}
                 };
                 $.extend(autocompleteOptions, this.options.autocomplete);
 
@@ -358,15 +357,14 @@
         },
 
         
-		_cleanedInput: function() {
-            // Returns the contents of the tag input, cleaned and ready to be passed to createTag
-            return $.trim(this.tagInput.val().replace(/^"(.*)"$/, '$1'));
+	_cleanedInput: function() {
+            	// Returns the contents of the tag label, cleaned and ready to be passed to createTag
+            	return $.trim(this.tagInput.val().replace(/^"(.*)"$/, '$1'));
         },
 
-		_cleanedItemValue: function() {
-            // Returns the contents of the tag input, cleaned and ready to be passed to createTag
-//            return $.trim(this.tagInput.data('value').replace(/^"(.*)"$/, '$1'));
-			return this.tagInput.data("item_value");
+	_cleanedItemValue: function() {
+            	// Returns the contents of the tag value, cleaned and ready to be passed to createTag
+		return this.tagInput.data("item_value");
         },
 
         _lastTag: function() {
@@ -411,30 +409,26 @@
 
         tagLabel: function(tag) {
             // Returns the tag's string label.
-//            if (this.options.singleField) {
-                return $(tag).find('.tagit-label:first').text(); //LO AGARRA DEL SPAN
-//            } else {
-//                return $(tag).find('input:first').val(); //LO AGARRA DEL HIDDEN FIELDs
-//            }
+                return $(tag).find('.tagit-label:first').text();
         },
 
         tagValue: function(tag) {
-			var that = this;
-			var lbl = that._formatStr(that.tagLabel(tag));
-			var val = null;
-			if (this.options.singleField) {
-				values = $(this.options.singleFieldNode).val().split(this.options.singleFieldDelimiter);
-				$(values).each(function(i) {
-					var this_label = $.trim(this.split(':')[1]);
-					if (this_label == lbl){
-						val = $.trim(this.split(':')[0]);
-						return false;
-					}				
-				});
-            } else {
-                val = $(tag).find('input:first').val().split(':')[0];
-            }
-			return val;
+		var that = this;
+		var lbl = that._formatStr(that.tagLabel(tag));
+		var val = null;
+		if (this.options.singleField) {
+			values = $(this.options.singleFieldNode).val().split(this.options.singleFieldDelimiter);
+			$(values).each(function(i) {
+				var this_label = $.trim(this.split(':')[1]);
+				if (this_label == lbl){
+					val = $.trim(this.split(':')[0]);
+					return false;
+				}				
+			});
+		} else {
+		val = $(tag).find('input:first').val().split(':')[0];
+		}
+		return val;
         },
 
         _showAutocomplete: function() {
@@ -578,13 +572,13 @@
             }
 
             if (this.options.singleField) {
-                var tags = this.assignedTags();
-                var removedTagLabel = this.tagLabel(tag);
-                tags = $.grep(tags, function(elem){
-					var el = elem.split(':')[1];
-                    return el != removedTagLabel;
-                });
-                this._updateSingleTagsField(tags);
+		var tags = this.assignedTags();
+		var removedTagLabel = this.tagLabel(tag);
+		tags = $.grep(tags, function(elem){
+		    var el = elem.split(':')[1];
+	            return el != removedTagLabel;
+		});
+		this._updateSingleTagsField(tags);
             }
 
             if (animate) {
