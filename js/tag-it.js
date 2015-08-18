@@ -103,7 +103,8 @@
             onTagAdded  : null,
             onTagRemoved: null,
             // `autocomplete.source` is the replacement for tagSource.
-            tagSource: null
+            tagSource: null,
+            items : null
             // Do not use the above deprecated options.
         },
 
@@ -190,34 +191,21 @@
                         that.tagInput.focus();
                     }
                 });
-
+            
+            
             // Single field support.
-            var addedExistingFromSingleFieldNode = false;
             if (this.options.singleField) {
-                if (this.options.singleFieldNode) {
-                    // Add existing tags from the input field.
-                    var node = $(this.options.singleFieldNode);
-                    var tags = node.val().split(this.options.singleFieldDelimiter);
-                    node.val('');
-                    $.each(tags, function(index, tag) {
-                        that.createTag(tag, null, true);
-                        addedExistingFromSingleFieldNode = true;
-                    });
-                } else {
-                    // Create our single field input after our list.
+            	if(!this.options.singleFieldNode){
+            		// Create our single field input after our list.
                     this.options.singleFieldNode = $('<input type="hidden" style="display:none;" value="" name="' + this.options.fieldName + '" />');
                     this.tagList.after(this.options.singleFieldNode);
-                }
+            	}
             }
-
-            // Add existing tags from the list, if any.
-            if (!addedExistingFromSingleFieldNode) {
-                this.tagList.children('li').each(function() {
-                    if (!$(this).hasClass('tagit-new')) {
-                        that.createTag($(this).text(), $(this).attr('class'), true);
-                        $(this).remove();
-                    }
-                });
+            
+            if(this.options.items){
+            	for (index = 0, len = this.options.items.length; index < len; ++index) {
+            		this.createTag(this.options.items[index],null,true);
+            	}
             }
 
             // Events.
@@ -268,14 +256,20 @@
                         // Autocomplete will create its own tag from a selection and close automatically.
                         if (!(that.options.autocomplete.autoFocus && that.tagInput.data('autocomplete-open'))) {
                             that.tagInput.autocomplete('close');
-                            that.createTag(that._cleanedInput());
+                            that.createTag({
+                            	label:that._cleanedInput(),
+                            	value:that._cleanedInput()
+                            });
                         }
                     }
                 }).blur(function(e){
-                    // Create a tag when the element loses focus.
+                    // Clean tag when the element loses focus.
                     // If autocomplete is enabled and suggestion was clicked, don't add it.
                     if (!that.tagInput.data('autocomplete-open')) {
-                        that.createTag(that._cleanedInput());
+                        that.createTag({
+                        	label:that._cleanedInput(),
+                        	value:that._cleanedInput()
+                        });
                     }
                 });
 
@@ -283,7 +277,7 @@
             if (this.options.availableTags || this.options.tagSource || this.options.autocomplete.source) {
                 var autocompleteOptions = {
                     select: function(event, ui) {
-                        that.createTag(ui.item.value);
+                        that.createTag(ui.item);
                         // Preventing the tag input to be updated with the chosen value.
                         return false;
                     }
@@ -436,21 +430,23 @@
             return Boolean($.effects && ($.effects[name] || ($.effects.effect && $.effects.effect[name])));
         },
 
-        createTag: function(value, additionalClass, duringInitialization) {
+        createTag: function(item, additionalClass, duringInitialization) {
             var that = this;
 
-            value = $.trim(value);
-
-            if(this.options.preprocessTag) {
-                value = this.options.preprocessTag(value);
+            if(typeof item === "string"){
+            	item = $.trim(item);
             }
 
-            if (value === '') {
+            if(this.options.preprocessTag) {
+            	item = this.options.preprocessTag(item);
+            }
+
+            if (!item || (!item.label && !item.value)) {
                 return false;
             }
 
-            if (!this.options.allowDuplicates && !this._isNew(value)) {
-                var existingTag = this._findTagByLabel(value);
+            if (!this.options.allowDuplicates && !this._isNew(item.label || item.value || item)) {
+                var existingTag = this._findTagByLabel(item.label || item.value || item);
                 if (this._trigger('onTagExists', null, {
                     existingTag: existingTag,
                     duringInitialization: duringInitialization
@@ -467,7 +463,7 @@
                 return false;
             }
 
-            var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
+            var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(item.label || item.value || item);
 
             // Create tag.
             var tag = $('<li></li>')
@@ -494,7 +490,7 @@
 
             // Unless options.singleField is set, each tag has a hidden input field inline.
             if (!this.options.singleField) {
-                var escapedValue = label.html();
+                var escapedValue = item.value || item.label || item;
                 tag.append('<input type="hidden" value="' + escapedValue + '" name="' + this.options.fieldName + '" class="tagit-hidden-field" />');
             }
 
@@ -508,7 +504,7 @@
 
             if (this.options.singleField) {
                 var tags = this.assignedTags();
-                tags.push(value);
+                tags.push(item.value || item.label || item);
                 this._updateSingleTagsField(tags);
             }
 
@@ -588,4 +584,3 @@
 
     });
 })(jQuery);
-
