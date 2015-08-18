@@ -466,7 +466,7 @@
             var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(item.label || item.value || item);
 
             // Create tag.
-            var tag = $('<li></li>')
+            var tag = $('<li data-value="' + (item.value || item.label || item) + '"></li>')
                 .addClass('tagit-choice ui-widget-content ui-state-default ui-corner-all')
                 .addClass(additionalClass)
                 .append(label);
@@ -541,7 +541,7 @@
 
             if (this.options.singleField) {
                 var tags = this.assignedTags();
-                var removedTagLabel = this.tagLabel(tag);
+                var removedTagLabel = tag.data('value');
                 tags = $.grep(tags, function(el){
                     return el != removedTagLabel;
                 });
