@@ -167,6 +167,11 @@ Optionally set a *placeholder* attribute on the `input` that gets created for ta
 
 Defaults to *null*
 
+### maxTagLength (integer)
+Optionally set a *maxlength* attribute on the tag-it `input` that gets created.
+
+Defaults to *null*
+
 
 ## Events
 
