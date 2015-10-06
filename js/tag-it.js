@@ -94,6 +94,9 @@
             onTagClicked        : null,
             onTagLimitExceeded  : null,
 
+            // Optionally set a maxlength attribute on the tag-it input
+            maxTagLength: null,
+
 
             // DEPRECATED:
             //
@@ -134,6 +137,10 @@
 
             if (this.options.placeholderText) {
                 this.tagInput.attr('placeholder', this.options.placeholderText);
+            }
+
+            if (this.options.maxTagLength) {
+                this.tagInput.attr('maxlength', this.options.maxTagLength);
             }
 
             if (!this.options.autocomplete.source) {
