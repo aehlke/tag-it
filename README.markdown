@@ -257,7 +257,7 @@ Set a function to be called before tag is created. Callback receives the
 value of the tag created.
 
     // ensure all tags are capitalized
-    $(#tag-it").tagit("preprocessTag", function(val) {
+    $("#tag-it").tagit("preprocessTag", function(val) {
       if (!val) { return ''; }
       return val[0].toUpperCase() + val.slice(1, val.length);
     });
