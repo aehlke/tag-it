@@ -133,7 +133,9 @@
             }
 
             if (this.options.placeholderText) {
-                this.tagInput.attr('placeholder', this.options.placeholderText);
+                this.placeHolderElement = $('<li class="tagit-new tagit-placeholder-content" />')
+                    .append($('<input type="text" >').attr("placeholder", this.options.placeholderText));
+                this.tagList.append(this.placeHolderElement);
             }
 
             if (!this.options.autocomplete.source) {
@@ -271,6 +273,8 @@
                             that.createTag(that._cleanedInput());
                         }
                     }
+                }).keyup(function(e){
+                    that._updatePlaceholderState();
                 }).blur(function(e){
                     // Create a tag when the element loses focus.
                     // If autocomplete is enabled and suggestion was clicked, don't add it.
@@ -302,6 +306,8 @@
 
                 this.tagInput.autocomplete('widget').addClass('tagit-autocomplete');
             }
+
+            this._updatePlaceholderState();
         },
 
         destroy: function() {
@@ -436,6 +442,19 @@
             return Boolean($.effects && ($.effects[name] || ($.effects.effect && $.effects.effect[name])));
         },
 
+        _updatePlaceholderState: function() {
+            if(!this.placeHolderElement) {
+                return;
+            }
+
+            if((this.tagInput && this.tagInput.val() !== '') || this._tags().length > 0) {
+                this.placeHolderElement.css("display", "none");
+            }
+            else {
+                this.placeHolderElement.css("display", "block");
+            }
+        },
+
         createTag: function(value, additionalClass, duringInitialization) {
             var that = this;
 
@@ -529,6 +548,8 @@
             if (this.options.showAutocompleteOnFocus && !duringInitialization) {
                 setTimeout(function () { that._showAutocomplete(); }, 0);
             }
+
+            this._updatePlaceholderState();
         },
 
         removeTag: function(tag, animate) {
@@ -567,6 +588,8 @@
                 tag.remove();
                 this._trigger('afterTagRemoved', null, {tag: tag, tagLabel: this.tagLabel(tag)});
             }
+
+            this._updatePlaceholderState();
 
         },
 
