@@ -134,7 +134,7 @@
 
             if (this.options.placeholderText) {
                 this.placeHolderElement = $('<li class="tagit-new tagit-placeholder-content" />')
-                    .append($('<input type="text" >').attr("placeholder", this.options.placeholderText));
+                    .append($('<input type="text" tabindex="-1" />').attr("placeholder", this.options.placeholderText));
                 this.tagList.append(this.placeHolderElement);
             }
 
