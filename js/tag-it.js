@@ -240,8 +240,9 @@
                     // except when there is an open quote or if setting allowSpaces = true.
                     // Tab will also create a tag, unless the tag input is empty,
                     // in which case it isn't caught.
+                    //&& event.char===',' -- fix for Russian letter "b"
                     if (
-                        (event.which === $.ui.keyCode.COMMA && event.shiftKey === false) ||
+                        (event.which === $.ui.keyCode.COMMA && event.char===',' && event.shiftKey === false) ||
                         event.which === $.ui.keyCode.ENTER ||
                         (
                             event.which == $.ui.keyCode.TAB &&
