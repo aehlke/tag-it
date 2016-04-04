@@ -28,6 +28,7 @@
 
     $.widget('ui.tagit', {
         options: {
+            allowAddNew       : true,
             allowDuplicates   : false,
             caseSensitive     : true,
             fieldName         : 'tags',
@@ -200,6 +201,9 @@
                     var tags = node.val().split(this.options.singleFieldDelimiter);
                     node.val('');
                     $.each(tags, function(index, tag) {
+                        if(!that.options.allowAddNew){
+                            return false;
+                        }
                         that.createTag(tag, null, true);
                         addedExistingFromSingleFieldNode = true;
                     });
@@ -214,6 +218,9 @@
             if (!addedExistingFromSingleFieldNode) {
                 this.tagList.children('li').each(function() {
                     if (!$(this).hasClass('tagit-new')) {
+                        if(!that.options.allowAddNew){
+                            return false;
+                        }
                         that.createTag($(this).text(), $(this).attr('class'), true);
                         $(this).remove();
                     }
@@ -268,6 +275,9 @@
                         // Autocomplete will create its own tag from a selection and close automatically.
                         if (!(that.options.autocomplete.autoFocus && that.tagInput.data('autocomplete-open'))) {
                             that.tagInput.autocomplete('close');
+                            if(!that.options.allowAddNew){
+                                return false;
+                            }
                             that.createTag(that._cleanedInput());
                         }
                     }
@@ -275,6 +285,9 @@
                     // Create a tag when the element loses focus.
                     // If autocomplete is enabled and suggestion was clicked, don't add it.
                     if (!that.tagInput.data('autocomplete-open')) {
+                        if(!that.options.allowAddNew){
+                            return false;
+                        }
                         that.createTag(that._cleanedInput());
                     }
                 });
@@ -439,8 +452,8 @@
         createTag: function(value, additionalClass, duringInitialization) {
             var that = this;
 
-            value = $.trim(value);
-
+            value = $.trim(value);            
+            
             if(this.options.preprocessTag) {
                 value = this.options.preprocessTag(value);
             }
@@ -462,13 +475,14 @@
                 return false;
             }
 
+            
             if (this.options.tagLimit && this._tags().length >= this.options.tagLimit) {
                 this._trigger('onTagLimitExceeded', null, {duringInitialization: duringInitialization});
                 return false;
             }
-
+            
             var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
-
+            
             // Create tag.
             var tag = $('<li></li>')
                 .addClass('tagit-choice ui-widget-content ui-state-default ui-corner-all')
