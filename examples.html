@@ -132,6 +132,17 @@
                 availableTags: sampleTags,
                 removeConfirmation: true
             });
+
+            //-------------------------------
+            // Regex enabled
+            //-------------------------------
+            $('#regexEnabled').tagit({
+                regexEnable: true,
+                regexPattern: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9]+(\.?[a-zA-Z0-9]+)?$/g,
+                onRegexFailure: function(evt, ui) {
+                    $("#regexMessage").text("Wrong email!").fadeIn().delay(1000).fadeOut();
+                }
+            });
             
         });
     </script>
@@ -254,6 +265,21 @@
                 <li>backspace me</li>
                 <li>me too</li>
             </ul>
+        </form>
+
+        <hr>
+        <h3>Regex enabled</h3>
+        <form>
+            <p>
+                With the option regexEnable you can set any regular expression in the regexPattern property to filter the input.
+            </p>
+            <ul id="regexEnabled">
+                <li>test@email.com</li>
+                <li>test2@anotheremail.com</li>
+            </ul>
+            <div  style="height:5px">
+                <p id="regexMessage" style="{display: hidden}"></p>
+            </div>
         </form>
 
     </div>
