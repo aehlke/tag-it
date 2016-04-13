@@ -39,6 +39,10 @@
             // Used for autocomplete, unless you override `autocomplete.source`.
             availableTags     : [],
 
+            regexPattern : null, // Holds the regex to be utilized when regexEnable is true
+            regexEnable : false, // Enables regex
+            regexObj : null, // To hold RegExp() object
+
             // Use to override or add any options to the autocomplete widget.
             //
             // By default, autocomplete.source will map to availableTags,
@@ -127,6 +131,10 @@
             this.tagInput = $('<input type="text" />').addClass('ui-widget-content');
 
             if (this.options.readOnly) this.tagInput.attr('disabled', 'disabled');
+
+            if (this.options.regexEnable) {
+                this.options.regexObj = new RegExp(this.options.regexPattern);
+            }
 
             if (this.options.tabIndex) {
                 this.tagInput.attr('tabindex', this.options.tabIndex);
@@ -460,6 +468,14 @@
                     }
                 }
                 return false;
+            }
+
+            if (this.options.regexEnable && value !== '') {
+                that.options.regexObj.lastIndex = 0;
+                if (!that.options.regexObj.test(value)) {
+                    this._trigger('onRegexFailure', null, {duringInitialization: duringInitialization});
+                    return false;
+                } 
             }
 
             if (this.options.tagLimit && this._tags().length >= this.options.tagLimit) {
