@@ -282,15 +282,8 @@
             // Autocomplete.
             if (this.options.availableTags || this.options.tagSource || this.options.autocomplete.source) {
                 var autocompleteOptions = {
-                    select: function (event, ui) {
-                        debugger;
-                        if (ui.item.label != undefined) {
-                            that.createTag(ui.item.value, undefined, undefined, ui.item.label);
-                        } else {
-                            that.createTag(ui.item.value);
-                        }
-                        
-                        
+                    select: function(event, ui) {
+                        that.createTag(ui.item.value);
                         // Preventing the tag input to be updated with the chosen value.
                         return false;
                     }
@@ -443,7 +436,7 @@
             return Boolean($.effects && ($.effects[name] || ($.effects.effect && $.effects.effect[name])));
         },
 
-        createTag: function(value, additionalClass, duringInitialization,tagLabel) {
+        createTag: function(value, additionalClass, duringInitialization) {
             var that = this;
 
             value = $.trim(value);
@@ -473,12 +466,8 @@
                 this._trigger('onTagLimitExceeded', null, {duringInitialization: duringInitialization});
                 return false;
             }
-            if (tagLabel != undefined) {
-                var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(tagLabel);
-            } else {
-                var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
-            }
-            
+
+            var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
 
             // Create tag.
             var tag = $('<li></li>')
@@ -504,14 +493,9 @@
             }
 
             // Unless options.singleField is set, each tag has a hidden input field inline.
-            //and it will also now see if it is a label or a value
             if (!this.options.singleField) {
-                if (tagLabel!= null) {
-                    tag.append('<input type="hidden" value="' + value + '" name="' + this.options.fieldName + '" class="tagit-hidden-field" />');
-                } else {
-                    var escapedValue = label.html();
-                    tag.append('<input type="hidden" value="' + escapedValue + '" name="' + this.options.fieldName + '" class="tagit-hidden-field" />');
-                }
+                var escapedValue = label.html();
+                tag.append('<input type="hidden" value="' + escapedValue + '" name="' + this.options.fieldName + '" class="tagit-hidden-field" />');
             }
 
             if (this._trigger('beforeTagAdded', null, {
