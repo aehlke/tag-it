@@ -35,7 +35,7 @@
             readOnly          : false,  // Disables editing.
             removeConfirmation: false,  // Require confirmation to remove tags.
             tagLimit          : null,   // Max number of tags allowed (null for unlimited).
-
+            valueFieldName: 'tagIds',   //if autocomplete source has a value field, it will be stored with inputs with such names else in data-autocomplete-ouput
             // Used for autocomplete, unless you override `autocomplete.source`.
             availableTags     : [],
 
@@ -106,7 +106,21 @@
             tagSource: null
             // Do not use the above deprecated options.
         },
+        
+        _createHiddenInput: function(fieldName, value,cssClass,additionalData) {
+            var $input = $('<input>');
+            $input.attr('type', 'hidden')
+                .attr('name', fieldName)
+                .attr('data-tagit-additionalData', additionalData)
+                .attr('class',cssClass)
+                .attr('value', value);
+            if (additionalData!= undefined && additionalData != null) {
+                $input.attr('data-tagit-additionalData', additionalData);
+            }
+            return $input;
 
+
+        },
         _create: function() {
             // for handling static scoping inside callbacks
             var that = this;
@@ -213,9 +227,19 @@
             // Add existing tags from the list, if any.
             if (!addedExistingFromSingleFieldNode) {
                 this.tagList.children('li').each(function() {
-                    if (!$(this).hasClass('tagit-new')) {
-                        that.createTag($(this).text(), $(this).attr('class'), true);
-                        $(this).remove();
+                    var $this = $(this);
+                    if (!$this.hasClass('tagit-new')) {
+                        var data = {
+                            label: $this.text()
+                        };
+                        var predefinedValue = $this.attr('data-tagit-value');
+                        if (predefinedValue != null) {
+                            data.value = predefinedValue;
+                        } else {
+                            data.value = $this.text();
+                        }
+                        that.createTag(data, $this.attr('class'), true);
+                        $this.remove();
                     }
                 });
             }
@@ -267,8 +291,25 @@
 
                         // Autocomplete will create its own tag from a selection and close automatically.
                         if (!(that.options.autocomplete.autoFocus && that.tagInput.data('autocomplete-open'))) {
+                            //trigger select event for autocomplete to emulate that user selected item with a mouse
+                            //data-tagit-autocomplete-tmpValue is filled in 
+                            var tmpValue = that.tagInput.attr('data-tagit-autocomplete-tmpValue');
+                            var eventData = {
+                                item: {
+                                    label: that._cleanedInput()
+                                }
+                            };
+                            //if we have a value data then add it. 
+                            //Else we create a dublicate value input with label text as value
+                            if (tmpValue != undefined && tmpValue!=null) {
+                                eventData.item.value = tmpValue;
+                            } else {
+                                eventData.item.value = eventData.item.label;
+                            }
+                            that.tagInput.data('ui-autocomplete')._trigger('select', 'autocompleteselect',eventData);
                             that.tagInput.autocomplete('close');
-                            that.createTag(that._cleanedInput());
+                            //that.tagInput.autocomplete('close');
+                            //that.createTag(that._cleanedInput());
                         }
                     }
                 }).blur(function(e){
@@ -282,8 +323,27 @@
             // Autocomplete.
             if (this.options.availableTags || this.options.tagSource || this.options.autocomplete.source) {
                 var autocompleteOptions = {
-                    select: function(event, ui) {
-                        that.createTag(ui.item.value);
+                    select: function (event, ui) {
+                        var $this = $(this);
+                        var data = {
+                            value: ui.item.value,
+                            label: ui.item.label
+                        };
+                        that.createTag(data);
+                        //data is added remove data-...-tmp attribute. 
+                        $this.removeAttr('data-tagit-autocomplete-tmpValue')
+                        // Preventing the tag input to be updated with the chosen value.
+                        return false;
+                    },
+                    // problem if the value and label passed in autocomplete: 
+                    //http://stackoverflow.com/questions/7642855/autocomplete-applying-value-not-label-to-textbox
+                    focus: function (event, ui) {
+                        var $this = $(this);
+                        $this.val(ui.item.label);
+                        //if we have value component- add it as a "data-" attr
+                        if (ui.item.value != undefined || ui.item.value != null) {
+                            $this.attr('data-tagit-autocomplete-tmpValue', ui.item.value)
+                        }
                         // Preventing the tag input to be updated with the chosen value.
                         return false;
                     }
@@ -398,13 +458,20 @@
 
         tagLabel: function(tag) {
             // Returns the tag's string label.
+                if (this.options.singleField) {
+                return $(tag).find('.tagit-label:first').text();
+            } else {
+                return $(tag).find("input[name='" + this.options.fieldName + "']:first").val();
+            }
+        },       
+        tagValue: function (tag) {
+            // Returns the tag's string label.
             if (this.options.singleField) {
                 return $(tag).find('.tagit-label:first').text();
             } else {
-                return $(tag).find('input:first').val();
+                return $(tag).find("input[name='" + this.options.valueFieldName + "']:first").val();
             }
         },
-
         _showAutocomplete: function() {
             this.tagInput.autocomplete('search', '');
         },
@@ -436,10 +503,27 @@
             return Boolean($.effects && ($.effects[name] || ($.effects.effect && $.effects.effect[name])));
         },
 
-        createTag: function(value, additionalClass, duringInitialization) {
+        createTag: function(data, additionalClass, duringInitialization) {
             var that = this;
-
-            value = $.trim(value);
+            //check if it is an object or an array
+            var value;
+            var tagLabelValue;
+            var isDataObjectAndNotArray = !(Object.prototype.toString.call(data) === '[object Array]') && data === Object(data);
+            if (isDataObjectAndNotArray) {
+                if (data.value == undefined ) {
+                    throw "You should provide value in data object";
+                }
+                value = $.trim(data.value);
+                if (data.label == undefined) {
+                    tagLabelValue = value;
+                } else {
+                    tagLabelValue = data.label;
+                }
+                
+            } else {
+                tagLabelValue = value = $.trim(data);
+            }
+            
 
             if(this.options.preprocessTag) {
                 value = this.options.preprocessTag(value);
@@ -449,8 +533,8 @@
                 return false;
             }
 
-            if (!this.options.allowDuplicates && !this._isNew(value)) {
-                var existingTag = this._findTagByLabel(value);
+            if (!this.options.allowDuplicates && !this._isNew(tagLabelValue)) {
+                var existingTag = this._findTagByLabel(tagLabelValue);
                 if (this._trigger('onTagExists', null, {
                     existingTag: existingTag,
                     duringInitialization: duringInitialization
@@ -467,7 +551,7 @@
                 return false;
             }
 
-            var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
+            var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(tagLabelValue);
 
             // Create tag.
             var tag = $('<li></li>')
@@ -495,7 +579,9 @@
             // Unless options.singleField is set, each tag has a hidden input field inline.
             if (!this.options.singleField) {
                 var escapedValue = label.html();
-                tag.append('<input type="hidden" value="' + escapedValue + '" name="' + this.options.fieldName + '" class="tagit-hidden-field" />');
+                tag.append(this._createHiddenInput(this.options.fieldName,escapedValue,"tagit-hidden-field"));
+                //Create a input field for autocompleteValue. It can be the same as tagLabel. It was done to pass array of autocomplete values to the server.
+                tag.append(this._createHiddenInput(this.options.valueFieldName,value,"tagit-hidden-value-field",data.additionalData));
             }
 
             if (this._trigger('beforeTagAdded', null, {
@@ -508,6 +594,8 @@
 
             if (this.options.singleField) {
                 var tags = this.assignedTags();
+                //todo:I think next shtep will be - make a method for representing a key value pair if it is a complex object.
+                //Now it will pass a value if it was provided or a text if there is no value 
                 tags.push(value);
                 this._updateSingleTagsField(tags);
             }
