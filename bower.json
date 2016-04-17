@@ -1,0 +1,36 @@
+{
+    "name": "odec-tag-it",
+    "version": "1.0.4",
+    "homepage": "https://github.com/Defee/tag-it",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/Defee/tag-it.git"
+    },
+    "authors": [
+        "@aehlke",
+        "@defee"
+    ],
+    "description": "modification of https://github.com/aehlke/tag-it",
+    "main": [
+        "./dist/css/jquery.tagit.css",
+        "./dist/css/tagit.ui-zendesk.css",
+        "./dist/js/tag-it.js"
+    ],
+    "keywords": [
+        "tag-it",
+        "tags",
+        "tag"
+    ],
+    "license": "MIT",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "jquery-1.11.1": "2.2.3",
+        "jquery-ui": "1.11.4"
+    }
+}
