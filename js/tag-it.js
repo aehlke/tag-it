@@ -32,6 +32,7 @@
             caseSensitive     : true,
             fieldName         : 'tags',
             placeholderText   : null,   // Sets `placeholder` attr on input field.
+            keepPlaceholder   : false,  // Keep the 'placeholder' even when there is content
             readOnly          : false,  // Disables editing.
             removeConfirmation: false,  // Require confirmation to remove tags.
             tagLimit          : null,   // Max number of tags allowed (null for unlimited).
@@ -526,6 +527,12 @@
                 duringInitialization: duringInitialization
             });
 
+            // Now that we already have a tag,
+            // remove the placeholder from the input field
+            if (!this.options.keepPlaceholder) {
+              this.tagInput.attr("placeholder", "");
+            }
+
             if (this.options.showAutocompleteOnFocus && !duringInitialization) {
                 setTimeout(function () { that._showAutocomplete(); }, 0);
             }
@@ -566,6 +573,12 @@
             } else {
                 tag.remove();
                 this._trigger('afterTagRemoved', null, {tag: tag, tagLabel: this.tagLabel(tag)});
+            }
+
+            // If no tags are left,
+            // re-add the placeholder text to the tag input field
+            if (!this.assignedTags().length && this.options.placeholderText && !this.options.keepPlaceholder) {
+                this.tagInput.attr('placeholder', this.options.placeholderText);
             }
 
         },
