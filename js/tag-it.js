@@ -50,6 +50,8 @@
 
             // When enabled, quotes are unneccesary for inputting multi-word tags.
             allowSpaces: false,
+            // When enabled, comma key won't trigger completion of a tag
+            allowCommas: false,
 
             // The below options are for using a single field instead of several
             // for our form values.
@@ -241,7 +243,7 @@
                     // Tab will also create a tag, unless the tag input is empty,
                     // in which case it isn't caught.
                     if (
-                        (event.which === $.ui.keyCode.COMMA && event.shiftKey === false) ||
+                        ((event.which === $.ui.keyCode.COMMA && that.options.allowCommas == false) && event.shiftKey === false) ||
                         event.which === $.ui.keyCode.ENTER ||
                         (
                             event.which == $.ui.keyCode.TAB &&
