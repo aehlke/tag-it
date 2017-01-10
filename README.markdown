@@ -260,7 +260,7 @@ Set a function to be called before tag is created. Callback receives the
 value of the tag created.
 
     // ensure all tags are capitalized
-    $(#tag-it").tagit("preprocessTag", function(val) {
+    $("#myTags").tagit("preprocessTag", function(val) {
       if (!val) { return ''; }
       return val[0].toUpperCase() + val.slice(1, val.length);
     });
@@ -276,13 +276,13 @@ Clears the widget of all tags — removes each tag it contains, so the **beforeT
 
     $("#myTags").tagit("removeAll");
 
-### setPlaceholderText()
+### setPlaceholderText(text, animate = true)
 Updates the placeholder text for the next input. You can call this inside
 one of the event call backs. For instance:
 
     afterTagAdded: function (event, ui) {
         if (ui.countOfTags === tagLimit) {
-            $('#my-tagit').tagit('setPlaceholderText', 'You can\'t add more!', false);
+            $('#myTags').tagit("setPlaceholderText", "You can't add more!", false);
         }
     }
 
