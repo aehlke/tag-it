@@ -107,6 +107,21 @@
             // Do not use the above deprecated options.
         },
 
+        setPlaceholderText: function(text, animate = true) {
+            if (text === this.tagInput.attr('placeholder')) {
+                //Don't bother resetting if it's the same
+                return;
+            }
+
+            if (this.options.animate && animate) {
+                this.tagInput.fadeOut(function() {
+                    $(this).attr('placeholder', text).fadeIn();
+                });
+            } else {
+                this.tagInput.attr('placeholder', text);
+            }
+        },
+
         _create: function() {
             // for handling static scoping inside callbacks
             var that = this;
@@ -501,7 +516,8 @@
             if (this._trigger('beforeTagAdded', null, {
                 tag: tag,
                 tagLabel: this.tagLabel(tag),
-                duringInitialization: duringInitialization
+                duringInitialization: duringInitialization,
+                countOfTags: this._tags().length
             }) === false) {
                 return;
             }
@@ -523,7 +539,8 @@
             this._trigger('afterTagAdded', null, {
                 tag: tag,
                 tagLabel: this.tagLabel(tag),
-                duringInitialization: duringInitialization
+                duringInitialization: duringInitialization,
+                countOfTags: this._tags().length
             });
 
             if (this.options.showAutocompleteOnFocus && !duringInitialization) {
@@ -539,7 +556,11 @@
             // DEPRECATED.
             this._trigger('onTagRemoved', null, tag);
 
-            if (this._trigger('beforeTagRemoved', null, {tag: tag, tagLabel: this.tagLabel(tag)}) === false) {
+            if (this._trigger('beforeTagRemoved', null, {
+                tag: tag,
+                tagLabel: this.tagLabel(tag),
+                countOfTags: this._tags().length
+            }) === false) {
                 return;
             }
 
@@ -559,13 +580,21 @@
                 var thisTag = this;
                 hide_args.push(function() {
                     tag.remove();
-                    thisTag._trigger('afterTagRemoved', null, {tag: tag, tagLabel: thisTag.tagLabel(tag)});
+                    thisTag._trigger('afterTagRemoved', null, {
+                        tag: tag,
+                        tagLabel: thisTag.tagLabel(tag),
+                        countOfTags: thisTag._tags().length
+                    });
                 });
 
                 tag.fadeOut('fast').hide.apply(tag, hide_args).dequeue();
             } else {
                 tag.remove();
-                this._trigger('afterTagRemoved', null, {tag: tag, tagLabel: this.tagLabel(tag)});
+                this._trigger('afterTagRemoved', null, {
+                    tag: tag,
+                    tagLabel: this.tagLabel(tag),
+                    countOfTags: this._tags().length
+                });
             }
 
         },

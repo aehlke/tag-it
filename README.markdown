@@ -174,7 +174,10 @@ Defaults to *null*
 
 Can be used to add custom behaviour before the tag is added to the DOM.
 
-The function receives a null event, and an object containing the properties `tag`, `tagLabel`, and `duringInitialization`.
+The function receives a null event, and an object containing the properties `tag`, `tagLabel`, `duringInitialization`, and `countOfTags`.
+
+`countOfTags` is the number of tags that are currently in the list at the point
+that the event is fired.
 
 `duringInitialization` is a boolean indicating whether the tag was added during the initial construction of this widget,
 e.g. when initializing tag-it on an input with preloaded data. You can use this to tell whether the event was initiated by
@@ -257,7 +260,7 @@ Set a function to be called before tag is created. Callback receives the
 value of the tag created.
 
     // ensure all tags are capitalized
-    $(#tag-it").tagit("preprocessTag", function(val) {
+    $("#myTags").tagit("preprocessTag", function(val) {
       if (!val) { return ''; }
       return val[0].toUpperCase() + val.slice(1, val.length);
     });
@@ -272,6 +275,16 @@ Finds the tag with the label `tagLabel` and removes it. If no such tag is found,
 Clears the widget of all tags — removes each tag it contains, so the **beforeTagRemoved** / **afterTagRemoved** event callbacks (if set) will be called for each.
 
     $("#myTags").tagit("removeAll");
+
+### setPlaceholderText(text, animate = true)
+Updates the placeholder text for the next input. You can call this inside
+one of the event call backs. For instance:
+
+    afterTagAdded: function (event, ui) {
+        if (ui.countOfTags === tagLimit) {
+            $('#myTags').tagit("setPlaceholderText", "You can't add more!", false);
+        }
+    }
 
 ## Properties
 

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>MM Tokenise Email Example</title>
+
+    <!-- These few CSS files are just to make this example page look nice. You can ignore them. -->
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/reset-fonts/reset-fonts.css">
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/base/base-min.css">
+    <link href="http://fonts.googleapis.com/css?family=Brawler" rel="stylesheet" type="text/css">
+    <link href="_static/master.css" rel="stylesheet" type="text/css">
+    <link href="_static/subpage.css" rel="stylesheet" type="text/css">
+    <link href="_static/examples.css" rel="stylesheet" type="text/css">
+    <!-- /ignore -->
+
+
+    <!-- INSTRUCTIONS -->
+
+    <!-- 2 CSS files are required: -->
+    <!--   * Tag-it's base CSS (jquery.tagit.css). -->
+    <!--   * Any theme CSS (either a jQuery UI theme such as "flick", or one that's bundled with Tag-it, e.g. tagit.ui-zendesk.css as in this example.) -->
+    <!-- The base CSS and tagit.ui-zendesk.css theme are scoped to the Tag-it widget, so they shouldn't affect anything else in your site, unlike with jQuery UI themes. -->
+    <link href="css/jquery.tagit.css" rel="stylesheet" type="text/css">
+    <link href="css/tagit.ui-zendesk.css" rel="stylesheet" type="text/css">
+    <!-- If you want the jQuery UI "flick" theme, you can use this instead, but it's not scoped to just Tag-it like tagit.ui-zendesk is: -->
+    <!--   <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css"> -->
+
+    <!-- jQuery and jQuery UI are required dependencies. -->
+    <!-- Although we use jQuery 1.4 here, it's tested with the latest too (1.8.3 as of writing this.) -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <!-- The real deal -->
+    <script src="js/tag-it.js" type="text/javascript" charset="utf-8"></script>
+
+    <script>
+        $(function(){
+            // singleFieldTags2 is an INPUT element, rather than a UL as in the other 
+            // examples, so it automatically defaults to singleField.
+            var placeholderTextBefore = 'Enter friends addresses';
+            var placeholderTextAfter = 'Add more friends!';
+            var tagLimit = 4;
+            $('#ShareRequest_ToEmails').tagit({
+                placeholderText: placeholderTextBefore,
+                tagLimit: tagLimit,
+                beforeTagAdded: function (event, ui) {
+                    //This is called each time the user hits enter, just before the tag is inserted into the dom.
+                    //Let's check here that it looks like an email address
+                    var email = ui.tagLabel;
+                    if (/^.+@.+$/.test(email)) {
+                        $('#ShareRequest_ToEmails').tagit('setPlaceholderText', placeholderTextAfter, false);
+                        return true;
+                    }
+                    return false;
+                },
+                afterTagAdded: function (event, ui) {
+                    if (ui.countOfTags === tagLimit) {
+                        $('#ShareRequest_ToEmails').tagit('setPlaceholderText', 'You can\'t add more!', false);
+                    }
+                },
+                beforeTagRemoved: function(event, ui) {
+                    console.log(ui);
+                    if (ui.countOfTags === 0) {
+                        $('#ShareRequest_ToEmails').tagit('setPlaceholderText', placeholderTextBefore);
+                    } else {
+                        $('#ShareRequest_ToEmails').tagit('setPlaceholderText', placeholderTextAfter);
+                    }
+                }
+            });
+
+            $('#ShareRequest_ToEmails').tagit('createTag', 'one@mm.com');
+            $('#ShareRequest_ToEmails').tagit('createTag', 'two@mm.com');
+            $('#ShareRequest_ToEmails').tagit('createTag', 'three@mm.com');
+            $('#ShareRequest_ToEmails').tagit('createTag', 'four@mm.com');
+        });
+    </script>
+    <style>
+ 
+
+        ul.tagit li {
+            font-size: 9px;
+            margin-top: 1px;
+        }
+        ul.tagit li.tagit-choice {
+
+            background-color: #eeeeee;
+            border-color: #dddddd;
+        }
+        </style>
+
+</head>
+<body>
+
+
+<div id="wrapper"> 
+    <div id="header"> 
+        <h2>MM Usage Example</h2>
+    </div>
+    
+
+    <div id="mmsharewidget">
+    <div class="tab-pane in  active" id="share_email-0">
+            
+        <div id="email-SharesHorizontal" class="email-share">
+                <input type="hidden" id="email_share_url">
+
+                
+                    <form method="post" name="email_share_form_name" id="email_share_form" action="https://farfetch.mentionme.dev/me/referral/share/18379701/da852d099bd0ef9b081ce1039f20fc3632f96b3a/pr?subdomain=farfetch." novalidate="true">
+                            
+    <input type="email" id="ShareRequest_ToEmails" name="ShareRequest[ToEmails]" style="resize: none; width:96%;" placeholder="Enter friends' emails, separated by a comma" class=" not-removable">
+
+            
+            <textarea id="ShareRequest_Message" name="ShareRequest[Message]" class="fieldfill" rows="3" style="resize: none;" placeholder="Write a message to your friend(s)">Take a look at Farfetch - where you can shop the world's best boutiques in one website. Plus, since I'm already a Farfetch customer, if you mention my name at the checkout when you place your order, you can receive 10% off too!</textarea>
+    
+
+    
+        <div class="mm-email-caveat"><p class="share-caveat"> </p></div>
+    
+                                                                                        <div class="mm-button">
+                                                                <button style="" id="email_button" class="btn btn-email btn-custom email_button" name="email" type="submit">
+                                    Send
+                                </button>
+                            </div>
+                                                            
+                            </form>
+            </div>
+
+    </div>
+    </div>
+
+</div>
+</body>
+</html>
+
