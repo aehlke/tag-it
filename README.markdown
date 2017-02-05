@@ -27,6 +27,9 @@ The plugin requires either a jQuery UI theme or a Tag-it theme to be present, as
 
     <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
 	<link href="css/jquery.tagit.css" rel="stylesheet" type="text/css">
+	
+## RTL USER
+just load and replace these files to project (rtl-jquery.tagit.css AND rtl-tagit.ui-zendesk.css)
 
 Now, let's attach it to an existing `<ul>` box:
 
