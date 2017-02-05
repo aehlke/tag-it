@@ -4,9 +4,11 @@ Tag-it is a simple and configurable tag editing widget with autocomplete support
 
 [Homepage](http://aehlke.github.com/tag-it/)
 
-## Demo
+## LTR Demo
 
 ![Screenshot](http://aehlke.github.com/tag-it/_static/screenshot.png)
+
+## Right To Left Demo
 ![Screenshot](http://s4.picofile.com/file/8285150568/tag_manager.JPG)
 
 Check the [examples.html](http://aehlke.github.com/tag-it/examples.html) for several demos and the [prototype.js](http://aehlke.github.com/tag-it/prototype.js) file for a JavaScript prototype with all options and events.
