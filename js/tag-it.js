@@ -121,10 +121,10 @@
                 this.options.singleFieldNode = this.element;
                 this.element.addClass('tagit-hidden-field');
             } else {
-                if ($.isFunction($.fn.andSelf)) {
-                    this.tagList = this.element.find('ul, ol').andSelf().last();
-                } else {
+                if ($.isFunction($.fn.addBack)) {
                     this.tagList = this.element.find('ul, ol').addBack().last();
+                } else {
+                    this.tagList = this.element.find('ul, ol').andSelf().last();
                 }
             }
 
