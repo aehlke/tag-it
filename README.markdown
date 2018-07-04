@@ -97,6 +97,12 @@ If enabled, this will also make **autocomplete.minLength** default to `0` unless
 
 Defaults to *false*.
 
+### sorteable (boolean)
+
+when this is true allows tags to be sorted by the method of jQueryUI sorteable
+
+Defaults to *false*.
+
 ### removeConfirmation (boolean)
 
 When removeConfirmation is enabled the user has to press the backspace key twice to remove the last tag.
@@ -222,6 +228,17 @@ duplicate tags during the widget initialization.
 If the **allowDuplicates** option is enabled, this will not be triggered.
 
 By default it will visually highlight the existing tag, unless you return *false* in your callback.
+
+### onSortChange (function, Callback)
+
+Can be used to add custom behaviour when the taglist is reorder
+
+    $("#myTags").tagit({
+        onSortChange: function() {
+            // do something special
+            console.log("sort changed");
+        }
+    });
 
 ### onTagClicked (function, Callback)
 
