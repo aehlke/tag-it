@@ -35,6 +35,7 @@
             readOnly          : false,  // Disables editing.
             removeConfirmation: false,  // Require confirmation to remove tags.
             tagLimit          : null,   // Max number of tags allowed (null for unlimited).
+            isEmail           : false, // When is true tags must be email.
 
             // Used for autocomplete, unless you override `autocomplete.source`.
             availableTags     : [],
@@ -436,6 +437,12 @@
             return Boolean($.effects && ($.effects[name] || ($.effects.effect && $.effects.effect[name])));
         },
 
+        _isEmail: function (str) {
+            var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            var isEmail = regex.test(String(str).toLowerCase());
+            return isEmail;
+        },
+
         createTag: function(value, additionalClass, duringInitialization) {
             var that = this;
 
@@ -447,6 +454,12 @@
 
             if (value === '') {
                 return false;
+            }
+
+            if (this.options.isEmail) {
+                if(!this._isEmail(value)){
+                    return false;
+                };
             }
 
             if (!this.options.allowDuplicates && !this._isNew(value)) {
