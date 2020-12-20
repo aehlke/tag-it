@@ -58,6 +58,11 @@
                 availableTags: sampleTags
             });
 
+	    $("#singleFieldTagsWithTagLengthLimit").tagit({
+          	availableTags: sampleTags,
+          	tagLengthLimit: 5,
+            });
+
             //-------------------------------
             // Preloading data in markup
             //-------------------------------
@@ -189,6 +194,24 @@
         </form>
 
         <hr>
+
+
+	<h3>
+          <a name="graceful-degredation"></a>Single Input Field with
+          tagLengthLimit
+        </h3>
+        <form>
+          <p>with tag length limit. Here tagLengthLimit is 5</p>
+          <input
+            name="tags"
+            id="singleFieldTagsWithTagLengthLimit"
+            value="Apple, Orange"
+          />
+        </form>
+
+        <hr />
+
+
         <h3>Spaces Allowed Without Quotes</h3>
         <p>You can already do multiword tags with spaces in them by default, but those must be wrapped in quotes. This option lets you use spaces without requiring the user to quote the input.</p>
         <p>There are normally 5 ways to insert a tag after inputting some text: space, comma, enter, selecting an autocomplete option, or defocusing the widget. With the "allowSpaces" option set to true, space no longer inserts a tag, it just adds a space to the current tag input.</p>

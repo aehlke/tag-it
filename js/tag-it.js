@@ -35,6 +35,7 @@
             readOnly          : false,  // Disables editing.
             removeConfirmation: false,  // Require confirmation to remove tags.
             tagLimit          : null,   // Max number of tags allowed (null for unlimited).
+	    tagLengthLimit    : null,
 
             // Used for autocomplete, unless you override `autocomplete.source`.
             availableTags     : [],
@@ -466,6 +467,10 @@
                 this._trigger('onTagLimitExceeded', null, {duringInitialization: duringInitialization});
                 return false;
             }
+
+	    if (this.options.tagLengthLimit && this.tagInput.val().length > this.options.tagLengthLimit) {
+        return false;
+      }
 
             var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
 
