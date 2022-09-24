@@ -492,6 +492,17 @@
                 tag.append(removeTag);
             }
 
+			// user should be able to remove tags via keyboard navigating with tab when tabindex is set
+			if (null != this.options.tabIndex) {
+				removeTag.attr("tabindex", this.options.tabIndex);
+				removeTag.keypress(function(e) {
+					if (e.which === $.ui.keyCode.ENTER || e.which === $.ui.keyCode.SPACE) {
+						that.removeTag(tag);
+						that.tagInput.focus();  // after removing the tag, set focus back to input
+					}
+				});
+			}
+
             // Unless options.singleField is set, each tag has a hidden input field inline.
             if (!this.options.singleField) {
                 var escapedValue = label.html();
