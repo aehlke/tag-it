@@ -2,4 +2,5 @@
 *.swn
 *.swo
 *.swp
+.idea
 .DS_Store

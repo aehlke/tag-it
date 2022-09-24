@@ -126,6 +126,10 @@ For example, the user can enter `John Smith` instead of `"John Smith"`.
 
 Defaults to *false*.
 
+### removeText (String)
+This text is associated with each tag's close button used in off-screen text read by assistive technologies.
+Defaults to *remove*.
+
 ### readOnly (boolean)
 
 When enabled, tag-it just render tags. It disables the ability to edit tags.
