@@ -128,9 +128,9 @@
 
             if (this.options.readOnly) this.tagInput.attr('disabled', 'disabled');
 
-            if (this.options.tabIndex) {
-                this.tagInput.attr('tabindex', this.options.tabIndex);
-            }
+			if (null != this.options.tabIndex) {
+				this.tagInput.attr('tabindex', this.options.tabIndex);
+			}
 
             if (this.options.placeholderText) {
                 this.tagInput.attr('placeholder', this.options.placeholderText);
