@@ -5,10 +5,10 @@
 *
 * Copyright 2011, Levy Carneiro Jr.
 * Released under the MIT license.
-* http://aehlke.github.com/tag-it/LICENSE
+* https://github.com/aehlke/tag-it/blob/master/LICENSE
 *
 * Homepage:
-*   http://aehlke.github.com/tag-it/
+*   https://github.com/aehlke/tag-it
 *
 * Authors:
 *   Levy Carneiro Jr.
