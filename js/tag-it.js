@@ -274,7 +274,7 @@
                 }).blur(function(e){
                     // Create a tag when the element loses focus.
                     // If autocomplete is enabled and suggestion was clicked, don't add it.
-                    if (!that.tagInput.data('autocomplete-open')) {
+                    if (!that.tagInput.autocomplete('widget').find(".ui-menu-item a").hasClass("ui-state-focus")) {
                         that.createTag(that._cleanedInput());
                     }
                 });
