@@ -132,6 +132,16 @@
                 availableTags: sampleTags,
                 removeConfirmation: true
             });
+
+            //-------------------------------
+            // Label/value pairs
+            //-------------------------------
+            // Not the use of tag_id rather than label
+            var sampleTags2 = [{label:'c++', tag_id:0}, {label:'java', tag_id:1}, {label:'php', tag_id:2}, {label:'coldfusion', tag_id:3}, {label:'javascript', tag_id:4}, {label:'asp', tag_id:5}, {label:'ruby', tag_id:6}, {label:'python', tag_id:7}, {label:'c', tag_id:8}, {label:'scala', tag_id:9}, {label:'groovy', tag_id:10}, {label:'haskell', tag_id:11}, {label:'perl', tag_id:12}, {label:'erlang', tag_id:13}, {label:'apl', tag_id:14}, {label:'cobol', tag_id:15}, {label:'go', tag_id:16}, {label:'lua', tag_id:17}];
+
+            $('#labelValuePairs').tagit({
+                autocomplete: {source: sampleTags2}
+            });
             
         });
     </script>
@@ -245,6 +255,7 @@
         </form>
 
         <hr>
+
         <h3>Remove Confirmation</h3>
         <form>
             <p>
@@ -253,6 +264,31 @@
             <ul id="removeConfirmationTags">
                 <li>backspace me</li>
                 <li>me too</li>
+            </ul>
+        </form>
+
+        <hr>
+
+        <h3>Label/value pairs</h3>
+        <form>
+            <p>
+                When you want label/value pairs you can set your data in the form of:<br />
+                [{label: "php", tag_id: 2}, {label: "go", tag_id:16}]
+            </p>
+            <p>
+                This will display the "label" to users but send the "tag_id" to the hidden form field.
+            </p>
+            <p>
+                <strong>CAVEATS:</strong>
+            </p>
+            <ul>
+                <li>You can only provide this data to autocomplete.source, not availableTags</li>
+                <li>You cannot currently pre-fill label-tag_id pairs</li>
+                <li>Label-tag_id pairs only work with autocomplete</li>
+                <li>You cannot use label-tag_id pairs with a single input field</li>
+                <li>Does not properly prevent duplicates</li>
+            </ul>
+            <ul id="labelValuePairs">
             </ul>
         </form>
 
