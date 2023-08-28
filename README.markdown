@@ -1,6 +1,16 @@
 # Tag-it: a jQuery UI plugin
 
-**I'm looking for new maintainer ownership for this project: https://github.com/aehlke/tag-it/issues/431** Please see PRs/forks before using in the meantime :)
+---
+
+**IMPORTANT: tag-it is _unmaintained_.**
+
+Tag-it has reached end-of-life, and we're not looking to update or maintain it.  This library _should_ still work, but there are many PRs open and forks that you might want to consider before using it.
+
+As a tag-it replacement, we currently recommend [tagify](https://github.com/yairEO/tagify), which appears to be a popular library that is still being actively developed as of late 2023.
+
+Thank you!
+
+---
 
 Tag-it is a simple and configurable tag editing widget with autocomplete support.
 
