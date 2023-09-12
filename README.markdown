@@ -16,7 +16,10 @@ Tag-it is a simple and configurable tag editing widget with autocomplete support
 
 [Homepage](http://aehlke.github.com/tag-it/)
 
-## Demo
+## Right To Left Demo
+![Screenshot](http://s4.picofile.com/file/8285150568/tag_manager.JPG)
+
+## LTR Demo
 
 ![Screenshot](http://aehlke.github.com/tag-it/_static/screenshot.png)
 
@@ -36,6 +39,9 @@ The plugin requires either a jQuery UI theme or a Tag-it theme to be present, as
 
     <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
 	<link href="css/jquery.tagit.css" rel="stylesheet" type="text/css">
+	
+## RTL USER
+just load and replace these files to project (rtl-jquery.tagit.css AND rtl-tagit.ui-zendesk.css)
 
 Now, let's attach it to an existing `<ul>` box:
 
