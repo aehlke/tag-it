@@ -597,6 +597,26 @@
             this._tags().each(function(index, tag) {
                 that.removeTag(tag, false);
             });
+        },
+        readOnly: function(value) {
+		   this.options.readOnly=value;
+		   
+		   assignedTags=this.assignedTags();
+		   
+		   this.removeAll();
+		   
+		   if (this.options.readOnly){
+			   this.tagInput.attr('disabled', 'disabled');
+			   
+		   } else{
+			   this.tagInput.attr('disabled', '');
+		   }
+		   
+		   for(var i=0; i<assignedTags.length; i++){
+			   this.createTag(assignedTags[i]);
+		   }
+		   
+		   
         }
 
     });
