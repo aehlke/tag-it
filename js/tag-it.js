@@ -543,6 +543,39 @@
                 setTimeout(function () { that._showAutocomplete(); }, 0);
             }
         },
+        
+        toggleReadOnly: function () {
+            var that = this;
+
+            this.tagInput.prop("disabled", !this.options.readOnly);
+
+            var tags = this.tagList.find(".tagit-choice");
+
+            if (!this.options.readOnly) {
+                tags.addClass('tagit-choice-read-only');
+                tags.removeClass('tagit-choice-editable');
+                tags.find(".tagit-close").remove();
+            } else {
+                tags.addClass('tagit-choice-editable');
+                tags.removeClass('tagit-choice-read-only');
+                // Button for removing the tag.
+                for (i = 0; i < tags.length; i++) {
+                    var tag = tags[i];
+                    var removeTagIcon = $('<span></span>')
+                        .addClass('ui-icon ui-icon-close');
+                    var removeTag = $('<a><span class="text-icon">\xd7</span></a>') // \xd7 is an X
+                        .addClass('tagit-close')
+                        .append(removeTagIcon)
+                        .click(function(e) {
+                            // Removes a tag when the little 'x' is clicked.
+                            that.removeTag($(e.target).parent().parent()[0]);
+                        });
+                    $(tag).append(removeTag);
+                }
+            }
+
+            this.options.readOnly = !this.options.readOnly;
+        },
 
         removeTag: function(tag, animate) {
             animate = typeof animate === 'undefined' ? this.options.animate : animate;
