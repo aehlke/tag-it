@@ -5,10 +5,10 @@
 *
 * Copyright 2011, Levy Carneiro Jr.
 * Released under the MIT license.
-* https://github.com/aehlke/tag-it/blob/master/LICENSE
+* http://aehlke.github.com/tag-it/LICENSE
 *
 * Homepage:
-*   https://github.com/aehlke/tag-it
+*   http://aehlke.github.com/tag-it/
 *
 * Authors:
 *   Levy Carneiro Jr.
@@ -142,9 +142,9 @@
 
             if (this.options.readOnly) this.tagInput.attr('disabled', 'disabled');
 
-			if (null != this.options.tabIndex) {
-				this.tagInput.attr('tabindex', this.options.tabIndex);
-			}
+            if (this.options.tabIndex) {
+                this.tagInput.attr('tabindex', this.options.tabIndex);
+            }
 
             if (this.options.placeholderText) {
                 this.tagInput.attr('placeholder', this.options.placeholderText);
@@ -567,8 +567,6 @@
                 var removeTagIcon = $('<span></span>')
                     .addClass('ui-icon ui-icon-close');
                 var removeTag = $('<a><span class="text-icon">\xd7</span></a>') // \xd7 is an X
-					.attr('role', 'button')
-					.attr('aria-label', `${label.text()} close`)
                     .addClass('tagit-close')
                     .append(removeTagIcon)
                     .click(function(e) {
@@ -577,17 +575,6 @@
                     });
                 tag.append(removeTag);
             }
-
-			// user should be able to remove tags via keyboard navigating with tab when tabindex is set
-			if (null != this.options.tabIndex) {
-				removeTag.attr("tabindex", this.options.tabIndex);
-				removeTag.keypress(function(e) {
-					if (e.which === $.ui.keyCode.ENTER || e.which === $.ui.keyCode.SPACE) {
-						that.removeTag(tag);
-						that.tagInput.focus();  // after removing the tag, set focus back to input
-					}
-				});
-			}
 
             // Unless options.singleField is set, each tag has a hidden input field inline.
             if (!this.options.singleField) {
