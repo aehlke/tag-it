@@ -507,8 +507,11 @@
 
             // Unless options.singleField is set, each tag has a hidden input field inline.
             if (!this.options.singleField) {
-                var escapedValue = label.html();
-                tag.append('<input type="hidden" value="' + escapedValue + '" name="' + this.options.fieldName + '" class="tagit-hidden-field" />');
+                var escapedValue = label.text();
+                var hiddenField = $('<input type="hidden" class="tagit-hidden-field" />');
+                hiddenField.val(escapedValue);
+                hiddenField.attr('name', this.options.fieldName);
+                tag.append(hiddenField);
             }
 
             if (this._trigger('beforeTagAdded', null, {
