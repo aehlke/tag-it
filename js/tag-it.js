@@ -214,7 +214,11 @@
             if (!addedExistingFromSingleFieldNode) {
                 this.tagList.children('li').each(function() {
                     if (!$(this).hasClass('tagit-new')) {
-                        that.createTag($(this).text(), $(this).attr('class'), true);
+						if(typeof($(this).attr('value')) != 'undefined') {
+						  that.createTag({label: $(this).text(), value: $(this).attr('value')}, $(this).attr('class'), true);
+						} else {
+						  that.createTag($(this).text(), $(this).attr('class'), true);
+						}
                         $(this).remove();
                     }
                 });
@@ -439,18 +443,24 @@
         createTag: function(value, additionalClass, duringInitialization) {
             var that = this;
 
-            value = $.trim(value);
+			if(typeof(value.value) != 'undefined') {
+				var tagLabel = value.label;
+				var tagValue = $.trim(value.value);
+			} else {
+				var tagLabel = value;
+				var tagValue = $.trim(value);
+			
 
             if(this.options.preprocessTag) {
-                value = this.options.preprocessTag(value);
+                value = this.options.preprocessTag(tagValue);
             }
 
             if (value === '') {
                 return false;
             }
 
-            if (!this.options.allowDuplicates && !this._isNew(value)) {
-                var existingTag = this._findTagByLabel(value);
+            if (!this.options.allowDuplicates && !this._isNew(tagValue)) {
+                var existingTag = this._findTagByLabel(tagValue);
                 if (this._trigger('onTagExists', null, {
                     existingTag: existingTag,
                     duringInitialization: duringInitialization
@@ -467,7 +477,7 @@
                 return false;
             }
 
-            var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(value);
+            var label = $(this.options.onTagClicked ? '<a class="tagit-label"></a>' : '<span class="tagit-label"></span>').text(tagLabel);
 
             // Create tag.
             var tag = $('<li></li>')
@@ -507,8 +517,8 @@
 
             // Unless options.singleField is set, each tag has a hidden input field inline.
             if (!this.options.singleField) {
-                var escapedValue = label.html();
-                tag.append('<input type="hidden" value="' + escapedValue + '" name="' + this.options.fieldName + '" class="tagit-hidden-field" />');
+                //var escapedValue = label.html();
+                tag.append('<input type="hidden" value="' + tagValue + '" name="' + this.options.fieldName + '" class="tagit-hidden-field" />');
             }
 
             if (this._trigger('beforeTagAdded', null, {
