@@ -153,7 +153,9 @@
 
             if (this.options.showAutocompleteOnFocus) {
                 this.tagInput.focus(function(event, ui) {
-                    that._showAutocomplete();
+                	if(that.options.tagLimit == null || that._tags().length < that.options.tagLimit){          	
+                		that._showAutocomplete();
+                	}
                 });
 
                 if (typeof this.options.autocomplete.minLength === 'undefined') {
@@ -540,7 +542,9 @@
             });
 
             if (this.options.showAutocompleteOnFocus && !duringInitialization) {
-                setTimeout(function () { that._showAutocomplete(); }, 0);
+            	if(this.options.tagLimit == null || this._tags().length < this.options.tagLimit){
+            		setTimeout(function () { that._showAutocomplete(); }, 0);
+            	}
             }
         },
 
