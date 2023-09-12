@@ -179,6 +179,12 @@ Optionally set a *placeholder* attribute on the `input` that gets created for ta
 
 Defaults to *null*
 
+### isEmail (boolean)
+
+When enabled, tags must be email format.
+
+Defaults to *false*
+
 
 ## Events
 
