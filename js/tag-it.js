@@ -51,6 +51,10 @@
             // When enabled, quotes are unneccesary for inputting multi-word tags.
             allowSpaces: false,
 
+            //If set to true will match tags only from beginning of the word.
+            //If set to false will match all the combinations of the given letters.
+            matchFromStart: true,
+
             // The below options are for using a single field instead of several
             // for our form values.
             //
@@ -137,12 +141,14 @@
             }
 
             if (!this.options.autocomplete.source) {
+                var matchFromStart = this.options.matchFromStart;
                 this.options.autocomplete.source = function(search, showChoices) {
                     var filter = search.term.toLowerCase();
                     var choices = $.grep(this.options.availableTags, function(element) {
                         // Only match autocomplete options that begin with the search term.
                         // (Case insensitive.)
-                        return (element.toLowerCase().indexOf(filter) === 0);
+                        var indexOfMatch = element.toLowerCase().indexOf(filter);
+                        return matchFromStart ? indexOfMatch === 0 : indexOfMatch > -1;
                     });
                     if (!this.options.allowDuplicates) {
                         choices = this._subtractArray(choices, this.assignedTags());
