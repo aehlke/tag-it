@@ -46,7 +46,7 @@ ul.tagit li.tagit-choice a.tagLabel:hover,
 ul.tagit li.tagit-choice a.tagit-close .text-icon:hover {
     color: #222;
 }
-ul.tagit input[type="text"] {
+ul.tagit li.tagit-new input {
     color: #333333;
     background: none;
 }
@@ -79,6 +79,7 @@ ul.tagit input[type="text"] {
     text-decoration:none;
     display:block;
     padding:.2em .4em;
+    border: 1px solid transparent;
     line-height:1.5;
     zoom:1;
 }
@@ -96,3 +97,5 @@ ul.tagit input[type="text"] {
 .tagit .ui-helper-hidden-accessible { position: absolute !important; clip: rect(1px,1px,1px,1px); }
 
 
+
+ul.tagit.tagit-rtl li.tagit-choice .tagit-close { right: auto; left: .4em; }

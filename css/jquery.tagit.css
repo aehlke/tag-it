@@ -13,7 +13,7 @@ ul.tagit li.tagit-choice {
     position: relative;
     line-height: inherit;
 }
-input.tagit-hidden-field {
+input.tagit-hidden-field, textarea.tagit-hidden-field {
     display: none;
 }
 ul.tagit li.tagit-choice-read-only { 
@@ -51,7 +51,7 @@ ul.tagit li.tagit-choice input {
     float: left;
     margin: 2px 5px 2px 0;
 }
-ul.tagit input[type="text"] {
+ul.tagit li.tagit-new input {
     -moz-box-sizing:    border-box;
     -webkit-box-sizing: border-box;
     box-sizing:         border-box;
@@ -67,3 +67,9 @@ ul.tagit input[type="text"] {
     background-color: inherit;
     outline: none;
 }
+
+/* Scoped direction overrides. */
+ul.tagit.tagit-rtl li { float: right; margin: 2px 0 2px 5px; }
+ul.tagit.tagit-rtl li.tagit-choice-editable { padding: .2em .5em .2em 18px; }
+ul.tagit.tagit-rtl li.tagit-new { padding: .25em 0 .25em 4px; }
+ul.tagit.tagit-rtl li.tagit-choice .tagit-close { right: auto; left: .1em; }

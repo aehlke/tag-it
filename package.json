@@ -1,0 +1,27 @@
+{
+  "name": "tag-it",
+  "version": "2.0.0",
+  "description": "jQuery UI tag editing widget",
+  "main": "js/tag-it.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aehlke/tag-it.git"
+  },
+  "files": [
+    "js",
+    "css",
+    "README.markdown",
+    "LICENSE"
+  ],
+  "peerDependencies": {
+    "jquery": ">=1.4 <4",
+    "jquery-ui": ">=1.8 <2"
+  },
+  "scripts": {
+    "build": "terser js/tag-it.js --compress --mangle --ecma 5 --output js/tag-it.min.js"
+  },
+  "devDependencies": {
+    "terser": "5.31.6"
+  }
+}

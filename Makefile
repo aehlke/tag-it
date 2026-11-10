@@ -4,7 +4,7 @@ MINIFIED_OUTPUT=./js/tag-it.min.js
 build:
 	@echo
 	@echo "Compiling JS..."
-	@curl --progress-bar -f -d compilation_level=SIMPLE_OPTIMIZATIONS -d output_format=text -d output_info=compiled_code --data-urlencode "js_code@${JS}" https://closure-compiler.appspot.com/compile -o ${MINIFIED_OUTPUT}
+	@npm run build
 
 gh-pages:
 	@echo "Updating GitHub pages..."

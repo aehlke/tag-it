@@ -137,7 +137,7 @@ Defaults to *true*.
 ### allowDuplicates (boolean)
 
 Allows duplicate tags to be created.
-One implication of this is that `removeTagByLabel` will remove all tags which match the given label.
+`removeTagByLabel` removes the first matching label. Duplicate detection uses submitted values.
 
 Defaults to *false*.
 
@@ -337,3 +337,75 @@ $("#myTags").data("ui-tagit").tagInput.addClass("fancy");
 
 tag-it is released under the [MIT license](http://github.com/aehlke/tag-it/raw/master/LICENSE).
 
+
+## Compatible extended input
+
+The createTag(value, additionalClass, duringInitialization) order and event
+duringInitialization property are preserved. Strings still work in availableTags,
+createTag and preloaded li/input fields. Autocomplete and createTag additionally
+accept {label: "Japan", value: "JP"}. Labels are text; assignedTags and form fields
+contain string values. Numeric zero becomes "0". tagLabel(tag) returns display text;
+tagValue(tag) returns the submitted value, including during removal callbacks.
+Duplicate detection compares values using caseSensitive. li elements may provide
+data-value. Single-field IDs resolve against availableTags for display labels.
+
+Set singleFieldQuoted: true to opt into quoting values containing delimiters, quotes or line breaks using
+doubled double quotes. The default false preserves existing stored quote characters and the legacy representation.
+Delimiter-bearing values are rejected and retained in the editor unless quoted mode is enabled. Servers
+accepting delimiter-bearing values must parse this quoted-field grammar rather
+than split(delimiter). apple,"New York, NY" represents two tags. Delimiters may be
+multiple characters but must be nonempty and contain no quote/newline. Malformed
+unmatched quotes in initial fields are preserved as literal values; an unfinished
+quote in the editor stays pending. Paste and blur share the parser. Rejected, vetoed
+and over-limit entries remain in the editor. createTag always creates one tag.
+
+Optional settings (former defaults remain):
+
+* maxTagLength: null or maximum UTF-16 length; every creation path validates the
+  final preprocessed value, including autocomplete and programmatic insertion. Native
+  maxlength is deliberately not used: it would truncate multi-tag pastes before parsing.
+* inputType: "text"; "email" and "tel" can select mobile keyboards.
+* removeOnBackspace: true; false leaves tags alone when the editor is empty.
+* allowCommas: false; true allows literal typed/pasted commas without quotes.
+* delimiterKeyCodes: [$.ui.keyCode.COMMA], plus Enter/Tab and optionally Space.
+  Commas use typed characters for non-US layouts. Custom codes affect keyboard
+  entry; singleFieldDelimiter controls pasted separators.
+* matchFromStart: true; false uses substring matching in the default source.
+* allowOnlyAutocompleteTags: false; true restricts all creation to availableTags
+  by value. This is local catalog validation, not remote server authorization.
+* autocompleteOnly: false; true restricts UI creation to selected suggestions,
+  while allowing preloading and programmatic creation for remote sources.
+* highlightTagsNotInAutocomplete: false; adds tagit-not-autocomplete to values
+  outside availableTags. Supply its theme style; no global styles are changed.
+* disableInputFocus: false; true prevents background clicks focusing the editor.
+* propagateTagClicks / propagateRemoveClicks: true; false stops that click bubbling.
+
+Use standard widget options to change readOnly without rebuilding tags or firing
+add/remove events, and to replace suggestions:
+
+```javascript
+$("#myTags").tagit("option", "readOnly", true);
+$("#myTags").tagit("option", "readOnly", false);
+$("#myTags").tagit("option", "availableTags", ["one", "two"]);
+```
+
+Use the existing preprocessTag callback to transform or validate complete values
+from every input path. For example, return /^\d+$/.test(value) ? value : "" to
+accept digits. This does not filter individual keystrokes or execute strings as code.
+Loop over an initial array with createTag(value, null, true); no populate API or
+available-catalog mutation is needed. Set editor text using the documented instance's
+tagInput.val(value).focus(). A textarea works wherever an input is accepted.
+placeholderText supplies native hints without overlays. autocomplete.minLength and
+autoFocus remain jQuery UI options. A custom autocomplete.source may cap results
+with slice(0, limit); autocomplete.appendTo selects a menu stacking context.
+
+RTL direction is detected at initialization from the list's computed direction.
+Set dir="rtl" on the list or an ancestor. Both themes use scoped tagit-rtl rules;
+unrelated jQuery UI accessibility helpers keep their accessible clipping behavior.
+
+For development, run `npm run build` after changing the widget source to regenerate
+`js/tag-it.min.js`. Run `tests/tag-it.behavior.js` against both distributions.
+
+### Consolidated contributor credits
+
+Contributors to these additions include mohsenksr, coremayo, anjaneyulu-paramalla, sukeerthiadiga, brunofullstack, ytxiuxiu, minhductin2, xa0c, mrcarlberg, Mohsen322, moshest, bbeckford, cleishm, beyto1974, Dr4K4n, Defee, vedatkilic, betsyecastro, mckey, dougalg, sricc, tareko, stefk, wwl2013, iamwavecut, irina-b, lturista, mindbane, cyberby, rgermanov, Disclosure, amnuts, aerlaut, dawidkkruczek, barneyb, glenntu, mindnektar, dlhageman, hilobok, ucavus, skibulk, yb66, thejonan, csillag, Lewiscowles1986, brandonwittwer, baio, viranch, robertprice.
